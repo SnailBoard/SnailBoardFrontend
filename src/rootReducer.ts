@@ -1,13 +1,12 @@
+import { combineReducers } from "@reduxjs/toolkit";
 
-import { combineReducers } from '@reduxjs/toolkit'
+import clicksReducer from "./counter";
 
-import clicksReducer from './counter'
-
-const clicks = { count: clicksReducer }
+const clicks = { count: clicksReducer };
 
 export let rootReducer = combineReducers({
-  ...clicks
-})
+  ...clicks,
+});
 
 export default function createReducer(injectedReducers = {}) {
   rootReducer = combineReducers({
@@ -18,4 +17,4 @@ export default function createReducer(injectedReducers = {}) {
   return rootReducer;
 }
 
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>;

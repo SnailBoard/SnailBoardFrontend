@@ -1,29 +1,26 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type CurrentDisplayState = {
-  clicks: number
-}
+  clicks: number;
+};
 
 let initialState: CurrentDisplayState = {
   clicks: 0,
-}
+};
 
 const countSlice = createSlice({
-  name: 'count',
+  name: "count",
   initialState,
   reducers: {
     addCount(state, action: PayloadAction<number>) {
-      state.clicks += action.payload
+      state.clicks += action.payload;
     },
     minusCount(state, action: PayloadAction<number>) {
-      state.clicks -= action.payload
-    }
-  }
-})
+      state.clicks -= action.payload;
+    },
+  },
+});
 
-export const {
-  addCount,
-  minusCount
-} = countSlice.actions
+export const { addCount, minusCount } = countSlice.actions;
 
-export default countSlice.reducer
+export default countSlice.reducer;

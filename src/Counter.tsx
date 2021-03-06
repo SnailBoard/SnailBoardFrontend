@@ -1,5 +1,5 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
 interface ICounterProps {
   value?: number;
@@ -7,32 +7,27 @@ interface ICounterProps {
   onDecrement?: any;
   onIncrementAsync?: any;
 }
-const Counter: React.FC<ICounterProps> =
-({
+const Counter: React.FC<ICounterProps> = ({
   value,
   onIncrement,
   onDecrement,
-  onIncrementAsync
+  onIncrementAsync,
 }): JSX.Element => {
   return (
     <div>
       <button onClick={onIncrementAsync} className="button">
         Increment after 1 second
-      </button>
-      {' '}
+      </button>{" "}
       <button onClick={onIncrement} className="button">
         + Increment
-      </button>
-      {' '}
+      </button>{" "}
       <button onClick={onDecrement} className="button">
         - Decrement
       </button>
       <hr />
-      <div>
-        Clicked: {value} times
-      </div>
+      <div>Clicked: {value} times</div>
     </div>
-  )
+  );
 };
 
-export default Counter
+export default Counter;

@@ -1,9 +1,9 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import createSagaMiddleware from 'redux-saga';
-import { createInjectorsEnhancer } from 'redux-injectors';
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import createSagaMiddleware from "redux-saga";
+import { createInjectorsEnhancer } from "redux-injectors";
 
-import createReducer from './rootReducer'
-import rootSaga from './sagas'
+import createReducer from "./rootReducer";
+import rootSaga from "./sagas";
 
 export default function configureAppStore(initialState = {}) {
   const reduxSagaMonitorOptions = {};
@@ -25,7 +25,7 @@ export default function configureAppStore(initialState = {}) {
     reducer: createReducer(),
     middleware: [...getDefaultMiddleware(), ...middlewares],
     preloadedState: initialState,
-    devTools: process.env.NODE_ENV !== 'production',
+    devTools: process.env.NODE_ENV !== "production",
     enhancers,
   });
 
