@@ -4,7 +4,7 @@ type CurrentDisplayState = {
   clicks: number;
 };
 
-let initialState: CurrentDisplayState = {
+const initialState: CurrentDisplayState = {
   clicks: 0,
 };
 
