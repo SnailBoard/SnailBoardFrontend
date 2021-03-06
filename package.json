@@ -30,7 +30,7 @@
     "serve": "serve -s build",
     "build-and-serve": "npm run build && npm run serve",
     "format": "npx prettier --write **/*.{js,jsx,ts,tsx,json}",
-    "lint": "tsc --noEmit && eslint --fix --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "tsc --noEmit && eslint --fix src/**/*.ts{,x}"
   },
   "husky": {
