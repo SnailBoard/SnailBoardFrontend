@@ -20,6 +20,4 @@ jobs:
       - name: run CI-test-build
         run: |
           npm install
-#          npm run lint
-#          npm run test
-          npm run build
+          CI=false npm run build

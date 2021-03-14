@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+#  pull_request:
+#    branches:
+#      - main
 
 jobs:
   buildAndTest:
@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run build
-        run: npm run build
+        run: CI=false npm run build
 
   deploy:
     name: CD Pipeline
@@ -57,7 +57,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run build
-        run: npm run build
+        run: CI=false npm run build
 
       # Install AWS CLI 2
       - name: Install AWS CLI 2
