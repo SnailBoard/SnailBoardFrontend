@@ -33,7 +33,7 @@ function App() {
           onIncrementAsync={() => dispatch(incrementAsync())}
         />
         <p>
-          Nazar pes <code>src/App.tsx</code> and save to reload.
+          Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <div>
           Learn{" "}
