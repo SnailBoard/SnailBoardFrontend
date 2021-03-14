@@ -1,0 +1,38 @@
+module.exports = {
+  extends: [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier",
+    "plugin:prettier/recommended",
+  ],
+  plugins: ["react", "@typescript-eslint", "jest"],
+  env: {
+    browser: true,
+    es6: true,
+    jest: true,
+  },
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 2018,
+    createDefaultProgram: true,
+    sourceType: "module",
+    project: "./tsconfig.eslint.json",
+  },
+  rules: {
+    "linebreak-style": "off",
+    "react/button-has-type": "warn",
+    "react/prop-types": "warn",
+    "no-param-reassign": "warn",
+    "@typescript-eslint/no-use-before-define": "warn",
+    "no-console": "warn",
+    "@typescript-eslint/explicit-module-boundary-types": "warn",
+    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/no-unsafe-member-access": "warn",
+    "@typescript-eslint/unbound-method": "warn",
+    "import/no-mutable-exports": "warn",
+    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/prefer-regexp-exec": "warn",
+  },
+};
