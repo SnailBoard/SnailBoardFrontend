@@ -8,14 +8,9 @@ import * as serviceWorker from './serviceWorker';
 import {BrowserRouter, Route} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css'
 
-const store = configureStore();
 
 ReactDOM.render(
-  <Provider store={store}>
-      <BrowserRouter>
-          <Route path="/" component={App}/>
-      </BrowserRouter>
-  </Provider>,
+    <App/>,
   document.getElementById('root')
 );
 

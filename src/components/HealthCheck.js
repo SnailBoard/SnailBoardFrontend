@@ -1,16 +1,24 @@
-import React, {useEffect} from 'react';
+import React from 'react';
+import {connect} from "react-redux";
 
 
-const HealthCheck = () => {
-    useEffect(() => {
-        fetch("/api/health-check")
-            .then(response => response.text())
-            .then(data => console.log("Debug response from backend via proxy: ", data))
-    },[])
+const HealthCheck = (props) => {
+    const { isAuthorized } = props
+    console.log(isAuthorized)
+
     return (
-        <h1>Ok</h1>
+        <>
+            <h1>Ok</h1>
+            <h2>User is authorized: {isAuthorized.toString()}</h2>
+        </>
     )
 }
 
+const mapStateToProps = rootState => ({
+    isAuthorized: rootState.auth.isAuthorized
+});
 
-export default HealthCheck
+const mapDispatchToProps = {
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HealthCheck);

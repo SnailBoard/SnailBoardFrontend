@@ -1,4 +1,4 @@
-import callWebApi from "../../helpers/api";
+import callWebApi from "../../core/helpers/api";
 
 export const loginRequest = async loginData => {
     const response = await callWebApi({
