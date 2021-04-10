@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import '../static/css/App.css';
 
 const Counter = ({ value, onIncrement, onDecrement, onIncrementAsync }) =>
 <div>

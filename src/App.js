@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import logo from './logo.svg';
-import increment, { incrementAsync, decrement } from './actions';
-import Counter from './Counter';
-import './App.css';
+import logo from './static/img/logo.svg';
+import increment, { incrementAsync, decrement } from './core/actions';
+import Counter from './components/Counter';
+import './static/css/App.css';
 
 function App() {
   const dispatch = useDispatch();
