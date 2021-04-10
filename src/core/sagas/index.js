@@ -1,19 +1,9 @@
-import { all, call, delay, put, takeEvery } from 'redux-saga/effects'
+import { all } from 'redux-saga/effects'
 import authSagas from "../../containers/Auth/sagas";
 
-// export function* incrementAsync() {
-//   yield delay(1000)
-//   yield put({type: 'INCREMENT'})
-// }
-//
-// export function* watchIncrementAsync() {
-//   yield takeEvery('INCREMENT_ASYNC', incrementAsync)
-// }
 
-// single entry point to start all Sagas at once
 export default function* rootSaga() {
   yield all([
-    // call(watchIncrementAsync),
     authSagas()
   ])
 }

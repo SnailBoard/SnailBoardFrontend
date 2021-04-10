@@ -8,6 +8,24 @@ const initialState = {
 
 export default function (state = initialState, action) {
     switch (action.type) {
+        case logoutRoutine.TRIGGER: {
+            localStorage.setItem("accessToken", "");
+            localStorage.setItem("refreshToken", "");
+            return ({
+                ...state,
+                isAuthorized: false,
+                // user: {}
+            });
+        }
+
+        case registerRoutine.REQUEST:
+        case loginRoutine.REQUEST: {
+            return ({
+                ...state,
+                isFetching: true
+            });
+        }
+
         case loginRoutine.SUCCESS: {
             const  { accessToken, refreshToken } = action.payload;
             console.log("Success login request")
@@ -28,13 +46,6 @@ export default function (state = initialState, action) {
                 isFetching: false
             })
 
-        case registerRoutine.REQUEST:
-        case loginRoutine.REQUEST: {
-            return ({
-                ...state,
-                isFetching: false
-            });
-        }
 
         case getUserRoutine.SUCCESS: {
             const user = action.payload;
@@ -42,16 +53,6 @@ export default function (state = initialState, action) {
                 ...state,
                 isAuthorized: true,
                 // user: user
-            });
-        }
-
-        case logoutRoutine.TRIGGER: {
-            localStorage.setItem("accessToken", "");
-            localStorage.setItem("refreshToken", "");
-            return ({
-                ...state,
-                isAuthorized: false,
-                // user: {}
             });
         }
 

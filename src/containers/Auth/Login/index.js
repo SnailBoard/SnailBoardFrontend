@@ -6,7 +6,6 @@ import {connect} from "react-redux";
 import {NavLink} from "react-router-dom";
 
 const LoginPage = ({loginRoutine: login, isFetching}) => {
-    // const [opened, setOpened] = useState(false);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -78,15 +77,12 @@ const LoginPage = ({loginRoutine: login, isFetching}) => {
     )
 }
 
-const mapStateToProps = rootState => (
-    {
-        isFetching: false
-    }
-);
+const mapStateToProps = rootState => ({
+        isFetching: rootState.auth.isFetching
+});
 
-const mapDispatchToProps =
-    {
+const mapDispatchToProps = {
         loginRoutine
-    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
