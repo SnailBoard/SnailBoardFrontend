@@ -5,12 +5,16 @@ import './static/css/index.css';
 import configureStore from './store'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {BrowserRouter, Route} from "react-router-dom";
+import 'semantic-ui-css/semantic.min.css'
 
 const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+      <BrowserRouter>
+          <Route path="/" component={App}/>
+      </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );

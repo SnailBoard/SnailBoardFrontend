@@ -1,6 +1,6 @@
 import types from './types';
 
-const increment = () => ({
+export const increment = () => ({
   type: types.INCREMENT,
 });
 
@@ -12,4 +12,3 @@ export const incrementAsync = error => ({
   type: types.INCREMENT_ASYNC,
 });
 
-export default increment;
