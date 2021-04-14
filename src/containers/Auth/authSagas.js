@@ -6,21 +6,26 @@ import {
   loginSuccess,
   registerStarted,
   registerPending,
+  loginFailed,
 } from './authSlice'
 
 function* login({ payload }) {
-  yield put(loginPending)
+  yield put(loginPending())
 
   const response = yield call(() => loginRequest(payload))
   // console.log(response2, " asdff ")
   // const response = {user: "rost", token: "asdf"}
-
-  yield put(
-    loginSuccess({
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
-    }),
-  )
+  if (response.ok) {
+    const json = yield response.json()
+    yield put(
+      loginSuccess({
+        accessToken: json.accessToken,
+        refreshToken: json.refreshToken,
+      }),
+    )
+  } else {
+    yield put(loginFailed())
+  }
 }
 
 function* watchLogin() {

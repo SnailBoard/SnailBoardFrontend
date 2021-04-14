@@ -1,22 +1,41 @@
 import React, { useState } from 'react'
-import { Button, Form, Header, Icon, Message } from 'semantic-ui-react'
+import '../index.scss'
 import validator from 'validator'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  Avatar,
+  Backdrop,
+  Button,
+  CircularProgress,
+  Grid,
+  Grow,
+  Paper,
+  Snackbar,
+  TextField,
+  Typography,
+} from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert'
+import MoodBadIcon from '@material-ui/icons/MoodBad'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { NavLink } from 'react-router-dom'
-import { isFetchingSelector, loginStarted } from '../authSlice'
+import {
+  isFetchingSelector,
+  loginStarted,
+  userClosedErrorAlert,
+  isFailedSelector,
+} from '../authSlice'
+import { useStyles } from '../styles'
 
 const LoginPage = () => {
   const dispatch = useDispatch()
   const isFetching = useSelector(isFetchingSelector)
-
+  const isFailed = useSelector(isFailedSelector)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(true)
   const [isPasswordValid, setIsPasswordValid] = useState(true)
-
-  const setValidatedEmail = () => setIsEmailValid(validator.isEmail(email))
-  const setValidatedPassword = () => setIsPasswordValid(password.length > 2)
-
+  const setValidatedEmail = (e) => setIsEmailValid(validator.isEmail(e))
+  const setValidatedPassword = (pw) => setIsPasswordValid(pw.length >= 6)
   const onLoginClick = () => {
     if (isEmailValid && isPasswordValid) {
       const loginPayload = {
@@ -29,58 +48,98 @@ const LoginPage = () => {
     }
   }
 
-  const onEmailChange = (e, { value }) => {
-    setEmail(value)
-    setValidatedEmail()
+  const onEmailChange = (e) => {
+    setEmail(e.target.value)
+    setValidatedEmail(e.target.value)
   }
 
-  const onPasswordChange = (e, { value }) => {
-    setPassword(value)
-    setValidatedPassword()
+  const onPasswordChange = (e) => {
+    setPassword(e.target.value)
+    setValidatedPassword(e.target.value)
   }
 
+  const handleCloseAlert = (e, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    dispatch(userClosedErrorAlert())
+  }
+
+  const classes = useStyles()
   return (
-    <div className="mainBox">
-      <Header as="h2" color="green">
-        Log in
-      </Header>
-      <Form>
-        <Form.Input
-          fluid
-          icon="at"
-          iconPosition="left"
-          placeholder="Email"
-          type="email"
-          error={!isEmailValid}
-          onChange={onEmailChange}
-          onBlur={setValidatedEmail}
-        />
-        <Form.Input
-          fluid
-          icon="lock"
-          iconPosition="left"
-          placeholder="Password"
-          type="password"
-          error={!isPasswordValid}
-          onChange={onPasswordChange}
-          onBlur={setValidatedPassword}
-        />
-        <Button
-          type="submit"
-          loading={isFetching}
-          disabled={isFetching}
-          onClick={() => onLoginClick()}
-        >
-          Login
-        </Button>
-      </Form>
-      <Message>
-        <Icon name="meh" size="big" />
-        <NavLink exact to="/register" color="black">
-          I DON`T HAVE AN ACCOUNT
-        </NavLink>
-      </Message>
-    </div>
+    <Grow in disableStrictModeCompat timeout={800}>
+      <Paper elevation={10} className={classes.paper}>
+        <Grid container alignItems="center" direction="column">
+          <Grid item align="center">
+            <Avatar className={classes.avatarLogin}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <h2>Log In</h2>
+          </Grid>
+          <TextField
+            label="Email"
+            variant="outlined"
+            placeholder="Enter email"
+            fullWidth
+            required
+            className={classes.element}
+            onChange={onEmailChange}
+            error={!isEmailValid}
+            helperText={!isEmailValid && 'Incorrect email format'}
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            placeholder="Enter password"
+            type="password"
+            fullWidth
+            required
+            className={classes.element}
+            onChange={onPasswordChange}
+            error={!isPasswordValid}
+            helperText={!isPasswordValid && 'At least 6 characters'}
+          />
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            className={classes.button}
+            onClick={() => onLoginClick()}
+            disabled={isFetching}
+            fullWidth
+          >
+            Sign in
+          </Button>
+          <Backdrop className={classes.backdrop} open={isFetching}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
+          <Snackbar
+            open={isFailed}
+            autoHideDuration={6000}
+            onClose={handleCloseAlert}
+          >
+            <MuiAlert
+              elevation={6}
+              variant="filled"
+              onClose={handleCloseAlert}
+              severity="error"
+            >
+              Error during login!
+            </MuiAlert>
+          </Snackbar>
+          <NavLink exact to="/register">
+            <Typography className={classes.element}>
+              {' '}
+              <Button color="primary">
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                I don't have an account
+                <MoodBadIcon className={classes.mood} />
+              </Button>
+            </Typography>
+          </NavLink>
+        </Grid>
+      </Paper>
+    </Grow>
   )
 }
 

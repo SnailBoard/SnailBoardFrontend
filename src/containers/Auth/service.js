@@ -9,7 +9,7 @@ export const loginRequest = async (loginData) => {
   })
   // const resp = await response.json()
   // console.log("Response from auth  ", resp)
-  return response.json()
+  return response
 }
 
 export const registerRequest = async (registerData) => {
