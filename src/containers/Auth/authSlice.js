@@ -4,20 +4,17 @@ import { saveState } from '../../core/utils/localStorage'
 const initialState = {
   isAuthorized: false,
   isFetching: false,
+  isFailed: false,
 }
 
 export const isAuthorizedSelector = (state) => state.auth.isAuthorized
 export const isFetchingSelector = (state) => state.auth.isFetching
+export const isFailedSelector = (state) => state.auth.isFailed
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logoutSuccess: (state) => {
-      saveState('accessToken', '')
-      saveState('refreshToken', '')
-      state.isAuthorized = false
-    },
     registerStarted: () => {},
     registerPending: (state) => {
       state.isFetching = true
@@ -38,17 +35,33 @@ export const authSlice = createSlice({
       state.isFetching = false
       state.isAuthorized = true
     },
+    loginFailed: (state) => {
+      console.log('Failed login request')
+      state.isFetching = false
+      state.isAuthorized = false
+      state.isFailed = true
+    },
+    userClosedErrorAlert: (state) => {
+      state.isFailed = false
+    },
+    logoutSuccess: (state) => {
+      saveState('accessToken', '')
+      saveState('refreshToken', '')
+      state.isAuthorized = false
+    },
   },
 })
 
 export const {
-  loginStarted,
-  loginPending,
-  loginSuccess,
-  logoutSuccess,
   registerStarted,
   registerPending,
   registerSuccess,
+  loginStarted,
+  loginPending,
+  loginSuccess,
+  loginFailed,
+  userClosedErrorAlert,
+  logoutSuccess,
 } = authSlice.actions
 
 export default authSlice.reducer

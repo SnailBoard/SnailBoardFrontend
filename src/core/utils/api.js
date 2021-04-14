@@ -35,24 +35,11 @@ const getFetchArgs = (args) => {
   }
 }
 
-const throwIfResponseFailed = async (response) => {
-  if (!response.ok) {
-    let parsedException = 'Something went wrong with request!'
-    try {
-      parsedException = await response.json()
-    } catch (err) {
-      // Do nothing
-    }
-    throw parsedException
-  }
-}
-
 export default async function Api(args) {
   const fetchArgs = getFetchArgs(args)
   const fetchUrl = getFetchUrl(args)
 
   const response = await fetch(fetchUrl, fetchArgs)
 
-  await throwIfResponseFailed(response)
   return response
 }
