@@ -1,45 +1,44 @@
-import * as queryString from 'query-string'
-import { loadState } from './localStorage'
+import axios from 'axios'
+import jwtDecode from 'jwt-decode'
+import history from '../../setupHistory'
 
-const getFetchUrl = (args) =>
-  args.endpoint + (args.query ? `?${queryString.stringify(args.query)}` : '')
+export const TOKEN_KEY = 'token'
 
-const getFetchArgs = (args) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
+export const setToken = (token) => {
+  if (token) {
+    axios.defaults.headers.common.Authorization = `Token ${token}`
+  } else {
+    delete axios.defaults.headers.common.Authorization
   }
-  const token = loadState('token')
+}
 
-  if (token && !args.skipAuthorization) {
-    headers.Authorization = `Bearer ${token}`
+export const isTokenValid = (token) => {
+  try {
+    const decodedJwt = jwtDecode(token)
+    const currentTime = Date.now().valueOf() / 1000
+    return decodedJwt.exp > currentTime
+  } catch (error) {
+    return false
   }
+}
 
-  const checkRequest = (request, requestType) => {
-    if (request) {
-      if (requestType === 'GET') {
-        throw new Error('GET request does not support request body.')
-      }
-      return JSON.stringify(request)
+axios.defaults.baseURL = '/api'
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // eslint-disable-next-line default-case
+    switch (error.response.status) {
+      case 401:
+        history.push('/register')
+        break
+      case 404:
+      case 403:
+        history.push('/')
+        break
     }
-    return {}
-  }
+    return Promise.reject(error.response)
+  },
+)
 
-  const checkedBody = checkRequest(args.request, args.type)
-
-  return {
-    headers,
-    method: args.type,
-    signal: args.ct,
-    body: checkedBody,
-  }
-}
-
-export default async function Api(args) {
-  const fetchArgs = getFetchArgs(args)
-  const fetchUrl = getFetchUrl(args)
-
-  const response = await fetch(fetchUrl, fetchArgs)
-
-  return response
-}
+export default axios

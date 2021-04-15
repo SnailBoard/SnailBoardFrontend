@@ -29,6 +29,7 @@ export const authSlice = createSlice({
     },
     loginSuccess: (state, { payload: { accessToken, refreshToken } }) => {
       console.log('Success login request')
+      // TODO: ask about tokens lifecycle
       saveState('accessToken', accessToken)
       saveState('refreshToken', refreshToken)
 

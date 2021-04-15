@@ -1,35 +1,23 @@
-import API from '../../core/utils/api'
+import API, { setToken, TOKEN_KEY } from '../../core/utils/api'
+import { removeState, saveState } from '../../core/utils/localStorage'
 
-export const loginRequest = async (loginData) => {
-  const response = await API({
-    endpoint: '/api/auth',
-    type: 'POST',
-    skipAuthorization: true,
-    request: loginData,
-  })
-  // const resp = await response.json()
-  // console.log("Response from auth  ", resp)
-  return response
+const handleResponse = ({ data: { token, ...restData } }) => {
+  saveState(TOKEN_KEY, token)
+  setToken(token)
+  return restData
 }
 
-export const registerRequest = async (registerData) => {
-  const response = await API({
-    endpoint: '/api/register',
-    type: 'POST',
-    skipAuthorization: true,
-    request: registerData,
-  })
-  return response.text()
-}
+export const loginRequest = (loginPayload) =>
+  API.post('/auth', loginPayload).then((response) =>
+    handleResponse(response.data),
+  )
 
-export const getUserRequest = async () => {
-  try {
-    const response = await API({
-      endpoint: '/api/user',
-      type: 'GET',
-    })
-    return response.json()
-  } catch (e) {
-    return null
-  }
+export const registerRequest = (registerData) =>
+  API.post('/register', registerData).then((response) =>
+    handleResponse(response.data),
+  )
+
+export const logout = () => {
+  removeState(TOKEN_KEY)
+  setToken(null)
 }

@@ -10,11 +10,13 @@ export const loadState = (itemKey) => {
   }
 }
 
-export const saveState = (key, value) => {
+export const removeState = (itemKey) => localStorage.removeItem(itemKey)
+
+export const saveState = (itemKey, itemValue) => {
   try {
-    const serializedState = JSON.stringify(value)
-    localStorage.removeItem(key)
-    localStorage.setItem(key, serializedState)
+    const serializedState = JSON.stringify(itemValue)
+    localStorage.removeItem(itemKey)
+    localStorage.setItem(itemKey, serializedState)
   } catch {
     // ignore write errors
   }

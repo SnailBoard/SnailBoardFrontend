@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import '../index.scss'
 import validator from 'validator'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -30,12 +29,15 @@ const LoginPage = () => {
   const dispatch = useDispatch()
   const isFetching = useSelector(isFetchingSelector)
   const isFailed = useSelector(isFailedSelector)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(true)
   const [isPasswordValid, setIsPasswordValid] = useState(true)
+
   const setValidatedEmail = (e) => setIsEmailValid(validator.isEmail(e))
   const setValidatedPassword = (pw) => setIsPasswordValid(pw.length >= 6)
+
   const onLoginClick = () => {
     if (isEmailValid && isPasswordValid) {
       const loginPayload = {
@@ -131,8 +133,7 @@ const LoginPage = () => {
             <Typography className={classes.element}>
               {' '}
               <Button color="primary">
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                I don't have an account
+                I don&apos;t have an account
                 <MoodBadIcon className={classes.mood} />
               </Button>
             </Typography>

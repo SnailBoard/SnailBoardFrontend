@@ -1,13 +1,13 @@
 import React from 'react'
 import { Route } from 'react-router'
-// import { useSelector } from 'react-redux'
-// import { isAuthorizedSelector } from '../containers/Auth/authSlice'
-// import LoginPage from '../containers/Auth/Login'
+import PropTypes from 'prop-types'
 
-// eslint-disable-next-line react/prop-types
-const PublicRoute = ({ component: Component, ...rest }) => {
-  console.log('asd')
-  return <Route {...rest} render={(props) => <Component {...props} />} />
+const PublicRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => <Component {...props} />} />
+)
+
+PublicRoute.propTypes = {
+  component: PropTypes.element,
 }
 
 export default PublicRoute
