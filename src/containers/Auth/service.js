@@ -1,4 +1,4 @@
-import API, { setAuthorizationToken } from '../../core/utils/api'
+import API, { setAuthorizationToken } from '../../core/api'
 import { removeState, saveState } from '../../core/localStorage'
 import {
   ACCESS_TOKEN_KEY,
