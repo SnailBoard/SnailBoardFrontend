@@ -36,14 +36,11 @@ const LoginPage = () => {
   const [isPasswordValid, setIsPasswordValid] = useState(true)
 
   const setValidatedEmail = (e) => setIsEmailValid(validator.isEmail(e))
-  const setValidatedPassword = (pw) => setIsPasswordValid(pw.length >= 6)
+  const setValidatedPassword = (p) => setIsPasswordValid(p.length >= 6)
 
   const onLoginClick = () => {
     if (isEmailValid && isPasswordValid) {
-      const loginPayload = {
-        email,
-        password,
-      }
+      const loginPayload = { email, password }
       console.log('Before Logging in')
       dispatch(loginStarted(loginPayload))
       console.log('After Logging in')

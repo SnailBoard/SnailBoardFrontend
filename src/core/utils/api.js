@@ -1,10 +1,7 @@
 import axios from 'axios'
-import jwtDecode from 'jwt-decode'
 import history from '../../setupHistory'
 
-export const TOKEN_KEY = 'token'
-
-export const setToken = (token) => {
+export const setAuthorizationToken = (token) => {
   if (token) {
     axios.defaults.headers.common.Authorization = `Token ${token}`
   } else {
@@ -12,20 +9,13 @@ export const setToken = (token) => {
   }
 }
 
-export const isTokenValid = (token) => {
-  try {
-    const decodedJwt = jwtDecode(token)
-    const currentTime = Date.now().valueOf() / 1000
-    return decodedJwt.exp > currentTime
-  } catch (error) {
-    return false
-  }
-}
-
 axios.defaults.baseURL = '/api'
 
 axios.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('Response from axios interceptor', response)
+    return response
+  },
   (error) => {
     // eslint-disable-next-line default-case
     switch (error.response.status) {

@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { saveState } from '../../core/utils/localStorage'
 
 const initialState = {
   isAuthorized: false,
@@ -27,11 +26,8 @@ export const authSlice = createSlice({
     loginPending: (state) => {
       state.isFetching = true
     },
-    loginSuccess: (state, { payload: { accessToken, refreshToken } }) => {
+    loginSuccess: (state) => {
       console.log('Success login request')
-      // TODO: ask about tokens lifecycle
-      saveState('accessToken', accessToken)
-      saveState('refreshToken', refreshToken)
 
       state.isFetching = false
       state.isAuthorized = true
@@ -45,9 +41,8 @@ export const authSlice = createSlice({
     userClosedErrorAlert: (state) => {
       state.isFailed = false
     },
+    logoutStarted: () => {},
     logoutSuccess: (state) => {
-      saveState('accessToken', '')
-      saveState('refreshToken', '')
       state.isAuthorized = false
     },
   },
@@ -62,6 +57,7 @@ export const {
   loginSuccess,
   loginFailed,
   userClosedErrorAlert,
+  logoutStarted,
   logoutSuccess,
 } = authSlice.actions
 
