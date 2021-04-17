@@ -29,6 +29,9 @@ const RegisterPage = () => {
   const dispatch = useDispatch()
   const isFetching = useSelector(isFetchingSelector)
   const isFailed = useSelector(isFailedSelector)
+
+  const classes = useStyles()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
@@ -86,7 +89,7 @@ const RegisterPage = () => {
     }
     dispatch(userClosedErrorAlert())
   }
-  const classes = useStyles()
+
   return (
     <Grow in disableStrictModeCompat timeout={800}>
       <Paper elevation={10} className={classes.paper}>
@@ -176,8 +179,7 @@ const RegisterPage = () => {
             <Typography className={classes.element}>
               {' '}
               <Button color="primary">
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                I don't have an account
+                I don&apos;t have an account
                 <MoodIcon className={classes.mood} />
               </Button>
             </Typography>

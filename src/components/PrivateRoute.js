@@ -1,9 +1,9 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { isAuthorizedSelector } from '../containers/Auth/authSlice'
 
-// eslint-disable-next-line react/prop-types
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthorized = useSelector(isAuthorizedSelector)
 
@@ -15,6 +15,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       }
     />
   )
+}
+
+PrivateRoute.propTypes = {
+  component: PropTypes.elementType,
 }
 
 export default PrivateRoute

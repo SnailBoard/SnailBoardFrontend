@@ -1,28 +1,23 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { loginRequest, registerRequest } from './service'
+import { loginRequest, logoutRequest, registerRequest } from './service'
 import {
-  loginStarted,
-  loginPending,
-  loginSuccess,
-  registerStarted,
-  registerPending,
   loginFailed,
+  loginPending,
+  loginStarted,
+  loginSuccess,
+  logoutStarted,
+  logoutSuccess,
+  registerPending,
+  registerStarted,
 } from './authSlice'
 
 function* login({ payload }) {
   yield put(loginPending())
 
   const response = yield call(() => loginRequest(payload))
-  // console.log(response2, " asdff ")
-  // const response = {user: "rost", token: "asdf"}
-  if (response.ok) {
-    const json = yield response.json()
-    yield put(
-      loginSuccess({
-        accessToken: json.accessToken,
-        refreshToken: json.refreshToken,
-      }),
-    )
+
+  if (response.status === 200) {
+    yield put(loginSuccess())
   } else {
     yield put(loginFailed())
   }
@@ -33,35 +28,26 @@ function* watchLogin() {
 }
 
 function* register({ payload }) {
-  console.log(payload)
-  yield put(registerPending)
+  yield put(registerPending())
 
   const response = yield call(() => registerRequest(payload))
 
   console.log('Response in sagas ', response)
-  // const { user, token } = response
-  // yield put(registerSuccess({ user, token }));
 }
 
 function* watchRegister() {
   yield takeEvery(registerStarted, register)
 }
 
-// function* getUser() {
-//   const response = yield call(() => getUserRequest())
-//   if (response) {
-//     yield put(getUserRoutine.success(response))
-//   }
-// }
-//
-// function* watchGetUser() {
-//   yield takeEvery(getUserRoutine.TRIGGER, getUser)
-// }
+function* logout() {
+  logoutRequest()
+  yield put(logoutSuccess())
+}
+
+function* watchLogout() {
+  yield takeEvery(logoutStarted, logout)
+}
 
 export default function* authSagas() {
-  yield all([
-    watchLogin(),
-    watchRegister(),
-    // watchGetUser()
-  ])
+  yield all([watchLogin(), watchRegister(), watchLogout()])
 }
