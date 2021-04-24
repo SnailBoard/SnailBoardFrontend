@@ -27,3 +27,8 @@ export const logoutRequest = () => {
   removeState(REFRESH_TOKEN_KEY)
   setAuthorizationToken(null)
 }
+
+export const userRequest = () =>
+  API.get('/user')
+    .then((response) => response)
+    .catch((reason) => reason)

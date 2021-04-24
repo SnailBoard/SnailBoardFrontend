@@ -4,11 +4,13 @@ const initialState = {
   isAuthorized: false,
   isFetching: false,
   isFailed: false,
+  data: {},
 }
 
 export const isAuthorizedSelector = (state) => state.auth.isAuthorized
 export const isFetchingSelector = (state) => state.auth.isFetching
 export const isFailedSelector = (state) => state.auth.isFailed
+export const dataSelector = (state) => state.auth.data
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -19,7 +21,6 @@ export const authSlice = createSlice({
       state.isFetching = true
     },
     registerSuccess: (state) => {
-      console.log('Success registration request')
       state.isFetching = false
     },
     loginStarted: () => {},
@@ -27,13 +28,24 @@ export const authSlice = createSlice({
       state.isFetching = true
     },
     loginSuccess: (state) => {
-      console.log('Success login request')
-
       state.isFetching = false
       state.isAuthorized = true
     },
     loginFailed: (state) => {
-      console.log('Failed login request')
+      state.isFetching = false
+      state.isAuthorized = false
+      state.isFailed = true
+    },
+    userStarted: () => {},
+    userPending: (state) => {
+      state.isFetching = true
+    },
+    userSuccess: (state, payload) => {
+      state.data = { ...payload.payload }
+      state.isFetching = false
+      state.isAuthorized = true
+    },
+    userFailed: (state) => {
       state.isFetching = false
       state.isAuthorized = false
       state.isFailed = true
@@ -56,9 +68,12 @@ export const {
   loginPending,
   loginSuccess,
   loginFailed,
+  userStarted,
   userClosedErrorAlert,
   logoutStarted,
   logoutSuccess,
+  userSuccess,
+  userFailed,
 } = authSlice.actions
 
 export default authSlice.reducer
