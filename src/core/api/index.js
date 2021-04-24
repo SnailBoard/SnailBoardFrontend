@@ -23,9 +23,9 @@ axios.interceptors.response.use(
         history.push('/register')
         break
       case 404:
-      case 403:
-        history.push('/')
-        break
+      // case 403:
+      //   history.push('/')
+      //   break
     }
     return Promise.reject(error.response)
   },

@@ -1,4 +1,5 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
+import history from '../../setupHistory'
 import { loginRequest, logoutRequest, registerRequest } from './service'
 import {
   loginFailed,
@@ -18,6 +19,7 @@ function* login({ payload }) {
 
   if (response.status === 200) {
     yield put(loginSuccess())
+    // history.push('/health-check')
   } else {
     yield put(loginFailed())
   }

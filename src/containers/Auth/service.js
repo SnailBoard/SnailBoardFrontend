@@ -1,9 +1,6 @@
 import API, { setAuthorizationToken } from '../../core/api'
 import { removeState, saveState } from '../../core/localStorage'
-import {
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY,
-} from '../../core/localStorage/keys'
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../../core/values/keys'
 
 const handleResponse = ({ accessToken, refreshToken }) => {
   saveState(ACCESS_TOKEN_KEY, accessToken)
@@ -12,10 +9,12 @@ const handleResponse = ({ accessToken, refreshToken }) => {
 }
 
 export const loginRequest = (loginPayload) =>
-  API.post('/auth', loginPayload).then((response) => {
-    handleResponse(response.data)
-    return response
-  })
+  API.post('/auth', loginPayload)
+    .then((response) => {
+      handleResponse(response.data)
+      return response
+    })
+    .catch((reason) => reason)
 
 export const registerRequest = (registerData) =>
   API.post('/register', registerData).then((response) => {
