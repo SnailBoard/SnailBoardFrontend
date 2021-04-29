@@ -50,6 +50,20 @@ export const authSlice = createSlice({
       state.isAuthorized = false
       state.isFailed = true
     },
+    refreshStarted: () => {},
+    refreshPending: (state) => {
+      state.isFetching = true
+    },
+    refreshSuccess: (state) => {
+      state.isFetching = false
+      state.isAuthorized = true
+    },
+    refreshFailed: (state) => {
+      state.isFetching = false
+      state.isAuthorized = false
+      state.isFailed = true
+    },
+
     userClosedErrorAlert: (state) => {
       state.isFailed = false
     },
@@ -69,11 +83,16 @@ export const {
   loginSuccess,
   loginFailed,
   userStarted,
+  userPending,
   userClosedErrorAlert,
   logoutStarted,
   logoutSuccess,
   userSuccess,
   userFailed,
+  refreshStarted,
+  refreshPending,
+  refreshSuccess,
+  refreshFailed,
 } = authSlice.actions
 
 export default authSlice.reducer
