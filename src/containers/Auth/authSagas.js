@@ -95,10 +95,12 @@ function* watchUser() {
 
 function* refresh() {
   yield put(refreshPending())
+  setAuthorizationToken(null)
   const response = yield call(() => refreshRequest(getRefreshData()))
   const { data } = response
   if (response.status < 400) {
     yield put(refreshSuccess(data))
+    yield put(userStarted())
     // history.push('/health-check')
   } else {
     yield put(refreshFailed())

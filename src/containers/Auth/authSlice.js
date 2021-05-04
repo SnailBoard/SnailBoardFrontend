@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../../core/values/keys'
+import { loadState } from '../../core/localStorage'
 
 const initialState = {
-  isAuthorized: false,
+  isAuthorized: !!loadState(ACCESS_TOKEN_KEY) && !!loadState(REFRESH_TOKEN_KEY),
   isFetching: false,
   isFailed: false,
-  data: {},
+  user: {},
 }
 
 export const isAuthorizedSelector = (state) => state.auth.isAuthorized
 export const isFetchingSelector = (state) => state.auth.isFetching
 export const isFailedSelector = (state) => state.auth.isFailed
-export const dataSelector = (state) => state.auth.data
+export const userSelector = (state) => state.auth.user
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -41,7 +43,7 @@ export const authSlice = createSlice({
       state.isFetching = true
     },
     userSuccess: (state, payload) => {
-      state.data = { ...payload.payload }
+      state.user = { ...payload.payload }
       state.isFetching = false
       state.isAuthorized = true
     },

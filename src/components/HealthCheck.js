@@ -1,13 +1,13 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {
-  dataSelector,
+  userSelector,
   isAuthorizedSelector,
 } from '../containers/Auth/authSlice'
 
 const HealthCheck = () => {
   const isAuthorized = useSelector(isAuthorizedSelector)
-  const data = useSelector(dataSelector)
+  const data = useSelector(userSelector)
   return (
     <>
       <h1>Ok</h1>
