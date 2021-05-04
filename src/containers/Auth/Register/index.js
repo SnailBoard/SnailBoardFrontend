@@ -41,12 +41,28 @@ const RegisterPage = () => {
   const [isEmailValid, setEmailValid] = useState(true)
   const [isPasswordValid, setIsPasswordValid] = useState(true)
 
-  const setValidatedFirstName = () => setFirstNameValid(firstName.length >= 2)
-  const setValidatedUsername = () => setUsernameValid(username.length >= 2)
-  const setValidatedPassword = (pw) => setIsPasswordValid(pw.length >= 6)
-  const setValidatedEmail = () => setEmailValid(validator.isEmail(email))
+  const setValidatedFirstName = (v) => setFirstNameValid(v.length >= 2)
+  const setValidatedUsername = (v) => setUsernameValid(v.length >= 2)
+  const setValidatedPassword = (v) => setIsPasswordValid(v.length >= 6)
+  const setValidatedEmail = (v) => setEmailValid(validator.isEmail(v))
 
   const onRegisterClick = () => {
+    if (email === '') {
+      setEmailValid(false)
+      return
+    }
+    if (password === '') {
+      setIsPasswordValid(false)
+      return
+    }
+    if (username === '') {
+      setUsernameValid(false)
+      return
+    }
+    if (firstName === '') {
+      setFirstNameValid(false)
+      return
+    }
     if (
       isEmailValid &&
       isPasswordValid &&
@@ -64,8 +80,9 @@ const RegisterPage = () => {
   }
 
   const onEmailChange = (e) => {
+    console.log('On email change')
     setEmail(e.target.value)
-    setValidatedEmail()
+    setValidatedEmail(e.target.value)
   }
 
   const onPasswordChange = (e) => {
@@ -75,12 +92,12 @@ const RegisterPage = () => {
 
   const onUsernameChange = (e) => {
     setUsername(e.target.value)
-    setValidatedUsername()
+    setValidatedUsername(e.target.value)
   }
 
   const onFirstNameChange = (e) => {
     setFirstName(e.target.value)
-    setValidatedFirstName()
+    setValidatedFirstName(e.target.value)
   }
 
   const handleCloseAlert = (e, reason) => {

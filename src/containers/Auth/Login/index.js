@@ -24,6 +24,7 @@ import {
   isFailedSelector,
 } from '../authSlice'
 import { useStyles } from '../styles'
+import { errorLoginMessage } from '../../../core/values/strings'
 
 const LoginPage = () => {
   const dispatch = useDispatch()
@@ -39,11 +40,17 @@ const LoginPage = () => {
   const setValidatedPassword = (p) => setIsPasswordValid(p.length >= 6)
 
   const onLoginClick = () => {
+    if (email === '') {
+      setIsEmailValid(false)
+      return
+    }
+    if (password === '') {
+      setIsPasswordValid(false)
+      return
+    }
     if (isEmailValid && isPasswordValid) {
       const loginPayload = { email, password }
-      console.log('Before Logging in')
       dispatch(loginStarted(loginPayload))
-      console.log('After Logging in')
     }
   }
 
@@ -114,7 +121,7 @@ const LoginPage = () => {
           </Backdrop>
           <Snackbar
             open={isFailed}
-            autoHideDuration={6000}
+            autoHideDuration={3000}
             onClose={handleCloseAlert}
           >
             <MuiAlert
@@ -123,12 +130,11 @@ const LoginPage = () => {
               onClose={handleCloseAlert}
               severity="error"
             >
-              Error during login!
+              {errorLoginMessage}
             </MuiAlert>
           </Snackbar>
           <NavLink exact to="/register">
             <Typography className={classes.element}>
-              {' '}
               <Button color="primary">
                 I don&apos;t have an account
                 <MoodBadIcon className={classes.mood} />

@@ -3,7 +3,7 @@ import history from '../../setupHistory'
 
 export const setAuthorizationToken = (token) => {
   if (token) {
-    axios.defaults.headers.common.Authorization = `Token ${token}`
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`
   } else {
     delete axios.defaults.headers.common.Authorization
   }
@@ -23,9 +23,9 @@ axios.interceptors.response.use(
         history.push('/register')
         break
       case 404:
-      case 403:
-        history.push('/')
-        break
+      // case 403:
+      //   history.push('/')
+      //   break
     }
     return Promise.reject(error.response)
   },

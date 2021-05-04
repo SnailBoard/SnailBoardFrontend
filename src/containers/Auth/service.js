@@ -1,9 +1,6 @@
 import API, { setAuthorizationToken } from '../../core/api'
-import { removeState, saveState } from '../../core/localStorage'
-import {
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY,
-} from '../../core/localStorage/keys'
+import { loadState, removeState, saveState } from '../../core/localStorage'
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../../core/values/keys'
 
 const handleResponse = ({ accessToken, refreshToken }) => {
   saveState(ACCESS_TOKEN_KEY, accessToken)
@@ -11,14 +8,20 @@ const handleResponse = ({ accessToken, refreshToken }) => {
   setAuthorizationToken(accessToken)
 }
 
-export const loginRequest = (loginPayload) =>
-  API.post('/auth', loginPayload).then((response) => {
-    handleResponse(response.data)
-    return response
-  })
+export const getRefreshData = () => ({
+  refreshToken: loadState(REFRESH_TOKEN_KEY),
+})
 
-export const registerRequest = (registerData) =>
-  API.post('/register', registerData).then((response) => {
+export const loginRequest = (loginPayload) =>
+  API.post('/auth', loginPayload)
+    .then((response) => {
+      handleResponse(response.data)
+      return response
+    })
+    .catch((reason) => reason)
+
+export const registerRequest = (data) =>
+  API.post('/register', data).then((response) => {
     handleResponse(response.data)
     return response
   })
@@ -28,3 +31,16 @@ export const logoutRequest = () => {
   removeState(REFRESH_TOKEN_KEY)
   setAuthorizationToken(null)
 }
+
+export const userRequest = () =>
+  API.get('/user')
+    .then((response) => response)
+    .catch((reason) => reason)
+
+export const refreshRequest = (data) =>
+  API.post('/refresh', data)
+    .then((response) => {
+      handleResponse(response.data)
+      return response
+    })
+    .catch((reason) => reason)
