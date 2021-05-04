@@ -7,6 +7,7 @@ import LoginPage from './containers/Auth/Login'
 import RegisterPage from './containers/Auth/Register'
 import PrivateRoute from './components/PrivateRoute'
 import HomePage from './containers/HomePage'
+import LogoutPage from './containers/Auth/Logout'
 
 const Routing = () => (
   <Switch>
@@ -14,6 +15,7 @@ const Routing = () => (
     <PrivateRoute exact path="/home" component={HomePage} />
     <PublicRoute exact path="/login" component={LoginPage} />
     <PublicRoute exact path="/register" component={RegisterPage} />
+    <PublicRoute exact path="/logout" component={LogoutPage} />
   </Switch>
 )
 
