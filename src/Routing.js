@@ -6,10 +6,12 @@ import HealthCheck from './components/HealthCheck'
 import LoginPage from './containers/Auth/Login'
 import RegisterPage from './containers/Auth/Register'
 import PrivateRoute from './components/PrivateRoute'
+import HomePage from './containers/HomePage'
 
 const Routing = () => (
   <Switch>
     <PrivateRoute exact path="/health-check" component={HealthCheck} />
+    <PrivateRoute exact path="/home" component={HomePage} />
     <PublicRoute exact path="/login" component={LoginPage} />
     <PublicRoute exact path="/register" component={RegisterPage} />
   </Switch>
