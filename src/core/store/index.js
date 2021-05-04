@@ -1,7 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import createSagaMiddleware from 'redux-saga'
 
-import { routerReducer } from 'react-router-redux'
 import authSlice from '../../containers/Auth/authSlice'
 import rootSaga from '../sagas'
 
@@ -16,7 +15,6 @@ const devMode = process.env.NODE_ENV === 'development'
 const store = configureStore({
   reducer: {
     auth: authSlice,
-    routing: routerReducer,
   },
   devTools: devMode,
   middleware,
