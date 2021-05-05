@@ -14,15 +14,15 @@ describe('Test for LoginPage container', () => {
     </Provider>
   )
 
-  it('Test input field to be in container', () => {
+  it('Test email header to be in container', () => {
     const { container } = render(testComponent)
-    const emailInput = container.querySelector('input[type=email]')
-    expect(emailInput.textContent === '').toBeTruthy()
+    const emailHeader = container.querySelector('h2')
+    expect(emailHeader.textContent === 'Log In').toBeTruthy()
   })
 
-  it('Test btn to be in container', () => {
+  it('Test log in btn to be in container', () => {
     const { container } = render(testComponent)
     const emailInput = container.querySelector('button[type=submit]')
-    expect(emailInput.textContent === 'Login').toBeTruthy()
+    expect(emailInput.textContent === 'Sign in').toBeTruthy()
   })
 })
