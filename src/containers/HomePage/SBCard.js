@@ -11,8 +11,6 @@ import PropTypes from 'prop-types'
 import { useStyles } from './styles'
 
 const SBCard = (props) => {
-  // const user = useSelector(userSelector)
-
   const { itemsCount, itemsHeader, btnName, columnsData } = props
 
   const renderColumn = (data) => (
