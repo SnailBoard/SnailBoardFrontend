@@ -7,10 +7,10 @@ import {
   isAuthorizedSelector,
   userSelector,
   userStarted,
-} from '../containers/Auth/authSlice'
-import { loadState } from '../core/localStorage'
-import { ACCESS_TOKEN_KEY } from '../core/values/keys'
-import { setAuthorizationToken } from '../core/api'
+} from '../../containers/Auth/authSlice'
+import { loadState } from '../../core/localStorage'
+import { ACCESS_TOKEN_KEY } from '../../core/values/keys'
+import { setAuthorizationToken } from '../../core/api'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthorized = useSelector(isAuthorizedSelector)

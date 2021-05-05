@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import {
   userSelector,
   isAuthorizedSelector,
-} from '../containers/Auth/authSlice'
+} from '../../containers/Auth/authSlice'
 
 const HealthCheck = () => {
   const isAuthorized = useSelector(isAuthorizedSelector)
