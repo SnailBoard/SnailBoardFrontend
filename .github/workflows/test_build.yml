@@ -6,6 +6,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-18.04
+    env:
+      CI: false
     strategy:
       matrix:
         node_version: [14]

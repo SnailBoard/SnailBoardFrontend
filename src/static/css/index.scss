@@ -14,7 +14,23 @@ code {
 
 .MuiPaper-elevation1 {
   box-shadow: none !important;
+}
+
 
 a {
   text-decoration: none;
+}
+
+.paperBtn {
+  width: 100%;
+  padding: 0 !important;
+  .MuiPaper-root {
+    width: 100%;
+    text-align: left;
+    text-transform: none;
+  }
+
+  :hover {
+    background: #EFF5C3;
+  }
 }
