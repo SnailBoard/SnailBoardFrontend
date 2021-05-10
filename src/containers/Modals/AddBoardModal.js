@@ -58,16 +58,16 @@ export const useStyles = makeStyles(() => ({
 }))
 
 const AddBoardModal = (props) => {
-  const { isOpen, setIsOpen } = props
+  const { isModalOpen, setIsModalOpen } = props
 
   const handleClose = () => {
-    setIsOpen(false)
+    setIsModalOpen(false)
   }
   const classes = useStyles()
   return (
     <>
       <Modal
-        open={isOpen}
+        open={isModalOpen}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
@@ -145,8 +145,8 @@ const AddBoardModal = (props) => {
 }
 
 AddBoardModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+  setIsModalOpen: PropTypes.func.isRequired,
 }
 
 export default AddBoardModal

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   Grid,
@@ -11,7 +11,9 @@ import {
   Button,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
+import { addTeamStarted } from '../HomePage/homeSlice'
 
 export const useStyles = makeStyles(() => ({
   addModal: {
@@ -58,16 +60,41 @@ export const useStyles = makeStyles(() => ({
 }))
 
 const AddTeamModal = (props) => {
-  const { isOpen, setIsOpen } = props
+  const { isModalOpen, setIsModalOpen } = props
+
+  const dispatch = useDispatch()
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+
+  const [isNameValid, setIsNameValid] = useState(true)
+
+  const setValidatedName = (v) => setIsNameValid(v.length >= 1)
+
+  const onNameChange = (e) => {
+    setName(e.target.value)
+    setValidatedName(e.target.value)
+  }
+
+  const onDescriptionChange = (e) => {
+    setDescription(e.target.value)
+  }
 
   const handleClose = () => {
-    setIsOpen(false)
+    setIsModalOpen(false)
   }
+
+  const handleAddTeam = () => {
+    if (isNameValid) {
+      const addTeamPayload = { name, description }
+      dispatch(addTeamStarted(addTeamPayload))
+    }
+  }
+
   const classes = useStyles()
   return (
     <>
       <Modal
-        open={isOpen}
+        open={isModalOpen}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
@@ -97,6 +124,8 @@ const AddTeamModal = (props) => {
                     fullWidth
                     required
                     className={classes.column}
+                    onChange={onNameChange}
+                    error={!isNameValid}
                   />
                 </Paper>
               </Grid>
@@ -109,6 +138,7 @@ const AddTeamModal = (props) => {
                     aria-label="empty textarea"
                     placeholder="Add description ..."
                     className={classes.description}
+                    onChange={onDescriptionChange}
                   />
                 </Paper>
               </Grid>
@@ -131,6 +161,7 @@ const AddTeamModal = (props) => {
                     variant="contained"
                     className={`successBtn ${classes.button}`}
                     fullWidth
+                    onClick={() => handleAddTeam()}
                   >
                     + Add team
                   </Button>
@@ -145,8 +176,8 @@ const AddTeamModal = (props) => {
 }
 
 AddTeamModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+  setIsModalOpen: PropTypes.func.isRequired,
 }
 
 export default AddTeamModal
