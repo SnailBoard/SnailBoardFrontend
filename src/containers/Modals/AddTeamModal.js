@@ -11,9 +11,13 @@ import {
   Button,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
-import { addTeamStarted } from '../HomePage/homeSlice'
+import {
+  addTeamStarted,
+  isFulfilledSelector,
+  setIsFulfilledFalse,
+} from '../HomePage/homeSlice'
 
 export const useStyles = makeStyles(() => ({
   addModal: {
@@ -62,10 +66,11 @@ export const useStyles = makeStyles(() => ({
 const AddTeamModal = (props) => {
   const { isModalOpen, setIsModalOpen } = props
 
+  const isFulfilled = useSelector(isFulfilledSelector)
+
   const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-
   const [isNameValid, setIsNameValid] = useState(true)
 
   const setValidatedName = (v) => setIsNameValid(v.length >= 1)
@@ -74,7 +79,6 @@ const AddTeamModal = (props) => {
     setName(e.target.value)
     setValidatedName(e.target.value)
   }
-
   const onDescriptionChange = (e) => {
     setDescription(e.target.value)
   }
@@ -88,6 +92,11 @@ const AddTeamModal = (props) => {
       const addTeamPayload = { name, description }
       dispatch(addTeamStarted(addTeamPayload))
     }
+  }
+
+  if (isFulfilled) {
+    setIsModalOpen(false)
+    dispatch(setIsFulfilledFalse())
   }
 
   const classes = useStyles()
