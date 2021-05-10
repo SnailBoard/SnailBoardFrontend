@@ -21,9 +21,7 @@ export const useStyles = makeStyles(() => ({
   },
   paper: {
     padding: 20,
-    // height: '60vh',
     width: '40vw',
-    // margin: '20px auto',
     background: ACCENT_COLOR,
   },
   header: {
@@ -32,7 +30,6 @@ export const useStyles = makeStyles(() => ({
   },
   column: {
     width: '37vw',
-    // padding: '15px',
     margin: '15px 15px',
     color: TEXT_DIMMED_COLOR,
     fontSize: '18px',
@@ -53,7 +50,6 @@ export const useStyles = makeStyles(() => ({
   },
   button: {
     width: '36vw',
-    // background: SUCCESS_COLOR,
   },
   btnContainer: {
     margin: '2vh 0',

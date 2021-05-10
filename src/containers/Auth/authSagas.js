@@ -102,7 +102,6 @@ function* refresh() {
   if (response.status < 400) {
     yield put(refreshSuccess(data))
     yield put(userStarted())
-    // history.push('/health-check')
   } else {
     yield put(refreshFailed())
   }
