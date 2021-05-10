@@ -1,6 +1,6 @@
 import API from '../../core/api'
 
-export const addTeamRequest = (loginPayload) =>
-  API.post('/team', loginPayload)
+export const addTeamRequest = (payload) =>
+  API.post('/team', payload)
     .then((response) => response)
     .catch((reason) => reason)
