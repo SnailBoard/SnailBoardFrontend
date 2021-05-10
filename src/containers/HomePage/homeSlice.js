@@ -8,6 +8,7 @@ const initialState = {
 
 export const isFulfilledSelector = (state) => state.home.isFulfilled
 export const isFetchingSelector = (state) => state.home.isFetching
+export const isFailedSelector = (state) => state.home.isFailed
 
 export const homeSlice = createSlice({
   name: 'home',
@@ -15,6 +16,9 @@ export const homeSlice = createSlice({
   reducers: {
     setIsFulfilledFalse: (state) => {
       state.isFulfilled = false
+    },
+    userClosedErrorAlert: (state) => {
+      state.isFailed = false
     },
     addTeamStarted: () => {},
     addTeamPending: (state) => {
@@ -26,12 +30,14 @@ export const homeSlice = createSlice({
     },
     addTeamFailed: (state) => {
       state.isFailed = true
+      state.isFetching = false
     },
   },
 })
 
 export const {
   setIsFulfilledFalse,
+  userClosedErrorAlert,
   addTeamStarted,
   addTeamPending,
   addTeamSuccess,

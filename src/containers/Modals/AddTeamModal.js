@@ -11,12 +11,16 @@ import {
   Button,
   CircularProgress,
   Backdrop,
+  Snackbar,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
+import MuiAlert from '@material-ui/lab/Alert'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
 import {
+  userClosedErrorAlert,
   addTeamStarted,
+  isFailedSelector,
   isFetchingSelector,
   isFulfilledSelector,
   setIsFulfilledFalse,
@@ -75,6 +79,7 @@ const AddTeamModal = (props) => {
 
   const isFulfilled = useSelector(isFulfilledSelector)
   const isFetching = useSelector(isFetchingSelector)
+  const isFailed = useSelector(isFailedSelector)
 
   const dispatch = useDispatch()
   const [name, setName] = useState('')
@@ -105,6 +110,13 @@ const AddTeamModal = (props) => {
   if (isFulfilled) {
     setIsModalOpen(false)
     dispatch(setIsFulfilledFalse())
+  }
+
+  const handleCloseAlert = (e, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    dispatch(userClosedErrorAlert())
   }
 
   const classes = useStyles()
@@ -192,6 +204,21 @@ const AddTeamModal = (props) => {
       <Backdrop className={classes.backdrop} open={isFetching}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Snackbar
+        open={isFailed}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseAlert}
+          severity="error"
+        >
+          <p>Error during adding a team!</p>
+          <p>Try to refresh page</p>
+        </MuiAlert>
+      </Snackbar>
     </>
   )
 }
