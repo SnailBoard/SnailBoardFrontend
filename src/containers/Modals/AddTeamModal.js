@@ -9,17 +9,20 @@ import {
   TextField,
   TextareaAutosize,
   Button,
+  CircularProgress,
+  Backdrop,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
 import {
   addTeamStarted,
+  isFetchingSelector,
   isFulfilledSelector,
   setIsFulfilledFalse,
 } from '../HomePage/homeSlice'
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles((theme) => ({
   addModal: {
     display: 'flex',
     alignItems: 'center',
@@ -61,19 +64,24 @@ export const useStyles = makeStyles(() => ({
     margin: '2vh 0',
     height: '30%',
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }))
 
 const AddTeamModal = (props) => {
   const { isModalOpen, setIsModalOpen } = props
 
   const isFulfilled = useSelector(isFulfilledSelector)
+  const isFetching = useSelector(isFetchingSelector)
 
   const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [isNameValid, setIsNameValid] = useState(true)
 
-  const setValidatedName = (v) => setIsNameValid(v.length >= 1)
+  const setValidatedName = (v) => setIsNameValid(v.length >= 3)
 
   const onNameChange = (e) => {
     setName(e.target.value)
@@ -132,6 +140,7 @@ const AddTeamModal = (props) => {
                     variant="filled"
                     fullWidth
                     required
+                    helperText={!isNameValid && 'At least 3 symbols'}
                     className={classes.column}
                     onChange={onNameChange}
                     error={!isNameValid}
@@ -180,6 +189,9 @@ const AddTeamModal = (props) => {
           </Grid>
         </Paper>
       </Modal>
+      <Backdrop className={classes.backdrop} open={isFetching}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   )
 }

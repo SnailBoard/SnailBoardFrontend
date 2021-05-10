@@ -7,6 +7,7 @@ const initialState = {
 }
 
 export const isFulfilledSelector = (state) => state.home.isFulfilled
+export const isFetchingSelector = (state) => state.home.isFetching
 
 export const homeSlice = createSlice({
   name: 'home',
