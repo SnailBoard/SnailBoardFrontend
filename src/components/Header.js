@@ -32,10 +32,7 @@ export const useStyles = makeStyles((theme) => ({
   btnLink: {
     color: '#fff',
     fontSize: 'medium',
-  },
-  logoutLink: {
-    color: '#fff',
-    fontSize: 'medium',
+    textTransform: 'none',
   },
   snailBtn: {
     justifyContent: 'center',
@@ -115,7 +112,7 @@ const Header = () => {
                 <Grid item xs={3}>
                   <NavLink exact to="/logout">
                     <Typography>
-                      <Button className={classes.logoutLink}>Logout</Button>
+                      <Button className={classes.btnLink}>Logout</Button>
                     </Typography>
                   </NavLink>
                 </Grid>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Grid, Grow } from '@material-ui/core'
 import Header from '../../components/Header'
 import { useStyles } from './styles'
-import SBCard from './SBCard'
+import SBCard, { CARD_TYPES } from './SBCard'
 
 const boardsFixture = [
   {
@@ -42,7 +42,7 @@ const HomePage = () => {
   const getTeamsItemsCount = () => '2 teams'
 
   return (
-    <>
+    <div className={classes.background}>
       <Header />
       <Container maxWidth="md" className={classes.cardContainer}>
         <Grid
@@ -59,6 +59,7 @@ const HomePage = () => {
                 itemsHeader="Boards"
                 btnName="+ add boards"
                 columnsData={boardsFixture}
+                cardType={CARD_TYPES.BOARD}
               />
             </Grid>
           </Grow>
@@ -69,12 +70,13 @@ const HomePage = () => {
                 itemsHeader="Teams"
                 btnName="+ add teams"
                 columnsData={teamsFixture}
+                cardType={CARD_TYPES.TEAM}
               />
             </Grid>
           </Grow>
         </Grid>
       </Container>
-    </>
+    </div>
   )
 }
 

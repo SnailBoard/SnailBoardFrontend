@@ -25,6 +25,11 @@ export const authSlice = createSlice({
     registerSuccess: (state) => {
       state.isFetching = false
     },
+    registerFailed: (state) => {
+      state.isFetching = false
+      state.isAuthorized = false
+      state.isFailed = true
+    },
     loginStarted: () => {},
     loginPending: (state) => {
       state.isFetching = true
@@ -80,6 +85,7 @@ export const {
   registerStarted,
   registerPending,
   registerSuccess,
+  registerFailed,
   loginStarted,
   loginPending,
   loginSuccess,

@@ -73,77 +73,79 @@ const LoginPage = () => {
 
   const classes = useStyles()
   return (
-    <Grow in disableStrictModeCompat timeout={800}>
-      <Paper elevation={10} className={classes.paper}>
-        <Grid container alignItems="center" direction="column">
-          <Grid item align="center">
-            <Avatar className={classes.avatarLogin}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <h2>Log In</h2>
-          </Grid>
-          <TextField
-            label="Email"
-            variant="outlined"
-            placeholder="Enter email"
-            fullWidth
-            required
-            className={classes.element}
-            onChange={onEmailChange}
-            error={!isEmailValid}
-            helperText={!isEmailValid && 'Incorrect email format'}
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            placeholder="Enter password"
-            type="password"
-            fullWidth
-            required
-            className={classes.element}
-            onChange={onPasswordChange}
-            error={!isPasswordValid}
-            helperText={!isPasswordValid && 'At least 6 characters'}
-          />
-          <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            className={classes.button}
-            onClick={() => onLoginClick()}
-            disabled={isFetching}
-            fullWidth
-          >
-            Sign in
-          </Button>
-          <Backdrop className={classes.backdrop} open={isFetching}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
-          <Snackbar
-            open={isFailed}
-            autoHideDuration={3000}
-            onClose={handleCloseAlert}
-          >
-            <MuiAlert
-              elevation={6}
-              variant="filled"
-              onClose={handleCloseAlert}
-              severity="error"
+    <>
+      <Grow in disableStrictModeCompat timeout={800}>
+        <Paper elevation={10} className={classes.paper}>
+          <Grid container alignItems="center" direction="column">
+            <Grid item align="center">
+              <Avatar className={classes.avatarLogin}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <h2>Log In</h2>
+            </Grid>
+            <TextField
+              label="Email"
+              variant="outlined"
+              placeholder="Enter email"
+              fullWidth
+              required
+              className={classes.element}
+              onChange={onEmailChange}
+              error={!isEmailValid}
+              helperText={!isEmailValid && 'Incorrect email format'}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              placeholder="Enter password"
+              type="password"
+              fullWidth
+              required
+              className={classes.element}
+              onChange={onPasswordChange}
+              error={!isPasswordValid}
+              helperText={!isPasswordValid && 'At least 6 characters'}
+            />
+            <Button
+              type="submit"
+              color="primary"
+              variant="contained"
+              className={classes.button}
+              onClick={() => onLoginClick()}
+              disabled={isFetching}
+              fullWidth
             >
-              {errorLoginMessage}
-            </MuiAlert>
-          </Snackbar>
-          <NavLink exact to="/register">
-            <Typography className={classes.element}>
-              <Button color="primary">
-                I don&apos;t have an account
-                <MoodBadIcon className={classes.mood} />
-              </Button>
-            </Typography>
-          </NavLink>
-        </Grid>
-      </Paper>
-    </Grow>
+              Sign in
+            </Button>
+            <Backdrop className={classes.backdrop} open={isFetching}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+            <NavLink exact to="/register">
+              <Typography className={classes.element}>
+                <Button color="primary">
+                  I don&apos;t have an account
+                  <MoodBadIcon className={classes.mood} />
+                </Button>
+              </Typography>
+            </NavLink>
+          </Grid>
+        </Paper>
+      </Grow>
+      <Snackbar
+        open={isFailed}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseAlert}
+          severity="error"
+        >
+          {errorLoginMessage}
+        </MuiAlert>
+      </Snackbar>
+    </>
   )
 }
 

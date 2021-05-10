@@ -16,6 +16,7 @@ const Routing = () => (
     <PrivateRoute exact path="/home" component={HomePage} />
     <PublicRoute exact path="/login" component={LoginPage} />
     <PublicRoute exact path="/welcome" component={WelcomePage} />
+    <PublicRoute exact path="/" component={WelcomePage} />
     <PublicRoute exact path="/register" component={RegisterPage} />
     <PublicRoute exact path="/logout" component={LogoutPage} />
   </Switch>

@@ -80,7 +80,6 @@ const RegisterPage = () => {
   }
 
   const onEmailChange = (e) => {
-    console.log('On email change')
     setEmail(e.target.value)
     setValidatedEmail(e.target.value)
   }

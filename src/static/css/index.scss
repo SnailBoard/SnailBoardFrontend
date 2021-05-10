@@ -1,3 +1,6 @@
+$SUCCESS_COLOR: #A8ED8E;
+$SUCCESS_DIMMED_COLOR: #c2fdac;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -32,5 +35,18 @@ a {
 
   :hover {
     background: #EFF5C3;
+    border-radius: 20px !important;
   }
+}
+
+.rounded {
+  border-radius: 20px !important;
+}
+
+.successBtn {
+  background-color: $SUCCESS_COLOR !important;
+}
+
+.selectedTeam {
+  background-color: $SUCCESS_COLOR !important;
 }

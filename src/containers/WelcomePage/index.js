@@ -23,7 +23,7 @@ const StyledButton = withStyles({
 
 const WelcomePage = () => {
   const classes = useStyles()
-
+  const currentYear = new Date().getFullYear()
   return (
     <div className={classes.root}>
       <Grid container justify="center" alignItems="center">
@@ -74,7 +74,7 @@ const WelcomePage = () => {
         </Grid>
         <Typography variant="body1" color="inherit" classes={classes.phantom}>
           <footer className={classes.footer}>
-            © 2021. All rights reserved
+            © {currentYear}. All rights reserved
           </footer>
         </Typography>
       </Grid>
