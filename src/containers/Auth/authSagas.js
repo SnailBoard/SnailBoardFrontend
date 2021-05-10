@@ -25,6 +25,7 @@ import {
   refreshSuccess,
   refreshFailed,
   refreshPending,
+  registerFailed,
 } from './authSlice'
 import { TOKEN_EXPIRED_MESSAGE } from '../../core/values/keys'
 import { setAuthorizationToken } from '../../core/api'
@@ -53,7 +54,7 @@ function* register({ payload }) {
     yield put(registerSuccess())
     history.push('/login')
   } else {
-    yield put(loginFailed())
+    yield put(registerFailed())
   }
 }
 

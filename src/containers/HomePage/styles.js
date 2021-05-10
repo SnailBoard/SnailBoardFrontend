@@ -1,8 +1,16 @@
 import { makeStyles } from '@material-ui/core'
-import { ACCENT2_COLOR, ACCENT_COLOR } from '../../core/values/colors'
+import {
+  ACCENT2_COLOR,
+  ACCENT_COLOR,
+  THIRD_COLOR,
+} from '../../core/values/colors'
 
 export const useStyles = makeStyles(() => ({
   cardGrid: {},
+  background: {
+    background: THIRD_COLOR,
+    height: '100vh',
+  },
   cardContainer: {
     marginTop: '15vh',
   },
@@ -14,12 +22,12 @@ export const useStyles = makeStyles(() => ({
     textAlign: 'center',
   },
   headerColumn: {
-    paddingTop: '2vh',
-    paddingLeft: '2vh',
+    paddingTop: '20px',
+    paddingLeft: '20px',
   },
   itemCountColumn: {
-    paddingBottom: '2vh',
-    paddingLeft: '2vh',
+    paddingBottom: '20px',
+    paddingLeft: '20px',
   },
   pos: {
     marginBottom: 12,
@@ -36,4 +44,15 @@ export const useStyles = makeStyles(() => ({
     textAlign: 'center',
   },
   paperBtn: {},
+  addModal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    padding: 50,
+    height: '50vh',
+    width: '70vh',
+    margin: '20px auto',
+  },
 }))
