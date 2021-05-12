@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   Grid,
@@ -9,11 +9,24 @@ import {
   TextField,
   TextareaAutosize,
   Button,
+  CircularProgress,
+  Backdrop,
+  Snackbar,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import MuiAlert from '@material-ui/lab/Alert'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
+import {
+  userClosedErrorAlert,
+  addTeamStarted,
+  isFailedSelector,
+  isFetchingSelector,
+  isFulfilledSelector,
+  setIsFulfilledFalse,
+} from '../HomePage/homeSlice'
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles((theme) => ({
   addModal: {
     display: 'flex',
     alignItems: 'center',
@@ -55,19 +68,62 @@ export const useStyles = makeStyles(() => ({
     margin: '2vh 0',
     height: '30%',
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }))
 
 const AddTeamModal = (props) => {
-  const { isOpen, setIsOpen } = props
+  const { isModalOpen, setIsModalOpen } = props
+
+  const isFulfilled = useSelector(isFulfilledSelector)
+  const isFetching = useSelector(isFetchingSelector)
+  const isFailed = useSelector(isFailedSelector)
+
+  const dispatch = useDispatch()
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [isNameValid, setIsNameValid] = useState(true)
+
+  const setValidatedName = (v) => setIsNameValid(v.length >= 3)
+
+  const onNameChange = (e) => {
+    setName(e.target.value)
+    setValidatedName(e.target.value)
+  }
+  const onDescriptionChange = (e) => {
+    setDescription(e.target.value)
+  }
 
   const handleClose = () => {
-    setIsOpen(false)
+    setIsModalOpen(false)
   }
+
+  const handleAddTeam = () => {
+    if (isNameValid) {
+      const addTeamPayload = { name, description }
+      dispatch(addTeamStarted(addTeamPayload))
+    }
+  }
+
+  if (isFulfilled) {
+    setIsModalOpen(false)
+    dispatch(setIsFulfilledFalse())
+  }
+
+  const handleCloseAlert = (e, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    dispatch(userClosedErrorAlert())
+  }
+
   const classes = useStyles()
   return (
     <>
       <Modal
-        open={isOpen}
+        open={isModalOpen}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
@@ -96,7 +152,10 @@ const AddTeamModal = (props) => {
                     variant="filled"
                     fullWidth
                     required
+                    helperText={!isNameValid && 'At least 3 symbols'}
                     className={classes.column}
+                    onChange={onNameChange}
+                    error={!isNameValid}
                   />
                 </Paper>
               </Grid>
@@ -109,6 +168,7 @@ const AddTeamModal = (props) => {
                     aria-label="empty textarea"
                     placeholder="Add description ..."
                     className={classes.description}
+                    onChange={onDescriptionChange}
                   />
                 </Paper>
               </Grid>
@@ -131,6 +191,7 @@ const AddTeamModal = (props) => {
                     variant="contained"
                     className={`successBtn ${classes.button}`}
                     fullWidth
+                    onClick={() => handleAddTeam()}
                   >
                     + Add team
                   </Button>
@@ -140,13 +201,31 @@ const AddTeamModal = (props) => {
           </Grid>
         </Paper>
       </Modal>
+      <Backdrop className={classes.backdrop} open={isFetching}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar
+        open={isFailed}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseAlert}
+          severity="error"
+        >
+          <p>Error during adding a team!</p>
+          <p>Try to refresh page</p>
+        </MuiAlert>
+      </Snackbar>
     </>
   )
 }
 
 AddTeamModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+  setIsModalOpen: PropTypes.func.isRequired,
 }
 
 export default AddTeamModal

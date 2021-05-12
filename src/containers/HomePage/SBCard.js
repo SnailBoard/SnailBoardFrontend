@@ -97,9 +97,15 @@ const SBCard = (props) => {
         </Grid>
       </Card>
       {cardType === CARD_TYPES.TEAM ? (
-        <AddTeamModal isOpen={addModalOpen} setIsOpen={setAddModalOpen} />
+        <AddTeamModal
+          isModalOpen={addModalOpen}
+          setIsModalOpen={setAddModalOpen}
+        />
       ) : (
-        <AddBoardModal isOpen={addModalOpen} setIsOpen={setAddModalOpen} />
+        <AddBoardModal
+          isModalOpen={addModalOpen}
+          setIsModalOpen={setAddModalOpen}
+        />
       )}
     </>
   )
