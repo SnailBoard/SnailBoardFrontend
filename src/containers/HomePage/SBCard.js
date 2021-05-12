@@ -19,39 +19,54 @@ const SBCard = (props) => {
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [selectedTeam, setSelectedTeam] = useState(-1)
   const renderColumn = (data, index, isSelected) => (
-    <Grid item xs={12} key={data.name}>
-      <Button
-        className={`paperBtn ${isSelected && 'selectedTeam'} rounded ${
-          classes.paperBtn
-        }`}
-        onClick={() => setSelectedTeam(index)}
-      >
-        <Paper
-          elevation={0}
-          className={`rounded ${isSelected && 'selectedTeam'} ${
-            classes.cardPaper
+    <>
+      <Grid item xs={isSelected ? 8 : 12} key={data.name}>
+        <Button
+          className={`paperBtn ${isSelected && 'selectedTeam'} rounded ${
+            classes.paperBtn
           }`}
+          onClick={() => setSelectedTeam(index)}
+          disabled={isSelected}
         >
-          <Typography
-            variant="h5"
-            component="h2"
+          <Paper
+            elevation={0}
             className={`rounded ${isSelected && 'selectedTeam'} ${
-              classes.headerColumn
+              classes.cardPaper
             }`}
           >
-            {data.name}
-          </Typography>
-          <Typography
-            color="textSecondary"
-            className={`rounded ${isSelected && 'selectedTeam'} ${
-              classes.itemCountColumn
-            }`}
-          >
-            {data.membersCount}
-          </Typography>
-        </Paper>
-      </Button>
-    </Grid>
+            <Typography
+              variant="h5"
+              component="h2"
+              className={`rounded ${isSelected && 'selectedTeam'} ${
+                classes.headerColumn
+              }`}
+            >
+              {data.name}
+            </Typography>
+            <Typography
+              color="textSecondary"
+              className={`rounded ${isSelected && 'selectedTeam'} ${
+                classes.itemCountColumn
+              }`}
+            >
+              {data.membersCount}
+            </Typography>
+          </Paper>
+        </Button>
+      </Grid>
+      {isSelected && (
+        <Grid item xs={4} key={data.name}>
+          <Button className={`rounded addMemberBtn ${classes.addMemberBtn}`}>
+            <Typography
+              color="textSecondary"
+              className={`rounded ${classes.addMemberLabel}`}
+            >
+              + member
+            </Typography>
+          </Button>
+        </Grid>
+      )}
+    </>
   )
 
   const renderAddBtn = (name) => (
@@ -84,7 +99,7 @@ const SBCard = (props) => {
         <Grid
           container
           justify="flex-start"
-          alignItems="center"
+          alignItems="stretch"
           className={classes.cardColumn}
           spacing={1}
         >

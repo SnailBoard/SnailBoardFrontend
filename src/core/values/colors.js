@@ -3,6 +3,7 @@ export const SECONDARY_COLOR = '#DCD6D1'
 export const THIRD_COLOR = '#DBDBE1'
 export const ACCENT_COLOR = '#EFE5C3'
 export const ACCENT2_COLOR = '#FFFCE5'
+export const ACCENT3_COLOR = '#fcff77'
 
 export const TEXT_DIMMED_COLOR = '#777777'
 

@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import {
   ACCENT2_COLOR,
+  ACCENT3_COLOR,
   ACCENT_COLOR,
   THIRD_COLOR,
 } from '../../core/values/colors'
@@ -43,6 +44,14 @@ export const useStyles = makeStyles(() => ({
     padding: '1vh',
     textAlign: 'center',
   },
+  addMemberBtn: {
+    height: '100%',
+    background: ACCENT3_COLOR,
+  },
+  addMemberLabel: {
+    textAlign: 'center',
+  },
+  addMemberPaper: {},
   paperBtn: {},
   addModal: {
     display: 'flex',
