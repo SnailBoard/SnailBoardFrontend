@@ -1,6 +1,18 @@
 $SUCCESS_COLOR: #A8ED8E;
 $SUCCESS_DIMMED_COLOR: #c2fdac;
 
+$PRIMARY_COLOR: #BCABA8;
+$SECONDARY_COLOR: #DCD6D1;
+$THIRD_COLOR: #DBDBE1;
+$ACCENT_COLOR: #EFE5C3;
+$ACCENT2_COLOR: #FFFCE5;
+$ACCENT3_COLOR: #fcff77;
+
+$TEXT_DIMMED_COLOR: #777777;
+$ACCENT3_DIMMED_COLOR: #dfe37e;
+
+$SUCCESS_COLOR: #A8ED8E;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -39,6 +51,15 @@ a {
   }
 }
 
+.addMemberBtn {
+  width: 100%;
+  .MuiTypography-root {
+    text-transform: none;
+  }
+  &:hover {
+    background: $ACCENT3_DIMMED_COLOR !important;
+  }
+}
 .rounded {
   border-radius: 20px !important;
 }
