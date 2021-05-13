@@ -24,6 +24,7 @@ import {
   isFetchingSelector,
   isFulfilledSelector,
   setIsFulfilledFalse,
+  setRefresh,
 } from '../HomePage/homeSlice'
 
 export const useStyles = makeStyles((theme) => ({
@@ -75,6 +76,7 @@ export const useStyles = makeStyles((theme) => ({
 }))
 
 const AddTeamModal = (props) => {
+  const classes = useStyles()
   const { isModalOpen, setIsModalOpen } = props
 
   const isFulfilled = useSelector(isFulfilledSelector)
@@ -110,6 +112,7 @@ const AddTeamModal = (props) => {
   if (isFulfilled) {
     setIsModalOpen(false)
     dispatch(setIsFulfilledFalse())
+    dispatch(setRefresh())
   }
 
   const handleCloseAlert = (e, reason) => {
@@ -119,7 +122,6 @@ const AddTeamModal = (props) => {
     dispatch(userClosedErrorAlert())
   }
 
-  const classes = useStyles()
   return (
     <>
       <Modal
