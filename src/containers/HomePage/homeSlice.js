@@ -23,6 +23,7 @@ export const isTeamsFetchingSelector = (state) => state.home.teams.isFetching
 export const isTeamsFailedSelector = (state) => state.home.teams.isFailed
 export const teamsDataSelector = (state) => state.home.teams.data
 
+
 export const homeSlice = createSlice({
   name: 'home',
   initialState,
@@ -61,6 +62,7 @@ export const homeSlice = createSlice({
       state.teams.isFailed = true
       state.teams.isFetching = false
     },
+
   },
 })
 

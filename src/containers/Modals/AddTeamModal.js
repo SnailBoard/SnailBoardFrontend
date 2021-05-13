@@ -77,6 +77,7 @@ export const useStyles = makeStyles((theme) => ({
 
 const AddTeamModal = (props) => {
   const classes = useStyles()
+
   const { isModalOpen, setIsModalOpen } = props
 
   const isFulfilled = useSelector(isFulfilledSelector)
