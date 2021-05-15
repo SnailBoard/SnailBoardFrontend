@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Grid, Grow } from '@material-ui/core'
-import Header from '../../components/Header'
+import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import SBCard, { CARD_TYPES } from './SBCard'
 
