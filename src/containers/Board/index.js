@@ -8,7 +8,7 @@ const Board = () => {
 
   return (
     <div className={classes.background}>
-      <Header boardName="dev" />
+      <Header boardName="development" />
 
       <Container maxWidth="md" className={classes.cardContainer}>
         Hello

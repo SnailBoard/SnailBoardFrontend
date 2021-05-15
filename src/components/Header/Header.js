@@ -5,6 +5,7 @@ import {
   Button,
   Grid,
   IconButton,
+  Paper,
   Toolbar,
   Typography,
 } from '@material-ui/core'
@@ -15,6 +16,7 @@ import { useSelector } from 'react-redux'
 import snailLogo from '../../static/img/snailboard.png'
 import { userSelector } from '../../containers/Auth/authSlice'
 import { useStyles } from './styles'
+import { PRIMARY_COLOR } from '../../core/values/colors'
 
 const Header = (props) => {
   const { boardName } = props
@@ -50,8 +52,16 @@ const Header = (props) => {
                   </NavLink>
                 </Grid>
                 {boardName && (
-                  <Grid item xs={3}>
-                    <Typography color="textSecondary">{boardName}</Typography>
+                  <Grid item xs={4}>
+                    <Paper
+                      style={{
+                        textAlign: 'center',
+                        color: PRIMARY_COLOR,
+                      }}
+                      variant="outlined"
+                    >
+                      {boardName}
+                    </Paper>
                   </Grid>
                 )}
               </Grid>
