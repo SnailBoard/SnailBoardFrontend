@@ -16,9 +16,8 @@ const Column = (props) => {
           innerRef={providedDraggable.innerRef}
           style={{
             background: PRIMARY_COLOR,
-            maxWidth: '200px',
-            minWidth: '200px',
-            minHeight: '200px',
+            maxWidth: '210px',
+            minWidth: '210px',
             marginLeft: '2vh',
             marginRight: '2vh',
             ...providedDraggable.draggableProps.style,
@@ -40,6 +39,8 @@ const Column = (props) => {
                 style={{
                   margin: '7px',
                   backgroundColor: PRIMARY_COLOR,
+                  height: '80vh',
+                  overflow: 'auto',
                 }}
               >
                 {tasks.map((task, idx) => (

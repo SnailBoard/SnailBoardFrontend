@@ -127,6 +127,7 @@ const Board = () => {
               innerRef={provided.innerRef}
               container
               justify="flex-start"
+              alignContent="flex-start"
               className={classes.boardContainer}
             >
               {boardData.columnOrder.map((columnId, index) => {

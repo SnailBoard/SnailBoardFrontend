@@ -5,7 +5,7 @@ export const useStyles = makeStyles(() => ({
   background: {
     background: THIRD_COLOR,
     height: '100vh',
-    overflow: 'auto',
+    // overflow: 'auto',
   },
   boardContainer: {
     marginTop: '3vh',
