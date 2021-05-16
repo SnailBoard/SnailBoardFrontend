@@ -1,14 +1,14 @@
 import React from 'react'
 
 import {
-  Button,
   Grid,
-  makeStyles,
   Modal,
   Paper,
-  TextareaAutosize,
-  TextField,
+  makeStyles,
   Typography,
+  TextField,
+  TextareaAutosize,
+  Button,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
