@@ -18,7 +18,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const user = useSelector(userSelector)
 
   useEffect(() => {
-    if (isAuthorized && !user.firstName) {
+    if (isAuthorized && user.firstName) {
       setAuthorizationToken(loadState(ACCESS_TOKEN_KEY))
       dispatch(userStarted())
     }

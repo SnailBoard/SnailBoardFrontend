@@ -44,25 +44,25 @@ const Header = (props) => {
                     <HomeIcon fontSize="large" />
                   </IconButton>
                 </Grid>
-                <Grid item xs={3}>
-                  <NavLink exact to="/boards">
-                    <Typography>
-                      <Button className={classes.btnLink}>Boards</Button>
-                    </Typography>
-                  </NavLink>
-                </Grid>
                 {boardName && (
-                  <Grid item xs={4}>
-                    <Paper
-                      style={{
-                        textAlign: 'center',
-                        color: PRIMARY_COLOR,
-                      }}
-                      variant="outlined"
-                    >
-                      {boardName}
-                    </Paper>
-                  </Grid>
+                  <>
+                    <Grid item xs={3}>
+                      <Typography>
+                        <Button className={classes.btnLink}>Boards</Button>
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Paper
+                        style={{
+                          textAlign: 'center',
+                          color: PRIMARY_COLOR,
+                        }}
+                        variant="outlined"
+                      >
+                        {boardName}
+                      </Paper>
+                    </Grid>
+                  </>
                 )}
               </Grid>
             </Grid>

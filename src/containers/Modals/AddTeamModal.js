@@ -1,29 +1,29 @@
 import React, { useState } from 'react'
 
 import {
-  Grid,
-  Modal,
-  Paper,
-  makeStyles,
-  Typography,
-  TextField,
-  TextareaAutosize,
+  Backdrop,
   Button,
   CircularProgress,
-  Backdrop,
+  Grid,
+  makeStyles,
+  Modal,
+  Paper,
   Snackbar,
+  TextareaAutosize,
+  TextField,
+  Typography,
 } from '@material-ui/core'
-import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import MuiAlert from '@material-ui/lab/Alert'
+import PropTypes from 'prop-types'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
 import {
-  userClosedErrorAlert,
   addTeamStarted,
   isFailedSelector,
   isFetchingSelector,
   isFulfilledSelector,
   setIsFulfilledFalse,
+  userClosedErrorAlert,
 } from '../HomePage/homeSlice'
 
 export const useStyles = makeStyles((theme) => ({
