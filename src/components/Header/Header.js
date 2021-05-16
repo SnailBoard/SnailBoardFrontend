@@ -1,10 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   AppBar,
   Button,
   Grid,
   IconButton,
-  makeStyles,
+  Paper,
   Toolbar,
   Typography,
 } from '@material-ui/core'
@@ -12,38 +13,13 @@ import HomeIcon from '@material-ui/icons/Home'
 import { NavLink } from 'react-router-dom'
 import Icon from '@material-ui/core/Icon'
 import { useSelector } from 'react-redux'
-import { PRIMARY_COLOR } from '../core/values/colors'
-import snailLogo from '../static/img/snailboard.png'
-import { userSelector } from '../containers/Auth/authSlice'
+import snailLogo from '../../static/img/snailboard.png'
+import { userSelector } from '../../containers/Auth/authSlice'
+import { useStyles } from './styles'
+import { PRIMARY_COLOR } from '../../core/values/colors'
 
-export const useStyles = makeStyles((theme) => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-    justifyContent: 'center',
-    justifyItems: 'center',
-  },
-  title: {
-    flexGrow: 1,
-    fontSize: 'medium',
-  },
-  appBar: {
-    background: PRIMARY_COLOR,
-  },
-  btnLink: {
-    color: '#fff',
-    fontSize: 'medium',
-    textTransform: 'none',
-  },
-  snailBtn: {
-    justifyContent: 'center',
-    justifyItems: 'center',
-    margin: '10px',
-    width: '95px',
-    height: '60px',
-  },
-}))
-
-const Header = () => {
+const Header = (props) => {
+  const { boardName } = props
   const user = useSelector(userSelector)
 
   const classes = useStyles()
@@ -68,13 +44,26 @@ const Header = () => {
                     <HomeIcon fontSize="large" />
                   </IconButton>
                 </Grid>
-                <Grid item xs={3}>
-                  <NavLink exact to="/boards">
-                    <Typography>
-                      <Button className={classes.btnLink}>Boards</Button>
-                    </Typography>
-                  </NavLink>
-                </Grid>
+                {boardName && (
+                  <>
+                    <Grid item xs={3}>
+                      <Typography>
+                        <Button className={classes.btnLink}>Boards</Button>
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Paper
+                        style={{
+                          textAlign: 'center',
+                          color: PRIMARY_COLOR,
+                        }}
+                        variant="outlined"
+                      >
+                        {boardName}
+                      </Paper>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             </Grid>
             <Grid item xs={4} align="center">
@@ -123,6 +112,10 @@ const Header = () => {
       </AppBar>
     </>
   )
+}
+
+Header.propTypes = {
+  boardName: PropTypes.string,
 }
 
 export default Header

@@ -1,33 +1,47 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Container, Grid, Grow } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
-import Header from '../../components/Header'
+import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
-import SBCard, { CARD_TYPES } from './SBCard'
+import SBCard from './SBCard'
+import { CARD_TYPES } from './SBCard/cardTypes'
 
-import {
-  getTeamsStarted,
-  teamsDataSelector,
-  refreshSelector,
-} from './homeSlice'
-import { setAuthorizationToken } from '../../core/api'
-import { loadState } from '../../core/localStorage'
-import { ACCESS_TOKEN_KEY } from '../../core/values/keys'
-import { isFulfilledSelector as isAuthFulfilledSelector } from '../Auth/authSlice'
+const boardsFixture = [
+  {
+    name: 'Dev board',
+    membersCount: '2 members',
+  },
+  {
+    name: 'Design board',
+    membersCount: '4 members',
+  },
+  {
+    name: 'Test board',
+    membersCount: '1 member',
+  },
+]
+
+const teamsFixture = [
+  {
+    name: 'Dev team',
+    membersCount: '2 members',
+  },
+  {
+    name: 'Design team',
+    membersCount: '4 members',
+  },
+  {
+    name: 'Test team',
+    membersCount: '1 member',
+  },
+]
 
 const HomePage = () => {
-  const dispatch = useDispatch()
-  const isAuthFulfilled = useSelector(isAuthFulfilledSelector)
-  const refresh = useSelector(refreshSelector)
-  useEffect(() => {
-    if (isAuthFulfilled) {
-      setAuthorizationToken(loadState(ACCESS_TOKEN_KEY))
-      dispatch(getTeamsStarted())
-    }
-    console.log('Updated')
-  }, [isAuthFulfilled, refresh])
-
   const classes = useStyles()
+
+  const getBoardsItemsCount = () => '2 boards'
+
+  const getTeamsItemsCount = () => '2 teams'
+
   return (
     <div className={classes.background}>
       <Header />
@@ -42,9 +56,10 @@ const HomePage = () => {
           <Grow in disableStrictModeCompat timeout={800}>
             <Grid item xs={6}>
               <SBCard
+                itemsCount={getBoardsItemsCount()}
                 itemsHeader="Boards"
                 btnName="+ add boards"
-                rowDataSelector={teamsDataSelector}
+                columnsData={boardsFixture}
                 cardType={CARD_TYPES.BOARD}
               />
             </Grid>
@@ -52,9 +67,10 @@ const HomePage = () => {
           <Grow in disableStrictModeCompat timeout={1600}>
             <Grid item xs={6}>
               <SBCard
+                itemsCount={getTeamsItemsCount()}
                 itemsHeader="Teams"
                 btnName="+ add teams"
-                rowDataSelector={teamsDataSelector}
+                columnsData={teamsFixture}
                 cardType={CARD_TYPES.TEAM}
               />
             </Grid>
