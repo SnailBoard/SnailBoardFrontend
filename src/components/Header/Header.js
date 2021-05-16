@@ -36,13 +36,15 @@ const Header = (props) => {
                 alignItems="center"
               >
                 <Grid item xs={3}>
-                  <IconButton
-                    edge="start"
-                    className={classes.menuButton}
-                    color="inherit"
-                  >
-                    <HomeIcon fontSize="large" />
-                  </IconButton>
+                  <NavLink exact to="/home">
+                    <IconButton
+                      edge="start"
+                      className={classes.menuButton}
+                      color="inherit"
+                    >
+                      <HomeIcon fontSize="large" />
+                    </IconButton>
+                  </NavLink>
                 </Grid>
                 {boardName && (
                   <>

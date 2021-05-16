@@ -6,6 +6,7 @@ export const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     justifyContent: 'center',
     justifyItems: 'center',
+    color: 'white',
   },
   title: {
     flexGrow: 1,
