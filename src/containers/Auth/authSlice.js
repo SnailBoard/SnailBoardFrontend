@@ -5,12 +5,14 @@ import { loadState } from '../../core/localStorage'
 const initialState = {
   isAuthorized: !!loadState(ACCESS_TOKEN_KEY) && !!loadState(REFRESH_TOKEN_KEY),
   isFetching: false,
+  isFulfilled: false,
   isFailed: false,
   user: {},
 }
 
 export const isAuthorizedSelector = (state) => state.auth.isAuthorized
 export const isFetchingSelector = (state) => state.auth.isFetching
+export const isFulfilledSelector = (state) => state.auth.isFulfilled
 export const isFailedSelector = (state) => state.auth.isFailed
 export const userSelector = (state) => state.auth.user
 
@@ -43,7 +45,9 @@ export const authSlice = createSlice({
       state.isAuthorized = false
       state.isFailed = true
     },
-    userStarted: () => {},
+    userStarted: (state) => {
+      state.isFulfilled = false
+    },
     userPending: (state) => {
       state.isFetching = true
     },
@@ -51,6 +55,7 @@ export const authSlice = createSlice({
       state.user = { ...payload.payload }
       state.isFetching = false
       state.isAuthorized = true
+      state.isFulfilled = true
     },
     userFailed: (state) => {
       state.isFetching = false

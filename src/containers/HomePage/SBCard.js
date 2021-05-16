@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import { useStyles } from './styles'
 import AddTeamModal from '../Modals/AddTeamModal'
 import AddBoardModal from '../Modals/AddBoardModal'
@@ -15,12 +16,27 @@ import AddBoardModal from '../Modals/AddBoardModal'
 export const CARD_TYPES = { BOARD: 'BOARD', TEAM: 'TEAM' }
 
 const SBCard = (props) => {
-  const { itemsCount, itemsHeader, btnName, columnsData, cardType } = props
+  const { itemsHeader, btnName, rowDataSelector, cardType } = props
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [selectedTeam, setSelectedTeam] = useState(-1)
+
+  const rawRowData = useSelector(rowDataSelector)
+  const columnsData = rawRowData.slice(0, 4)
+
+  const rowsCount = () => {
+    const count = rawRowData.length
+    const label = cardType === CARD_TYPES.TEAM ? 'team' : 'board'
+    return count === 1 ? `${count} ${label}` : `${count} ${label}s`
+  }
+
+  const membersCount = (row) => {
+    const count = row.memberCount
+    return count === 1 ? `${count} member` : `${count} members`
+  }
+
   const renderColumn = (data, index, isSelected) => (
     <>
-      <Grid item xs={isSelected ? 8 : 12} key={data.name}>
+      <Grid item xs={isSelected ? 8 : 12} key={`${index} ${cardType}`}>
         <Button
           className={`paperBtn ${isSelected && 'selectedTeam'} rounded ${
             classes.paperBtn
@@ -49,7 +65,7 @@ const SBCard = (props) => {
                 classes.itemCountColumn
               }`}
             >
-              {data.membersCount}
+              {membersCount(data)}
             </Typography>
           </Paper>
         </Button>
@@ -93,7 +109,7 @@ const SBCard = (props) => {
             {itemsHeader}
           </Typography>
           <Typography className={classes.pos} color="textSecondary">
-            {itemsCount}
+            {rowsCount()}
           </Typography>
         </CardContent>
         <Grid
@@ -128,15 +144,9 @@ const SBCard = (props) => {
 
 SBCard.propTypes = {
   cardType: PropTypes.string.isRequired,
-  itemsCount: PropTypes.string.isRequired,
   itemsHeader: PropTypes.string.isRequired,
   btnName: PropTypes.string.isRequired,
-  columnsData: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      membersCount: PropTypes.string.isRequired,
-    }),
-  ),
+  rowDataSelector: PropTypes.func.isRequired,
 }
 
 export default SBCard
