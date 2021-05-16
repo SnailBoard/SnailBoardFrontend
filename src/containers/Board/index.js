@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, PureComponent } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { Grid } from '@material-ui/core'
+import PropTypes from 'prop-types'
 import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import Column from './Column'
@@ -33,6 +34,24 @@ const initialData = {
   },
   // Facilitate reordering of the columns
   columnOrder: ['column-1', 'column-2', 'column-3'],
+}
+
+class InnerList extends PureComponent {
+  render() {
+    const { column, taskMap, index } = this.props
+    const tasks = column.taskIds.map((taskId) => taskMap[taskId])
+    return <Column column={column} tasks={tasks} index={index} />
+  }
+}
+
+InnerList.propTypes = {
+  taskMap: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }),
+  column: PropTypes.shape({
+    taskIds: PropTypes.string.isRequired,
+  }),
+  index: PropTypes.number.isRequired,
 }
 
 const Board = () => {
@@ -132,15 +151,12 @@ const Board = () => {
             >
               {boardData.columnOrder.map((columnId, index) => {
                 const column = boardData.columns[columnId]
-                const tasks = column.taskIds.map(
-                  (taskId) => boardData.tasks[taskId],
-                )
                 return (
-                  <Column
+                  <InnerList
                     key={column.id}
                     column={column}
-                    tasks={tasks}
                     index={index}
+                    taskMap={boardData.tasks}
                   />
                 )
               })}

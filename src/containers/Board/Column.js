@@ -1,9 +1,25 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { Paper, Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import Card from './Card'
 import { PRIMARY_COLOR } from '../../core/values/colors'
+
+class InnerList extends PureComponent {
+  render() {
+    return this.props.tasks.map((task, index) => (
+      <Card key={task.id} task={task} index={index} />
+    ))
+  }
+}
+
+InnerList.propTypes = {
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  ),
+}
 
 const Column = (props) => {
   const { column, tasks, index } = props
@@ -43,9 +59,7 @@ const Column = (props) => {
                   overflow: 'auto',
                 }}
               >
-                {tasks.map((task, idx) => (
-                  <Card key={task.id} task={task} index={idx} />
-                ))}
+                <InnerList tasks={tasks} />
                 {provided.placeholder}
               </Paper>
             )}
