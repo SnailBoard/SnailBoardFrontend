@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { Grid } from '@material-ui/core'
 import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
@@ -40,7 +40,7 @@ const Board = () => {
 
   const classes = useStyles()
 
-  const onDragEnd = ({ destination, source, draggableId }) => {
+  const onDragEnd = ({ destination, source, draggableId, type }) => {
     if (
       !destination ||
       (destination.droppableId === source.droppableId &&
@@ -49,50 +49,62 @@ const Board = () => {
       return
     }
 
-    const start = boardData.columns[source.droppableId]
-    const finish = boardData.columns[destination.droppableId]
-
-    if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds)
-      newTaskIds.splice(source.index, 1)
-      newTaskIds.splice(destination.index, 0, draggableId)
-
-      const newColumn = {
-        ...start,
-        taskIds: newTaskIds,
-      }
+    if (type === 'column') {
+      const newColumnOrder = Array.from(boardData.columnOrder)
+      newColumnOrder.splice(source.index, 1)
+      newColumnOrder.splice(destination.index, 0, draggableId)
 
       const newBoardData = {
         ...boardData,
-        columns: {
-          ...boardData.columns,
-          [newColumn.id]: newColumn,
-        },
+        columnOrder: newColumnOrder,
       }
-
       setBoardData(newBoardData)
     } else {
-      // Moving from one list to another
-      const startTaskIds = Array.from(start.taskIds)
-      startTaskIds.splice(source.index, 1)
-      const newStart = {
-        ...start,
-        taskIds: startTaskIds,
+      const home = boardData.columns[source.droppableId]
+      const foreign = boardData.columns[destination.droppableId]
+
+      if (home === foreign) {
+        const newTaskIds = Array.from(home.taskIds)
+        newTaskIds.splice(source.index, 1)
+        newTaskIds.splice(destination.index, 0, draggableId)
+
+        const newHome = {
+          ...home,
+          taskIds: newTaskIds,
+        }
+
+        const newBoardData = {
+          ...boardData,
+          columns: {
+            ...boardData.columns,
+            [newHome.id]: newHome,
+          },
+        }
+
+        setBoardData(newBoardData)
       }
 
-      const finishTaskIds = Array.from(finish.taskIds)
-      finishTaskIds.splice(destination.index, 0, draggableId)
-      const newFinish = {
-        ...finish,
-        taskIds: finishTaskIds,
+      // moving from one list to another
+      const homeTaskIds = Array.from(home.taskIds)
+      homeTaskIds.splice(source.index, 1)
+      const newHome = {
+        ...home,
+        taskIds: homeTaskIds,
+      }
+
+      const foreignTaskIds = Array.from(foreign.taskIds)
+      foreignTaskIds.splice(destination.index, 0, draggableId)
+      const newForeign = {
+        ...foreign,
+        taskIds: foreignTaskIds,
       }
 
       const newBoardData = {
         ...boardData,
         columns: {
           ...boardData.columns,
-          [newStart.id]: newStart,
-          [newFinish.id]: newFinish,
+          [newHome.id]: newHome,
+          [newForeign.id]: newForeign,
         },
       }
       setBoardData(newBoardData)
@@ -103,17 +115,39 @@ const Board = () => {
     <div className={classes.background}>
       <Header boardName="development" />
 
-      <Grid container justify="flex-start" className={classes.boardContainer}>
-        <DragDropContext onDragEnd={onDragEnd}>
-          {boardData.columnOrder.map((columnId) => {
-            const column = boardData.columns[columnId]
-            const tasks = column.taskIds.map(
-              (taskId) => boardData.tasks[taskId],
-            )
-            return <Column key={column.id} column={column} tasks={tasks} />
-          })}
-        </DragDropContext>
-      </Grid>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="column"
+        >
+          {(provided) => (
+            <Grid
+              {...provided.droppableProps}
+              innerRef={provided.innerRef}
+              container
+              justify="flex-start"
+              className={classes.boardContainer}
+            >
+              {boardData.columnOrder.map((columnId, index) => {
+                const column = boardData.columns[columnId]
+                const tasks = column.taskIds.map(
+                  (taskId) => boardData.tasks[taskId],
+                )
+                return (
+                  <Column
+                    key={column.id}
+                    column={column}
+                    tasks={tasks}
+                    index={index}
+                  />
+                )
+              })}
+              {provided.placeholder}
+            </Grid>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   )
 }
