@@ -36,7 +36,7 @@ const HomePage = () => {
           container
           spacing={8}
           justify="flex-start"
-          alignItems="center"
+          alignItems="flex-start"
           className={classes.cardGrid}
         >
           <Grow in disableStrictModeCompat timeout={800}>

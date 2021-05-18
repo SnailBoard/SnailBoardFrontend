@@ -1,5 +1,5 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { addTeamRequest, getTeamsRequest } from './service'
+import { addBoardRequest, addTeamRequest, getTeamsRequest } from './service'
 import {
   addTeamStarted,
   addTeamPending,
@@ -9,6 +9,10 @@ import {
   getTeamsPending,
   getTeamsSuccess,
   getTeamsFailed,
+  addBoardStarted,
+  addBoardPending,
+  addBoardSuccess,
+  addBoardFailed,
 } from './homeSlice'
 
 function* addTeam({ payload }) {
@@ -33,6 +37,16 @@ function* getTeams() {
   }
 }
 
+function* addBoard({ payload }) {
+  yield put(addBoardPending())
+  const response = yield call(() => addBoardRequest(payload))
+
+  if (response.status < 400) {
+    yield put(addBoardSuccess())
+  } else {
+    yield put(addBoardFailed())
+  }
+}
 function* watchAddTeam() {
   yield takeEvery(addTeamStarted, addTeam)
 }
@@ -41,6 +55,10 @@ function* watchGetTeams() {
   yield takeEvery(getTeamsStarted, getTeams)
 }
 
+function* watchAddBoard() {
+  yield takeEvery(addBoardStarted, addBoard)
+}
+
 export default function* homeSagas() {
-  yield all([watchAddTeam(), watchGetTeams()])
+  yield all([watchAddTeam(), watchGetTeams(), watchAddBoard()])
 }

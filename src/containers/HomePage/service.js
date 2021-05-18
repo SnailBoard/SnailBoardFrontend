@@ -9,3 +9,8 @@ export const getTeamsRequest = () =>
   API.get('/team')
     .then((response) => response)
     .catch((reason) => reason)
+
+export const addBoardRequest = (payload) =>
+  API.post('/board', payload)
+    .then((response) => response)
+    .catch((reason) => reason)
