@@ -1,11 +1,12 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import {
+  addBoardRequest,
   addTeamRequest,
   getTeamsRequest,
   getUsersRequest,
   inviteUserToTeamRequest,
 } from './service'
-import { addBoardRequest, addTeamRequest, getTeamsRequest } from './service'
+
 import {
   addTeamStarted,
   addTeamPending,

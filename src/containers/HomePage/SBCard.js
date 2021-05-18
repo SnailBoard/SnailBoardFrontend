@@ -47,7 +47,6 @@ const boards = [
 const SBCard = (props) => {
   const { itemsHeader, btnName, rowDataSelector, cardType } = props
   const [addModalOpen, setAddModalOpen] = useState(false)
-  const [selectedTeam, setSelectedTeam] = useState(-1)
   const [addUserModalOpen, setAddUserModalOpen] = useState(false)
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(-1)
 
@@ -198,7 +197,9 @@ const SBCard = (props) => {
       <AddUserToTeamModal
         isOpenModal={addUserModalOpen}
         selectedTeamId={
-          columnsData && selectedTeam >= 0 ? columnsData[selectedTeam].id : ''
+          columnsData && selectedTeamIndex >= 0
+            ? columnsData[selectedTeamIndex].id
+            : ''
         }
         handleClose={handleCloneAddUserModal}
       />
