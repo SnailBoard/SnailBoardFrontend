@@ -79,7 +79,9 @@ function* user() {
   const { data } = response
   if (response.status < 400) {
     yield put(userSuccess(data))
-    // history.push('/home')
+    if (window.location.pathname === '/login') {
+      history.push('/home')
+    }
   } else if (
     response.status === 403 &&
     response.data.message === TOKEN_EXPIRED_MESSAGE
