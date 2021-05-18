@@ -5,6 +5,7 @@ import {
   getUsersRequest,
   inviteUserToTeamRequest,
 } from './service'
+import { addBoardRequest, addTeamRequest, getTeamsRequest } from './service'
 import {
   addTeamStarted,
   addTeamPending,
@@ -19,6 +20,10 @@ import {
   getUsersSuccess,
   getUsersFailed,
   inviteUserToTeam,
+  addBoardStarted,
+  addBoardPending,
+  addBoardSuccess,
+  addBoardFailed,
 } from './homeSlice'
 
 function* addTeam({ payload }) {
@@ -63,12 +68,26 @@ function* watchInviteToTeam() {
   yield takeEvery(inviteUserToTeam, inviteUser)
 }
 
+function* addBoard({ payload }) {
+  yield put(addBoardPending())
+  const response = yield call(() => addBoardRequest(payload))
+
+  if (response.status < 400) {
+    yield put(addBoardSuccess())
+  } else {
+    yield put(addBoardFailed())
+  }
+}
 function* watchAddTeam() {
   yield takeEvery(addTeamStarted, addTeam)
 }
 
 function* watchGetTeams() {
   yield takeEvery(getTeamsStarted, getTeams)
+}
+
+function* watchAddBoard() {
+  yield takeEvery(addBoardStarted, addBoard)
 }
 
 function* watchGetUsers() {
@@ -81,5 +100,6 @@ export default function* homeSagas() {
     watchGetTeams(),
     watchGetUsers(),
     watchInviteToTeam(),
+    watchAddBoard(),
   ])
 }
