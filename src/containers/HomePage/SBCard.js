@@ -9,40 +9,14 @@ import {
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
 import { useStyles } from './styles'
 import AddTeamModal from '../Modals/AddTeamModal'
 import AddBoardModal from '../Modals/AddBoardModal'
 import AddUserToTeamModal from '../Modals/AddUserToTeamModal'
-import { setSelectedTeam } from './homeSlice'
+import { getBoardsStarted, setSelectedTeam } from './homeSlice'
 
 export const CARD_TYPES = { BOARD: 'BOARD', TEAM: 'TEAM' }
-
-const boards = [
-  {
-    id: 'qrasa',
-    memberCount: 3,
-    name: 'Dev board',
-    description: 'Development board',
-  },
-  {
-    id: 'qrasa',
-    memberCount: 2,
-    name: 'Design board',
-    description: 'Development board',
-  },
-  {
-    id: 'qrasa',
-    memberCount: 4,
-    name: 'Management board',
-    description: 'Management board',
-  },
-  {
-    id: 'qrasa',
-    memberCount: 1,
-    name: 'Dev board',
-    description: 'Development board',
-  },
-]
 
 const SBCard = (props) => {
   const { itemsHeader, btnName, rowDataSelector, cardType } = props
@@ -50,29 +24,33 @@ const SBCard = (props) => {
   const [addUserModalOpen, setAddUserModalOpen] = useState(false)
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(-1)
 
-  const rawRowData = useSelector(rowDataSelector)
-  let columnsData
+  const selectorData = useSelector(rowDataSelector)
+
+  let rawData
   if (cardType === CARD_TYPES.TEAM) {
-    columnsData = rawRowData.slice(0, 4)
+    rawData = selectorData
   } else {
-    columnsData = boards
+    rawData = selectorData.boards
   }
+
+  const columnsData = rawData.slice(0, 4)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (columnsData) {
       dispatch(setSelectedTeam(columnsData[selectedTeamIndex]))
+      const selectedTeam = columnsData[selectedTeamIndex]
+      if (selectedTeam) {
+        dispatch(getBoardsStarted(selectedTeam.id))
+      }
     }
   }, [selectedTeamIndex])
 
+  const history = useHistory()
+
   const rowsCount = () => {
-    let count
-    if (cardType === CARD_TYPES.TEAM) {
-      count = rawRowData.length
-    } else {
-      count = boards.length
-    }
+    const count = rawData.length
 
     const label = cardType === CARD_TYPES.TEAM ? 'team' : 'board'
     return count === 1 ? `${count} ${label}` : `${count} ${label}s`
@@ -83,11 +61,16 @@ const SBCard = (props) => {
   }
 
   const membersCount = (row) => {
-    const count = row.memberCount
+    let count
+    if (cardType === CARD_TYPES.TEAM) {
+      count = row.memberCount
+    } else {
+      count = selectorData.memberCount
+    }
     return count === 1 ? `${count} member` : `${count} members`
   }
 
-  const renderColumn = (data, index, isSelected) => (
+  const renderTeamsColumn = (data, index, isSelected) => (
     <>
       <Grid item xs={isSelected ? 8 : 12} key={`${index} ${cardType}`}>
         <Button
@@ -141,6 +124,35 @@ const SBCard = (props) => {
     </>
   )
 
+  const renderBoardsColumn = (data, index) => (
+    <>
+      <Grid item xs={12} key={`${index} ${cardType}`}>
+        <Button
+          className={`paperBtn rounded ${classes.paperBtn}`}
+          onClick={() => {
+            history.push('/board')
+          }}
+        >
+          <Paper elevation={0} className={`rounded ${classes.cardPaper}`}>
+            <Typography
+              variant="h5"
+              component="h2"
+              className={`rounded ${classes.headerColumn}`}
+            >
+              {data.name}
+            </Typography>
+            <Typography
+              color="textSecondary"
+              className={`rounded ${classes.itemCountColumn}`}
+            >
+              {membersCount(data)}
+            </Typography>
+          </Paper>
+        </Button>
+      </Grid>
+    </>
+  )
+
   const renderAddBtn = (name) => (
     <Grid item xs={12}>
       <Button
@@ -176,9 +188,11 @@ const SBCard = (props) => {
           spacing={1}
         >
           {columnsData.map((data, index) => {
-            const isSelected =
-              cardType === CARD_TYPES.TEAM && selectedTeamIndex === index
-            return renderColumn(data, index, isSelected)
+            if (cardType === CARD_TYPES.TEAM) {
+              const isSelected = selectedTeamIndex === index
+              return renderTeamsColumn(data, index, isSelected)
+            }
+            return renderBoardsColumn(data, index)
           })}
           {renderAddBtn(btnName)}
         </Grid>
@@ -196,11 +210,6 @@ const SBCard = (props) => {
       )}
       <AddUserToTeamModal
         isOpenModal={addUserModalOpen}
-        selectedTeamId={
-          columnsData && selectedTeamIndex >= 0
-            ? columnsData[selectedTeamIndex].id
-            : ''
-        }
         handleClose={handleCloneAddUserModal}
       />
     </>

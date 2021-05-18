@@ -27,3 +27,8 @@ export const addBoardRequest = (payload) =>
   API.post('/board', payload)
     .then((response) => response)
     .catch((reason) => reason)
+
+export const getBoardsRequest = (id) =>
+  API.get(`/board/byTeam/${id}`)
+    .then((response) => response)
+    .catch((reason) => reason)

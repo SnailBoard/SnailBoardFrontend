@@ -18,6 +18,7 @@ import {
   usersSelector,
   usersLoadingSelector,
   inviteUserToTeam,
+  selectedTeamSelector,
 } from '../HomePage/homeSlice'
 import { userSelector } from '../Auth/authSlice'
 
@@ -70,11 +71,12 @@ export const useStyles = makeStyles((theme) => ({
 }))
 
 const AddUserToTeamModal = (props) => {
-  const { isOpenModal, handleClose, selectedTeamId } = props
+  const { isOpenModal, handleClose } = props
   const [username, setUsername] = useState('')
   const usernames = useSelector(usersSelector)
   const currentUser = useSelector(userSelector)
   const isUsersLoading = useSelector(usersLoadingSelector)
+  const selectedTeam = useSelector(selectedTeamSelector)
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(true)
   const dispatch = useDispatch()
@@ -96,17 +98,22 @@ const AddUserToTeamModal = (props) => {
   }
 
   const handleAddUser = () => {
-    if (username) {
-      dispatch(
-        inviteUserToTeam({
-          userEmail: usernames.find((user) => user.username === username).email,
-          teamId: selectedTeamId,
-        }),
-      )
-      handleClose()
-    } else if (email && isEmailValid) {
-      dispatch(inviteUserToTeam({ userEmail: email, teamId: selectedTeamId }))
-      handleClose()
+    if (selectedTeam) {
+      if (username) {
+        dispatch(
+          inviteUserToTeam({
+            userEmail: usernames.find((user) => user.username === username)
+              .email,
+            teamId: selectedTeam.id,
+          }),
+        )
+        handleClose()
+      } else if (email && isEmailValid) {
+        dispatch(
+          inviteUserToTeam({ userEmail: email, teamId: selectedTeam.id }),
+        )
+        handleClose()
+      }
     }
   }
 
@@ -216,7 +223,6 @@ const AddUserToTeamModal = (props) => {
 AddUserToTeamModal.propTypes = {
   isOpenModal: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  selectedTeamId: PropTypes.string,
 }
 
 export default AddUserToTeamModal

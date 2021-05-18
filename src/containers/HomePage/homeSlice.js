@@ -24,6 +24,15 @@ const initialState = {
     isUsersFetching: false,
     isUserFetchingFailed: false,
   },
+  boards: {
+    isFetching: false,
+    isFailed: false,
+    isFulfilled: false,
+    data: {
+      boards: [],
+      memberCount: 0,
+    },
+  },
   selectedTeam: '',
 }
 
@@ -47,6 +56,12 @@ export const isTeamsFailedSelector = (state) => state.home.teams.isFailed
 export const teamsDataSelector = (state) => state.home.teams.data
 export const usersSelector = (state) => state.home.teams.users
 export const usersLoadingSelector = (state) => state.home.teams.isUsersFetching
+
+export const isBoardsFulfilledSelector = (state) =>
+  state.home.boards.isFulfilled
+export const isBoardsFetchingSelector = (state) => state.home.boards.isFetching
+export const isBoardsFailedSelector = (state) => state.home.boards.isFailed
+export const boardsDataSelector = (state) => state.home.boards.data
 
 export const selectedTeamSelector = (state) => state.home.selectedTeam
 
@@ -90,6 +105,19 @@ export const homeSlice = createSlice({
     getTeamsFailed: (state) => {
       state.teams.isFailed = true
       state.teams.isFetching = false
+    },
+    getBoardsStarted: () => {},
+    getBoardsPending: (state) => {
+      state.boards.isFetching = true
+    },
+    getBoardsSuccess: (state, payload) => {
+      state.boards.isFetching = false
+      state.boards.isFulfilled = true
+      state.boards.data = payload.payload
+    },
+    getBoardsFailed: (state) => {
+      state.boards.isFailed = true
+      state.boards.isFetching = false
     },
     getUsersStarted: () => {},
     getUsersPending: (state) => {
@@ -144,6 +172,10 @@ export const {
   getUsersSuccess,
   getUsersFailed,
   inviteUserToTeam,
+  getBoardsStarted,
+  getBoardsPending,
+  getBoardsSuccess,
+  getBoardsFailed,
 } = homeSlice.actions
 
 export default homeSlice.reducer
