@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import { useStyles } from './styles'
 import AddTeamModal from '../Modals/AddTeamModal'
 import AddBoardModal from '../Modals/AddBoardModal'
+import AddUserToTeamModal from '../Modals/AddUserToTeamModal'
 
 export const CARD_TYPES = { BOARD: 'BOARD', TEAM: 'TEAM' }
 
@@ -19,6 +20,7 @@ const SBCard = (props) => {
   const { itemsHeader, btnName, rowDataSelector, cardType } = props
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [selectedTeam, setSelectedTeam] = useState(-1)
+  const [addUserModalOpen, setAddUserModalOpen] = useState(false)
 
   const rawRowData = useSelector(rowDataSelector)
   const columnsData = rawRowData.slice(0, 4)
@@ -27,6 +29,10 @@ const SBCard = (props) => {
     const count = rawRowData.length
     const label = cardType === CARD_TYPES.TEAM ? 'team' : 'board'
     return count === 1 ? `${count} ${label}` : `${count} ${label}s`
+  }
+
+  const handleCloneAddUserModal = () => {
+    setAddUserModalOpen(false)
   }
 
   const membersCount = (row) => {
@@ -72,7 +78,10 @@ const SBCard = (props) => {
       </Grid>
       {isSelected && (
         <Grid item xs={4} key={data.name}>
-          <Button className={`rounded addMemberBtn ${classes.addMemberBtn}`}>
+          <Button
+            className={`rounded addMemberBtn ${classes.addMemberBtn}`}
+            onClick={() => setAddUserModalOpen(true)}
+          >
             <Typography
               color="textSecondary"
               className={`rounded ${classes.addMemberLabel}`}
@@ -138,6 +147,13 @@ const SBCard = (props) => {
           setIsModalOpen={setAddModalOpen}
         />
       )}
+      <AddUserToTeamModal
+        isOpenModal={addUserModalOpen}
+        selectedTeamId={
+          columnsData && selectedTeam >= 0 ? columnsData[selectedTeam].id : ''
+        }
+        handleClose={handleCloneAddUserModal}
+      />
     </>
   )
 }

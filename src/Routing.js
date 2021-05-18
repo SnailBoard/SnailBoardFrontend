@@ -10,6 +10,7 @@ import PrivateRoute from './components/Auth/PrivateRoute'
 import HomePage from './containers/HomePage'
 import LogoutPage from './containers/Auth/Logout'
 import Board from './containers/Board'
+import TeamInvitePage from './containers/HomePage/TeamInvitePage'
 
 const Routing = () => (
   <Switch>
@@ -20,6 +21,11 @@ const Routing = () => (
     <PublicRoute exact path="/welcome" component={WelcomePage} />
     <PublicRoute exact path="/register" component={RegisterPage} />
     <PublicRoute exact path="/logout" component={LogoutPage} />
+    <PublicRoute
+      exact
+      path="/team/invite/:inviteId"
+      component={TeamInvitePage}
+    />
     <PublicRoute exact path="/" component={WelcomePage} />
   </Switch>
 )

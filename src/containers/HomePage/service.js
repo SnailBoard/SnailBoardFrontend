@@ -9,3 +9,16 @@ export const getTeamsRequest = () =>
   API.get('/team')
     .then((response) => response)
     .catch((reason) => reason)
+
+export const getUsersRequest = () =>
+  API.get('/usersInfo/n')
+    .then((response) => response)
+    .catch((reason) => reason)
+
+export const inviteUserToTeamRequest = (payload) => {
+  API.get('/team/generateLink', {
+    params: payload,
+  })
+    .then((response) => response)
+    .catch((reason) => reason)
+}

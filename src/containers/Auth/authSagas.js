@@ -1,6 +1,7 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import history from '../../setupHistory'
 import {
+  acceptInvitationRequest,
   getRefreshData,
   loginRequest,
   logoutRequest,
@@ -37,6 +38,10 @@ function* login({ payload }) {
 
   if (response.status < 400) {
     yield put(userStarted())
+    const inviteId = localStorage.getItem('inviteId')
+    if (inviteId) {
+      yield call(() => acceptInvitationRequest({ inviteId }))
+    }
   } else {
     yield put(loginFailed())
   }
@@ -79,7 +84,7 @@ function* user() {
   const { data } = response
   if (response.status < 400) {
     yield put(userSuccess(data))
-    // history.push('/home')
+    history.push('/home')
   } else if (
     response.status === 403 &&
     response.data.message === TOKEN_EXPIRED_MESSAGE
