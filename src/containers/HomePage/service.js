@@ -11,7 +11,7 @@ export const getTeamsRequest = () =>
     .catch((reason) => reason)
 
 export const getUsersRequest = () =>
-  API.get('/usersInfo/n')
+  API.get('/usersInfo')
     .then((response) => response)
     .catch((reason) => reason)
 

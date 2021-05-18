@@ -41,6 +41,7 @@ function* login({ payload }) {
     const inviteId = localStorage.getItem('inviteId')
     if (inviteId) {
       yield call(() => acceptInvitationRequest({ inviteId }))
+      localStorage.removeItem('inviteId')
     }
   } else {
     yield put(loginFailed())
