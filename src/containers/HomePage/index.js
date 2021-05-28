@@ -9,6 +9,7 @@ import {
   getTeamsStarted,
   teamsDataSelector,
   refreshSelector,
+  boardsDataSelector,
 } from './homeSlice'
 import { setAuthorizationToken } from '../../core/api'
 import { loadState } from '../../core/localStorage'
@@ -44,7 +45,7 @@ const HomePage = () => {
               <SBCard
                 itemsHeader="Boards"
                 btnName="+ add boards"
-                rowDataSelector={teamsDataSelector}
+                rowDataSelector={boardsDataSelector}
                 cardType={CARD_TYPES.BOARD}
               />
             </Grid>

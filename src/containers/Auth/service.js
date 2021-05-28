@@ -44,3 +44,9 @@ export const refreshRequest = (data) =>
       return response
     })
     .catch((reason) => reason)
+
+export const acceptInvitationRequest = (payload) => {
+  API.put(`team/acceptInvitation/${payload.inviteId}`)
+    .then((response) => response)
+    .catch((reason) => reason)
+}

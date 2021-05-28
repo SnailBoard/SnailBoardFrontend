@@ -1,6 +1,7 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import history from '../../setupHistory'
 import {
+  acceptInvitationRequest,
   getRefreshData,
   loginRequest,
   logoutRequest,
@@ -37,6 +38,11 @@ function* login({ payload }) {
 
   if (response.status < 400) {
     yield put(userStarted())
+    const inviteId = localStorage.getItem('inviteId')
+    if (inviteId) {
+      yield call(() => acceptInvitationRequest({ inviteId }))
+      localStorage.removeItem('inviteId')
+    }
   } else {
     yield put(loginFailed())
   }

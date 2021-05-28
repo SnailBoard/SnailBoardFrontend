@@ -20,6 +20,18 @@ const initialState = {
     isFailed: false,
     isFulfilled: false,
     data: [],
+    users: [],
+    isUsersFetching: false,
+    isUserFetchingFailed: false,
+  },
+  boards: {
+    isFetching: false,
+    isFailed: false,
+    isFulfilled: false,
+    data: {
+      boards: [],
+      memberCount: 0,
+    },
   },
   selectedTeam: '',
 }
@@ -42,6 +54,14 @@ export const isTeamsFulfilledSelector = (state) => state.home.teams.isFulfilled
 export const isTeamsFetchingSelector = (state) => state.home.teams.isFetching
 export const isTeamsFailedSelector = (state) => state.home.teams.isFailed
 export const teamsDataSelector = (state) => state.home.teams.data
+export const usersSelector = (state) => state.home.teams.users
+export const usersLoadingSelector = (state) => state.home.teams.isUsersFetching
+
+export const isBoardsFulfilledSelector = (state) =>
+  state.home.boards.isFulfilled
+export const isBoardsFetchingSelector = (state) => state.home.boards.isFetching
+export const isBoardsFailedSelector = (state) => state.home.boards.isFailed
+export const boardsDataSelector = (state) => state.home.boards.data
 
 export const selectedTeamSelector = (state) => state.home.selectedTeam
 
@@ -86,6 +106,31 @@ export const homeSlice = createSlice({
       state.teams.isFailed = true
       state.teams.isFetching = false
     },
+    getBoardsStarted: () => {},
+    getBoardsPending: (state) => {
+      state.boards.isFetching = true
+    },
+    getBoardsSuccess: (state, payload) => {
+      state.boards.isFetching = false
+      state.boards.isFulfilled = true
+      state.boards.data = payload.payload
+    },
+    getBoardsFailed: (state) => {
+      state.boards.isFailed = true
+      state.boards.isFetching = false
+    },
+    getUsersStarted: () => {},
+    getUsersPending: (state) => {
+      state.teams.isUsersFetching = true
+    },
+    getUsersSuccess: (state, payload) => {
+      state.teams.users = payload.payload
+    },
+    getUsersFailed: (state) => {
+      state.teams.isUsersFetching = false
+      state.teams.isUserFetchingFailed = true
+    },
+    inviteUserToTeam: () => {},
     addBoardStarted: () => {},
     addBoardPending: (state) => {
       state.addBoard.isFetching = true
@@ -122,6 +167,15 @@ export const {
   addBoardSuccess,
   addBoardFailed,
   setSelectedTeam,
+  getUsersPending,
+  getUsersStarted,
+  getUsersSuccess,
+  getUsersFailed,
+  inviteUserToTeam,
+  getBoardsStarted,
+  getBoardsPending,
+  getBoardsSuccess,
+  getBoardsFailed,
 } = homeSlice.actions
 
 export default homeSlice.reducer

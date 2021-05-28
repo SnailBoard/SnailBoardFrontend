@@ -1,5 +1,13 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { addBoardRequest, addTeamRequest, getTeamsRequest } from './service'
+import {
+  addBoardRequest,
+  addTeamRequest,
+  getBoardsRequest,
+  getTeamsRequest,
+  getUsersRequest,
+  inviteUserToTeamRequest,
+} from './service'
+
 import {
   addTeamStarted,
   addTeamPending,
@@ -9,10 +17,19 @@ import {
   getTeamsPending,
   getTeamsSuccess,
   getTeamsFailed,
+  getUsersPending,
+  getUsersStarted,
+  getUsersSuccess,
+  getUsersFailed,
+  inviteUserToTeam,
   addBoardStarted,
   addBoardPending,
   addBoardSuccess,
   addBoardFailed,
+  getBoardsStarted,
+  getBoardsPending,
+  getBoardsSuccess,
+  getBoardsFailed,
 } from './homeSlice'
 
 function* addTeam({ payload }) {
@@ -37,6 +54,37 @@ function* getTeams() {
   }
 }
 
+function* getBoards({ payload }) {
+  yield put(getBoardsPending())
+  const response = yield call(() => getBoardsRequest(payload))
+
+  if (response.status < 400) {
+    yield put(getBoardsSuccess(response.data))
+  } else {
+    yield put(getBoardsFailed())
+  }
+}
+
+function* getUsers() {
+  yield put(getUsersPending())
+  const response = yield call(() => getUsersRequest())
+
+  if (response.status < 400) {
+    yield put(getUsersSuccess(response.data))
+  } else {
+    yield put(getUsersFailed())
+  }
+}
+
+function* inviteUser({ payload }) {
+  console.log(payload)
+  yield call(() => inviteUserToTeamRequest(payload))
+}
+
+function* watchInviteToTeam() {
+  yield takeEvery(inviteUserToTeam, inviteUser)
+}
+
 function* addBoard({ payload }) {
   yield put(addBoardPending())
   const response = yield call(() => addBoardRequest(payload))
@@ -55,10 +103,25 @@ function* watchGetTeams() {
   yield takeEvery(getTeamsStarted, getTeams)
 }
 
+function* watchGetBoards() {
+  yield takeEvery(getBoardsStarted, getBoards)
+}
+
 function* watchAddBoard() {
   yield takeEvery(addBoardStarted, addBoard)
 }
 
+function* watchGetUsers() {
+  yield takeEvery(getUsersStarted, getUsers)
+}
+
 export default function* homeSagas() {
-  yield all([watchAddTeam(), watchGetTeams(), watchAddBoard()])
+  yield all([
+    watchAddTeam(),
+    watchGetTeams(),
+    watchGetUsers(),
+    watchInviteToTeam(),
+    watchAddBoard(),
+    watchGetBoards(),
+  ])
 }
