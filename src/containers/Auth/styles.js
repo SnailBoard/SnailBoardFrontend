@@ -6,6 +6,7 @@ export const useStyles = makeStyles((theme) => ({
     height: '70vh',
     width: 500,
     margin: '20px auto',
+    display: 'flex',
   },
   element: {
     marginTop: 20,
@@ -28,5 +29,21 @@ export const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
+  },
+  authBody: {
+    background: '#EFE5C3',
+    display: 'inline-flex',
+    width: '100vw',
+    height: '100vh',
+    margin: 'auto',
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginPaper: {
+    background: 'linear-gradient(to bottom right, #EFFCD5, #FFFCE5)',
+  },
+  registerPaper: {
+    background: 'linear-gradient(to bottom right, #F4D9B0, #FFFCE5)',
   },
 }))
