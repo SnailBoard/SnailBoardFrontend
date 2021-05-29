@@ -18,6 +18,7 @@ export const useStyles = makeStyles(() => ({
   card: {
     minWidth: 200,
     background: ACCENT_COLOR,
+    textAlign: 'center',
   },
   header: {
     textAlign: 'center',
@@ -63,5 +64,8 @@ export const useStyles = makeStyles(() => ({
     height: '50vh',
     width: '70vh',
     margin: '20px auto',
+  },
+  boardsLoader: {
+    color: 'green',
   },
 }))
