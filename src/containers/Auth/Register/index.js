@@ -107,102 +107,107 @@ const RegisterPage = () => {
   }
 
   return (
-    <Grow in disableStrictModeCompat timeout={800}>
-      <Paper elevation={10} className={classes.paper}>
-        <Grid container alignItems="center" direction="column">
-          <Grid item align="center">
-            <Avatar className={classes.avatarRegister}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <h2>Register</h2>
-          </Grid>
-          <TextField
-            label="Email"
-            variant="outlined"
-            placeholder="Enter email"
-            fullWidth
-            required
-            className={classes.element}
-            onChange={onEmailChange}
-            error={!isEmailValid}
-            helperText={!isEmailValid && 'Incorrect email format'}
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            placeholder="Enter password"
-            type="password"
-            fullWidth
-            required
-            className={classes.element}
-            onChange={onPasswordChange}
-            error={!isPasswordValid}
-            helperText={!isPasswordValid && 'At least 6 characters'}
-          />
-          <TextField
-            label="Username"
-            variant="outlined"
-            // placeholder="Enter password"
-            type="username"
-            fullWidth
-            required
-            className={classes.element}
-            onChange={onUsernameChange}
-            error={!isUsernameValid}
-            helperText={!isUsernameValid && 'At least 2 characters'}
-          />
-          <TextField
-            label="First name"
-            variant="outlined"
-            // placeholder="Enter password"
-            type="firstName"
-            fullWidth
-            required
-            className={classes.element}
-            onChange={onFirstNameChange}
-            error={!isFirstNameValid}
-            helperText={!isFirstNameValid && 'At least 2 characters'}
-          />
-          <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            className={classes.button}
-            onClick={() => onRegisterClick()}
-            disabled={isFetching}
-            fullWidth
-          >
-            Register
-          </Button>
-          <Backdrop className={classes.backdrop} open={isFetching}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
-          <Snackbar
-            open={isFailed}
-            autoHideDuration={6000}
-            onClose={handleCloseAlert}
-          >
-            <MuiAlert
-              elevation={6}
-              variant="filled"
-              onClose={handleCloseAlert}
-              severity="error"
+    <div className={classes.authBody}>
+      <Grow in disableStrictModeCompat timeout={800}>
+        <Paper
+          elevation={10}
+          className={`${classes.paper} ${classes.registerPaper}`}
+        >
+          <Grid container alignItems="center" direction="column">
+            <Grid item align="center">
+              <Avatar className={classes.avatarRegister}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <h2>Register</h2>
+            </Grid>
+            <TextField
+              label="Email"
+              variant="outlined"
+              placeholder="Enter email"
+              fullWidth
+              required
+              className={classes.element}
+              onChange={onEmailChange}
+              error={!isEmailValid}
+              helperText={!isEmailValid && 'Incorrect email format'}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              placeholder="Enter password"
+              type="password"
+              fullWidth
+              required
+              className={classes.element}
+              onChange={onPasswordChange}
+              error={!isPasswordValid}
+              helperText={!isPasswordValid && 'At least 6 characters'}
+            />
+            <TextField
+              label="Username"
+              variant="outlined"
+              // placeholder="Enter password"
+              type="username"
+              fullWidth
+              required
+              className={classes.element}
+              onChange={onUsernameChange}
+              error={!isUsernameValid}
+              helperText={!isUsernameValid && 'At least 2 characters'}
+            />
+            <TextField
+              label="First name"
+              variant="outlined"
+              // placeholder="Enter password"
+              type="firstName"
+              fullWidth
+              required
+              className={classes.element}
+              onChange={onFirstNameChange}
+              error={!isFirstNameValid}
+              helperText={!isFirstNameValid && 'At least 2 characters'}
+            />
+            <Button
+              type="submit"
+              color="primary"
+              variant="contained"
+              className={classes.button}
+              onClick={() => onRegisterClick()}
+              disabled={isFetching}
+              fullWidth
             >
-              Error during register!
-            </MuiAlert>
-          </Snackbar>
-          <NavLink exact to="/login">
-            <Typography className={classes.element}>
-              {' '}
-              <Button color="primary">
-                I don&apos;t have an account
-                <MoodIcon className={classes.mood} />
-              </Button>
-            </Typography>
-          </NavLink>
-        </Grid>
-      </Paper>
-    </Grow>
+              Register
+            </Button>
+            <Backdrop className={classes.backdrop} open={isFetching}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+            <Snackbar
+              open={isFailed}
+              autoHideDuration={6000}
+              onClose={handleCloseAlert}
+            >
+              <MuiAlert
+                elevation={6}
+                variant="filled"
+                onClose={handleCloseAlert}
+                severity="error"
+              >
+                Error during register!
+              </MuiAlert>
+            </Snackbar>
+            <NavLink exact to="/login">
+              <Typography className={classes.element}>
+                {' '}
+                <Button color="primary">
+                  I have an account
+                  <MoodIcon className={classes.mood} />
+                </Button>
+              </Typography>
+            </NavLink>
+          </Grid>
+        </Paper>
+      </Grow>
+    </div>
   )
 }
 
