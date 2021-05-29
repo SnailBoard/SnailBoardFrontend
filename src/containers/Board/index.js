@@ -1,7 +1,8 @@
-import React, { useState, PureComponent } from 'react'
+import React, { PureComponent, useState } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { Grid } from '@material-ui/core'
 import PropTypes from 'prop-types'
+import { Grid } from '@material-ui/core'
+import { useParams } from 'react-router'
 import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import Column from './Column'
@@ -55,6 +56,7 @@ InnerList.propTypes = {
 }
 
 const Board = () => {
+  const { boardName } = useParams()
   const [boardData, setBoardData] = useState(initialData)
 
   const classes = useStyles()
@@ -132,7 +134,7 @@ const Board = () => {
 
   return (
     <div className={classes.background}>
-      <Header boardName="development" />
+      <Header boardName={boardName} />
 
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
