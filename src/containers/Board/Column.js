@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react'
 import { Paper, Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
-import Card from './Card'
+import Ticket from './Ticket'
 import { PRIMARY_COLOR } from '../../core/values/colors'
 
 class InnerList extends PureComponent {
   render() {
     return this.props.tasks.map((task, index) => (
-      <Card key={task.id} task={task} index={index} />
+      <Ticket key={task.id} task={task} index={index} />
     ))
   }
 }

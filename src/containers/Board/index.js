@@ -1,41 +1,19 @@
-import React, { PureComponent, useState } from 'react'
+import React, { PureComponent } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
 import { Grid } from '@material-ui/core'
 import { useParams } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import Column from './Column'
-
-const initialData = {
-  tasks: {
-    'task-1': { id: 'task-1', content: 'Take out the garbage' },
-    'task-2': { id: 'task-2', content: 'Watch my favorite show' },
-    'task-3': { id: 'task-3', content: 'Charge my phone' },
-    'task-4': { id: 'task-4', content: 'Cook dinner' },
-    'task-5': { id: 'task-5', content: 'Go shopping' },
-    'task-6': { id: 'task-6', content: 'Write essay' },
-  },
-  columns: {
-    'column-1': {
-      id: 'column-1',
-      title: 'To do',
-      taskIds: ['task-1', 'task-2', 'task-3', 'task-4'],
-    },
-    'column-2': {
-      id: 'column-2',
-      title: 'In progress',
-      taskIds: ['task-5', 'task-6'],
-    },
-    'column-3': {
-      id: 'column-3',
-      title: 'Done',
-      taskIds: [],
-    },
-  },
-  // Facilitate reordering of the columns
-  columnOrder: ['column-1', 'column-2', 'column-3'],
-}
+import {
+  columnOrderSelector,
+  columnsSelector,
+  tasksSelector,
+  changeColumnsSuccess,
+  changeColumnOrderSuccess,
+} from './boardSlice'
 
 class InnerList extends PureComponent {
   render() {
@@ -56,8 +34,13 @@ InnerList.propTypes = {
 }
 
 const Board = () => {
+  const dispatch = useDispatch()
+
+  const tasks = useSelector(tasksSelector)
+  const columns = useSelector(columnsSelector)
+  const columnOrder = useSelector(columnOrderSelector)
+
   const { boardName } = useParams()
-  const [boardData, setBoardData] = useState(initialData)
 
   const classes = useStyles()
 
@@ -71,18 +54,14 @@ const Board = () => {
     }
 
     if (type === 'column') {
-      const newColumnOrder = Array.from(boardData.columnOrder)
+      const newColumnOrder = Array.from(columnOrder)
       newColumnOrder.splice(source.index, 1)
       newColumnOrder.splice(destination.index, 0, draggableId)
 
-      const newBoardData = {
-        ...boardData,
-        columnOrder: newColumnOrder,
-      }
-      setBoardData(newBoardData)
+      dispatch(changeColumnOrderSuccess(newColumnOrder))
     } else {
-      const home = boardData.columns[source.droppableId]
-      const foreign = boardData.columns[destination.droppableId]
+      const home = columns[source.droppableId]
+      const foreign = columns[destination.droppableId]
 
       if (home === foreign) {
         const newTaskIds = Array.from(home.taskIds)
@@ -94,15 +73,11 @@ const Board = () => {
           taskIds: newTaskIds,
         }
 
-        const newBoardData = {
-          ...boardData,
-          columns: {
-            ...boardData.columns,
-            [newHome.id]: newHome,
-          },
+        const newColumnsData = {
+          ...columns,
+          [newHome.id]: newHome,
         }
-
-        setBoardData(newBoardData)
+        dispatch(changeColumnsSuccess(newColumnsData))
       }
 
       // moving from one list to another
@@ -120,15 +95,12 @@ const Board = () => {
         taskIds: foreignTaskIds,
       }
 
-      const newBoardData = {
-        ...boardData,
-        columns: {
-          ...boardData.columns,
-          [newHome.id]: newHome,
-          [newForeign.id]: newForeign,
-        },
+      const newColumnsData = {
+        ...columns,
+        [newHome.id]: newHome,
+        [newForeign.id]: newForeign,
       }
-      setBoardData(newBoardData)
+      dispatch(changeColumnsSuccess(newColumnsData))
     }
   }
 
@@ -151,14 +123,14 @@ const Board = () => {
               alignContent="flex-start"
               className={classes.boardContainer}
             >
-              {boardData.columnOrder.map((columnId, index) => {
-                const column = boardData.columns[columnId]
+              {columnOrder.map((columnId, index) => {
+                const column = columns[columnId]
                 return (
                   <InnerList
                     key={column.id}
                     column={column}
                     index={index}
-                    taskMap={boardData.tasks}
+                    taskMap={tasks}
                   />
                 )
               })}
