@@ -1,19 +1,20 @@
 import React, { PureComponent } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
-import { Grid } from '@material-ui/core'
+import { Grid, InputBase, Paper } from '@material-ui/core'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import Column from './Column'
 import {
+  changeColumnOrderSuccess,
+  changeColumnsSuccess,
   columnOrderSelector,
   columnsSelector,
   tasksSelector,
-  changeColumnsSuccess,
-  changeColumnOrderSuccess,
 } from './boardSlice'
+import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
 
 class InnerList extends PureComponent {
   render() {
@@ -135,6 +136,30 @@ const Board = () => {
                 )
               })}
               {provided.placeholder}
+              <Paper
+                style={{
+                  background: PRIMARY_COLOR,
+                  maxWidth: '210px',
+                  minWidth: '210px',
+                  height: '45px',
+                  marginLeft: '2vh',
+                  marginRight: '2vh',
+                }}
+              >
+                <Paper
+                  style={{
+                    background: ACCENT2_COLOR,
+                    margin: '1vh',
+                    textAlign: 'center',
+                  }}
+                >
+                  <InputBase
+                    className={classes.input}
+                    placeholder="+ Add new column"
+                    inputProps={{ className: classes.inputTextColor }}
+                  />
+                </Paper>
+              </Paper>
             </Grid>
           )}
         </Droppable>
