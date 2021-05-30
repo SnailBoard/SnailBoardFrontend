@@ -78,7 +78,9 @@ const Board = () => {
           ...columns,
           [newHome.id]: newHome,
         }
+
         dispatch(changeColumnsSuccess(newColumnsData))
+        return
       }
 
       // moving from one list to another

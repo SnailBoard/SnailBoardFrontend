@@ -47,7 +47,6 @@ export const boardSlice = createSlice({
     changeColumnsSuccess: (state, { payload }) => {
       state.columns = payload
       state.isFetching = false
-      state.isAuthorized = true
     },
     changeColumnOrderStarted: () => {},
     changeColumnOrderPending: (state) => {
@@ -56,7 +55,6 @@ export const boardSlice = createSlice({
     changeColumnOrderSuccess: (state, { payload }) => {
       state.columnOrder = payload
       state.isFetching = false
-      state.isAuthorized = true
     },
   },
 })
