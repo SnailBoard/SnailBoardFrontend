@@ -9,7 +9,7 @@ import { useStyles } from './styles'
 import Column from './Column'
 import {
   changeColumnOrderSuccess,
-  changeColumnsSuccess,
+  changeTasksInColumnsSuccess,
   columnOrderSelector,
   columnsSelector,
   tasksSelector,
@@ -79,7 +79,7 @@ const Board = () => {
           [newHome.id]: newHome,
         }
 
-        dispatch(changeColumnsSuccess(newColumnsData))
+        dispatch(changeTasksInColumnsSuccess(newColumnsData))
         return
       }
 
@@ -103,15 +103,17 @@ const Board = () => {
         [newHome.id]: newHome,
         [newForeign.id]: newForeign,
       }
-      dispatch(changeColumnsSuccess(newColumnsData))
+      dispatch(changeTasksInColumnsSuccess(newColumnsData))
     }
   }
 
   const addNewColumn = (event) => {
-    const {
-      target: { value },
-    } = event
-    console.log(value)
+    if (event.keyCode === 13) {
+      const {
+        target: { value },
+      } = event
+      console.log(value)
+    }
   }
 
   return (
@@ -164,7 +166,7 @@ const Board = () => {
                     className={classes.input}
                     placeholder="+ Add new column"
                     inputProps={{ className: classes.inputTextColor }}
-                    onChange={addNewColumn}
+                    onKeyDown={addNewColumn}
                   />
                 </Paper>
               </Paper>

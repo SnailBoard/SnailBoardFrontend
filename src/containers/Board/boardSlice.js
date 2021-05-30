@@ -40,11 +40,11 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    changeColumnsStarted: () => {},
-    changeColumnsPending: (state) => {
+    changeTasksInColumnsStarted: () => {},
+    changeTasksInColumnsPending: (state) => {
       state.isFetching = true
     },
-    changeColumnsSuccess: (state, { payload }) => {
+    changeTasksInColumnsSuccess: (state, { payload }) => {
       state.columns = payload
       state.isFetching = false
     },
@@ -60,9 +60,9 @@ export const boardSlice = createSlice({
 })
 
 export const {
-  changeColumnsPending,
-  changeColumnsStarted,
-  changeColumnsSuccess,
+  changeTasksInColumnsPending,
+  changeTasksInColumnsStarted,
+  changeTasksInColumnsSuccess,
   changeColumnOrderPending,
   changeColumnOrderStarted,
   changeColumnOrderSuccess,
