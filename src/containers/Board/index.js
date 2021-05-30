@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
-import { Grid, InputBase, Paper } from '@material-ui/core'
+import { GridList, InputBase, Paper } from '@material-ui/core'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header/Header'
@@ -105,6 +105,13 @@ const Board = () => {
     }
   }
 
+  const addNewColumn = (event) => {
+    const {
+      target: { value },
+    } = event
+    console.log(value)
+  }
+
   return (
     <div className={classes.background}>
       <Header boardName={boardName} />
@@ -116,12 +123,10 @@ const Board = () => {
           type="column"
         >
           {(provided) => (
-            <Grid
+            <GridList
               {...provided.droppableProps}
               innerRef={provided.innerRef}
               container
-              justify="flex-start"
-              alignContent="flex-start"
               className={classes.boardContainer}
             >
               {columnOrder.map((columnId, index) => {
@@ -157,10 +162,11 @@ const Board = () => {
                     className={classes.input}
                     placeholder="+ Add new column"
                     inputProps={{ className: classes.inputTextColor }}
+                    onChange={addNewColumn}
                   />
                 </Paper>
               </Paper>
-            </Grid>
+            </GridList>
           )}
         </Droppable>
       </DragDropContext>

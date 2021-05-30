@@ -10,6 +10,8 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: '3vh',
     marginBottom: '3vh',
     padding: 0,
+    minWidth: '100vw',
+    flexWrap: 'nowrap',
   },
   header: {
     textAlign: 'center',
