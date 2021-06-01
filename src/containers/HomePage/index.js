@@ -3,7 +3,7 @@ import { Container, Grid, Grow } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
-import SBCard, { CARD_TYPES } from './SBCard'
+import SBCard from './SBCard'
 
 import {
   getTeamsStarted,
@@ -15,6 +15,7 @@ import { setAuthorizationToken } from '../../core/api'
 import { loadState } from '../../core/localStorage'
 import { ACCESS_TOKEN_KEY } from '../../core/values/keys'
 import { isFulfilledSelector as isAuthFulfilledSelector } from '../Auth/authSlice'
+import { CARD_TYPES } from './SBCard/cardTypes'
 
 const HomePage = () => {
   const dispatch = useDispatch()
@@ -25,7 +26,6 @@ const HomePage = () => {
       setAuthorizationToken(loadState(ACCESS_TOKEN_KEY))
       dispatch(getTeamsStarted())
     }
-    console.log('Updated')
   }, [isAuthFulfilled, refresh])
 
   const classes = useStyles()

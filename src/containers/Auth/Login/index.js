@@ -73,9 +73,12 @@ const LoginPage = () => {
 
   const classes = useStyles()
   return (
-    <>
+    <div className={classes.authBody}>
       <Grow in disableStrictModeCompat timeout={800}>
-        <Paper elevation={10} className={classes.paper}>
+        <Paper
+          elevation={10}
+          className={`${classes.paper} ${classes.loginPaper}`}
+        >
           <Grid container alignItems="center" direction="column">
             <Grid item align="center">
               <Avatar className={classes.avatarLogin}>
@@ -145,7 +148,7 @@ const LoginPage = () => {
           {errorLoginMessage}
         </MuiAlert>
       </Snackbar>
-    </>
+    </div>
   )
 }
 
