@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core'
 export const useStyles = makeStyles((theme) => ({
   paper: {
     padding: 50,
-    height: '70vh',
+    height: '650px',
     width: 500,
     margin: '20px auto',
     display: 'flex',
