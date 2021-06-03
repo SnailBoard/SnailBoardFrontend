@@ -9,15 +9,14 @@ export const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   title: {
-    flexGrow: 1,
-    fontSize: 'medium',
+    padding: '25px',
   },
   appBar: {
     background: PRIMARY_COLOR,
   },
   btnLink: {
     color: '#fff',
-    fontSize: 'medium',
+    fontSize: 'large',
     textTransform: 'none',
   },
   snailBtn: {
@@ -26,5 +25,29 @@ export const useStyles = makeStyles((theme) => ({
     margin: '10px',
     width: '95px',
     height: '60px',
+  },
+  boardLabel: {
+    textAlign: 'center',
+    color: PRIMARY_COLOR,
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  leftBlock: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '40%',
+  },
+  centralBlock: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '20%',
+    justifyContent: 'center',
+  },
+  rightBlock: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '40%',
+    justifyContent: 'flex-end',
   },
 }))

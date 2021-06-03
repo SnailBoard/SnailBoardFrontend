@@ -23,7 +23,7 @@ import {
 import { CARD_TYPES } from './cardTypes'
 import { RenderBoardsColumn, RenderTeamsColumn } from './renderColumns'
 
-const PAGE_SIZE = 4
+const PAGE_SIZE = 3
 
 const SBCard = (props) => {
   const { itemsHeader, btnName, rowDataSelector, cardType } = props
@@ -114,7 +114,10 @@ const SBCard = (props) => {
         <Button
           className={`paperBtn rounded ${classes.paperBtn}`}
           onClick={() => changePage(page + 1)}
-          disabled={page === Math.ceil(rawData.length / PAGE_SIZE)}
+          disabled={
+            page ===
+            Math.ceil(rawData.length / PAGE_SIZE || rawData.length === 0)
+          }
         >
           <Paper elevation={0} className={`rounded ${classes.cardPaper}`}>
             <Typography className={classes.addBtn} color="textSecondary">
