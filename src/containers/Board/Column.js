@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, useContext } from 'react'
 import { InputBase, Paper, Typography, ButtonBase } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import Ticket from './Ticket'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
 import { useStyles } from './styles'
+import { BoardContext } from './context'
 
 class InnerList extends PureComponent {
   render() {
@@ -24,6 +25,7 @@ InnerList.propTypes = {
 
 const Column = (props) => {
   const { column, tasks, index } = props
+  const { setTicketModalOpen } = useContext(BoardContext)
   const classes = useStyles()
 
   return (
@@ -78,6 +80,7 @@ const Column = (props) => {
                       placeholder="   + Add new card"
                       inputProps={{ className: classes.inputTextColor }}
                       disabled
+                      onClick={() => setTicketModalOpen(true)}
                     />
                   </ButtonBase>
                 </Paper>

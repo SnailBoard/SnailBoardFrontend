@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, useState } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
 import { GridList, InputBase, Paper } from '@material-ui/core'
@@ -15,6 +15,8 @@ import {
   tasksSelector,
 } from './boardSlice'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
+import { BoardContext } from './context'
+import TicketModal from '../Modals/TicketModal'
 
 class InnerList extends PureComponent {
   render() {
@@ -34,12 +36,38 @@ InnerList.propTypes = {
   index: PropTypes.number.isRequired,
 }
 
+const initTicketModalInputs = {
+  reporter: 'Danya',
+  assignee: 'Nazar',
+  storyPoints: 5,
+  name: '',
+  description: '',
+}
+
 const Board = () => {
   const dispatch = useDispatch()
 
   const tasks = useSelector(tasksSelector)
   const columns = useSelector(columnsSelector)
   const columnOrder = useSelector(columnOrderSelector)
+  const [ticketModalOpen, setTicketModalOpen] = useState(false)
+  const [ticketModalInputs, setTicketModalInputs] = useState(
+    initTicketModalInputs,
+  )
+  console.log(ticketModalInputs)
+  const handleChange = (event) => {
+    setTicketModalInputs((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }))
+  }
+
+  const contextValues = {
+    handleChange,
+    ticketModalInputs,
+    ticketModalOpen,
+    setTicketModalOpen,
+  }
 
   const { boardName } = useParams()
 
@@ -117,64 +145,67 @@ const Board = () => {
   }
 
   return (
-    <div className={classes.background}>
-      <Header boardName={boardName} />
+    <BoardContext.Provider value={contextValues}>
+      <div className={classes.background}>
+        <Header boardName={boardName} />
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="all-columns"
-          direction="horizontal"
-          type="column"
-        >
-          {(provided) => (
-            <GridList
-              {...provided.droppableProps}
-              innerRef={provided.innerRef}
-              container
-              className={classes.boardContainer}
-            >
-              {columnOrder.map((columnId, index) => {
-                const column = columns[columnId]
-                return (
-                  <InnerList
-                    key={column.id}
-                    column={column}
-                    index={index}
-                    taskMap={tasks}
-                  />
-                )
-              })}
-              {provided.placeholder}
-              <Paper
-                style={{
-                  background: PRIMARY_COLOR,
-                  maxWidth: '210px',
-                  minWidth: '210px',
-                  height: '45px',
-                  marginLeft: '2vh',
-                  marginRight: '2vh',
-                }}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable
+            droppableId="all-columns"
+            direction="horizontal"
+            type="column"
+          >
+            {(provided) => (
+              <GridList
+                {...provided.droppableProps}
+                innerRef={provided.innerRef}
+                container
+                className={classes.boardContainer}
               >
+                {columnOrder.map((columnId, index) => {
+                  const column = columns[columnId]
+                  return (
+                    <InnerList
+                      key={column.id}
+                      column={column}
+                      index={index}
+                      taskMap={tasks}
+                    />
+                  )
+                })}
+                {provided.placeholder}
                 <Paper
                   style={{
-                    background: ACCENT2_COLOR,
-                    margin: '1vh',
-                    textAlign: 'center',
+                    background: PRIMARY_COLOR,
+                    maxWidth: '210px',
+                    minWidth: '210px',
+                    height: '45px',
+                    marginLeft: '2vh',
+                    marginRight: '2vh',
                   }}
                 >
-                  <InputBase
-                    className={classes.input}
-                    placeholder="+ Add new column"
-                    inputProps={{ className: classes.inputTextColor }}
-                    onKeyDown={addNewColumn}
-                  />
+                  <Paper
+                    style={{
+                      background: ACCENT2_COLOR,
+                      margin: '1vh',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <InputBase
+                      className={classes.input}
+                      placeholder="+ Add new column"
+                      inputProps={{ className: classes.inputTextColor }}
+                      onKeyDown={addNewColumn}
+                    />
+                  </Paper>
                 </Paper>
-              </Paper>
-            </GridList>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </div>
+              </GridList>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <TicketModal />
+      </div>
+    </BoardContext.Provider>
   )
 }
 
