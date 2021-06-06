@@ -1,49 +1,51 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import {
-  Button,
+  Avatar,
   Card as BaseCard,
-  CardActions,
   CardContent,
-  CardMedia,
+  Grid,
   Typography,
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import SnailImage from '../../static/img/snailboard.png'
+import { useStyles } from './styles'
+import { ACCENT_COLOR } from '../../core/values/colors'
 
 const Ticket = (props) => {
-  const { task, index } = props
+  const { ticket, index } = props
+  const classes = useStyles()
 
   return (
-    <Draggable draggableId={task.id} index={index}>
+    <Draggable draggableId={ticket.id} index={index}>
       {(provided) => (
         <BaseCard
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           innerRef={provided.innerRef}
-          style={{ marginBottom: '10px', ...provided.draggableProps.style }}
+          style={{
+            marginBottom: 6,
+            backgroundColor: ACCENT_COLOR,
+            ...provided.draggableProps.style,
+          }}
         >
-          <CardMedia
-            image={SnailImage}
-            title="Contemplative Reptile"
-            style={{ height: 120 }}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h4">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {task.content}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small" color="primary">
-              Share
-            </Button>
-            <Button size="small" color="primary">
-              Learn More
-            </Button>
-          </CardActions>
+          <Grid container justify="flex-end">
+            <Grid item xs direction="column">
+              <CardContent className={classes.cardContent}>
+                <Typography variant="body2" color="textPrimary" component="p">
+                  #{ticket.number} {ticket.description}
+                </Typography>
+              </CardContent>
+              <Avatar className={classes.cardStoryPoints}>
+                <Typography variant="caption" color="initial" component="p">
+                  {ticket.storyPoints}
+                </Typography>
+              </Avatar>
+            </Grid>
+            <Avatar
+              className={classes.cardAvatar}
+              src="http://i.pravatar.cc/300?img=1"
+            />
+          </Grid>
         </BaseCard>
       )}
     </Draggable>
@@ -51,9 +53,11 @@ const Ticket = (props) => {
 }
 
 Ticket.propTypes = {
-  task: PropTypes.shape({
+  ticket: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    number: PropTypes.number.isRequired,
+    storyPoints: PropTypes.number.isRequired,
   }),
   index: PropTypes.number.isRequired,
 }

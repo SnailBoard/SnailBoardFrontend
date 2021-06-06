@@ -9,10 +9,10 @@ import { useStyles } from './styles'
 import Column from './Column'
 import {
   changeColumnOrderSuccess,
-  changeTasksInColumnsSuccess,
+  changeTicketsInColumnsSuccess,
   columnOrderSelector,
   columnsSelector,
-  tasksSelector,
+  ticketsSelector,
 } from './boardSlice'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
 import { BoardContext } from './context'
@@ -20,18 +20,20 @@ import TicketModal from '../Modals/TicketModal'
 
 class InnerList extends PureComponent {
   render() {
-    const { column, taskMap, index } = this.props
-    const tasks = column.taskIds.map((taskId) => taskMap[taskId])
-    return <Column column={column} tasks={tasks} index={index} />
+    const { column, ticketsMap, index } = this.props
+    const tickets = column.tickets.map((ticketId) => ticketsMap[ticketId])
+    return <Column column={column} tickets={tickets} index={index} />
   }
 }
 
 InnerList.propTypes = {
-  taskMap: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  }),
+  ticketsMap: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   column: PropTypes.shape({
-    taskIds: PropTypes.string.isRequired,
+    tickets: PropTypes.array.isRequired,
   }),
   index: PropTypes.number.isRequired,
 }
@@ -47,7 +49,7 @@ const initTicketModalInputs = {
 const Board = () => {
   const dispatch = useDispatch()
 
-  const tasks = useSelector(tasksSelector)
+  const tickets = useSelector(ticketsSelector)
   const columns = useSelector(columnsSelector)
   const columnOrder = useSelector(columnOrderSelector)
 
@@ -56,7 +58,6 @@ const Board = () => {
     initTicketModalInputs,
   )
 
-  console.log(ticketModalInputs)
   const handleChange = (event) => {
     setTicketModalInputs((prevState) => ({
       ...prevState,
@@ -95,13 +96,13 @@ const Board = () => {
       const foreign = columns[destination.droppableId]
 
       if (home === foreign) {
-        const newTaskIds = Array.from(home.taskIds)
+        const newTaskIds = Array.from(home.tickets)
         newTaskIds.splice(source.index, 1)
         newTaskIds.splice(destination.index, 0, draggableId)
 
         const newHome = {
           ...home,
-          taskIds: newTaskIds,
+          tickets: newTaskIds,
         }
 
         const newColumnsData = {
@@ -109,23 +110,23 @@ const Board = () => {
           [newHome.id]: newHome,
         }
 
-        dispatch(changeTasksInColumnsSuccess(newColumnsData))
+        dispatch(changeTicketsInColumnsSuccess(newColumnsData))
         return
       }
 
       // moving from one list to another
-      const homeTaskIds = Array.from(home.taskIds)
+      const homeTaskIds = Array.from(home.tickets)
       homeTaskIds.splice(source.index, 1)
       const newHome = {
         ...home,
-        taskIds: homeTaskIds,
+        tickets: homeTaskIds,
       }
 
-      const foreignTaskIds = Array.from(foreign.taskIds)
+      const foreignTaskIds = Array.from(foreign.tickets)
       foreignTaskIds.splice(destination.index, 0, draggableId)
       const newForeign = {
         ...foreign,
-        taskIds: foreignTaskIds,
+        tickets: foreignTaskIds,
       }
 
       const newColumnsData = {
@@ -133,7 +134,7 @@ const Board = () => {
         [newHome.id]: newHome,
         [newForeign.id]: newForeign,
       }
-      dispatch(changeTasksInColumnsSuccess(newColumnsData))
+      dispatch(changeTicketsInColumnsSuccess(newColumnsData))
     }
   }
 
@@ -171,7 +172,7 @@ const Board = () => {
                       key={column.id}
                       column={column}
                       index={index}
-                      taskMap={tasks}
+                      ticketsMap={tickets}
                     />
                   )
                 })}

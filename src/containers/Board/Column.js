@@ -11,14 +11,14 @@ import { ticketsInColumnCountSelector } from './boardSlice'
 
 class InnerList extends PureComponent {
   render() {
-    return this.props.tasks.map((task, index) => (
-      <Ticket key={task.id} task={task} index={index} />
+    return this.props.tickets.map((ticket, index) => (
+      <Ticket key={ticket.id} ticket={ticket} index={index} />
     ))
   }
 }
 
 InnerList.propTypes = {
-  tasks: PropTypes.arrayOf(
+  tickets: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
@@ -26,7 +26,7 @@ InnerList.propTypes = {
 }
 
 const Column = (props) => {
-  const { column, tasks, index } = props
+  const { column, tickets, index } = props
   const { setTicketModalOpen } = useContext(BoardContext)
 
   const ticketsCount = useSelector(ticketsInColumnCountSelector(column.id))
@@ -55,7 +55,7 @@ const Column = (props) => {
             style={{ color: 'white' }}
             variant="h5"
           >
-            {column.title}
+            {column.name}
           </Typography>
           <Typography
             {...providedDraggable.dragHandleProps}
@@ -73,11 +73,11 @@ const Column = (props) => {
                 style={{
                   margin: '7px',
                   backgroundColor: PRIMARY_COLOR,
-                  height: '80vh',
+                  height: '78vh',
                   overflow: 'auto',
                 }}
               >
-                <InnerList tasks={tasks} />
+                <InnerList tickets={tickets} />
                 {provided.placeholder}
                 <Paper
                   style={{
@@ -107,15 +107,15 @@ const Column = (props) => {
 }
 
 Column.propTypes = {
-  tasks: PropTypes.arrayOf(
+  tickets: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
     }),
   ),
   column: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
   }),
   index: PropTypes.number.isRequired,
 }

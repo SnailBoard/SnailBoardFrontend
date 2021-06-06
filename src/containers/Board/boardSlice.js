@@ -1,52 +1,104 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  tasks: {
-    'task-1': { id: 'task-1', content: 'Take out the garbage' },
-    'task-2': { id: 'task-2', content: 'Watch my favorite show' },
-    'task-3': { id: 'task-3', content: 'Charge my phone' },
-    'task-4': { id: 'task-4', content: 'Cook dinner' },
-    'task-5': { id: 'task-5', content: 'Go shopping' },
-    'task-6': { id: 'task-6', content: 'Write essay' },
+  tickets: {
+    'b4a382a4-0823-4ef2-bd2e-694ca4abcc3c': {
+      name: 'test',
+      description: 'test',
+      reporter: {
+        firstName: 'Pavel',
+        email: 'pawloiwanov@gmail.com',
+        username: 'pavelItel',
+        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
+      },
+      assignee: {
+        firstName: 'Pavel',
+        email: 'pawloiwanov@gmail.com',
+        username: 'pavelItel',
+        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
+      },
+      id: 'b4a382a4-0823-4ef2-bd2e-694ca4abcc3c',
+      position: 1,
+      created_at: '2021-06-03T21:24:12',
+      updated_at: '2021-06-03T21:24:12',
+      storyPoints: 12,
+      number: 1,
+    },
+    'b4a382b4-0823-4ef2-bd2e-694ca4abcc3c': {
+      name: 'test',
+      description: 'test',
+      reporter: {
+        firstName: 'Pavel',
+        email: 'pawloiwanov@gmail.com',
+        username: 'pavelItel',
+        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
+      },
+      assignee: {
+        firstName: 'Pavel',
+        email: 'pawloiwanov@gmail.com',
+        username: 'pavelItel',
+        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
+      },
+      id: 'b4a382b4-0823-4ef2-bd2e-694ca4abcc3c',
+      position: 1,
+      created_at: '2021-06-03T21:24:12',
+      updated_at: '2021-06-03T21:24:12',
+      storyPoints: 12,
+      number: 2,
+    },
   },
   columns: {
     'column-1': {
       id: 'column-1',
-      title: 'To do',
-      taskIds: ['task-1', 'task-2', 'task-3', 'task-4'],
+      name: 'To do',
+      description: 'test',
+      position: 1,
+      tickets: ['b4a382a4-0823-4ef2-bd2e-694ca4abcc3c'],
     },
     'column-2': {
       id: 'column-2',
-      title: 'In progress',
-      taskIds: ['task-5', 'task-6'],
+      name: 'In progress',
+      description: 'test',
+      position: 2,
+      tickets: ['b4a382b4-0823-4ef2-bd2e-694ca4abcc3c'],
     },
     'column-3': {
       id: 'column-3',
-      title: 'Done',
-      taskIds: [],
+      name: 'Done',
+      description: 'test',
+      position: 3,
+      tickets: [],
     },
   },
   columnOrder: ['column-1', 'column-2', 'column-3'],
   isFetching: false,
 }
 
-export const tasksSelector = (state) => state.board.tasks
-export const taskByIdSelector = (taskId) => (state) => state.board.tasks[taskId]
+export const ticketsSelector = (state) => state.board.tickets
+export const ticketByIdSelector = (ticketId) => (state) =>
+  state.board.tickets[ticketId]
 export const columnsSelector = (state) => state.board.columns
 export const columnOrderSelector = (state) => state.board.columnOrder
+// Object.entries(state.board.columns)
+//   .map(([id, { position }]) => ({
+//     id,
+//     position,
+//   }))
+//   .sort((prev, next) => prev.position - next.position)
+//   .map(({ id }) => id)
 export const isFetchingSelector = (state) => state.board.isFetching
 export const ticketsInColumnCountSelector = (columnId) => (state) =>
-  state.board.columns[columnId].taskIds.length
+  state.board.columns[columnId].tickets.length
 
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    changeTasksInColumnsStarted: () => {},
-    changeTasksInColumnsPending: (state) => {
+    changeTicketsInColumnsStarted: () => {},
+    changeTicketsInColumnsPending: (state) => {
       state.isFetching = true
     },
-    changeTasksInColumnsSuccess: (state, { payload }) => {
+    changeTicketsInColumnsSuccess: (state, { payload }) => {
       state.columns = payload
       state.isFetching = false
     },
@@ -62,9 +114,9 @@ export const boardSlice = createSlice({
 })
 
 export const {
-  changeTasksInColumnsPending,
-  changeTasksInColumnsStarted,
-  changeTasksInColumnsSuccess,
+  changeTicketsInColumnsStarted,
+  changeTicketsInColumnsPending,
+  changeTicketsInColumnsSuccess,
   changeColumnOrderPending,
   changeColumnOrderStarted,
   changeColumnOrderSuccess,
