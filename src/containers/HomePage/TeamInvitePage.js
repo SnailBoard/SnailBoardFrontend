@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react'
-import { Redirect } from 'react-router'
-import PropTypes from 'prop-types'
+import { Redirect, useParams } from 'react-router'
 
-const TeamInvitePage = (props) => {
-  useEffect(() => localStorage.setItem('inviteId', props.match.params.inviteId))
+const TeamInvitePage = () => {
+  const { inviteId } = useParams()
+
+  useEffect(() => localStorage.setItem('inviteId', inviteId))
   return <Redirect to="/login" />
-}
-
-TeamInvitePage.propTypes = {
-  match: PropTypes.object,
 }
 
 export default TeamInvitePage

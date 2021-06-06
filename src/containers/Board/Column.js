@@ -1,14 +1,16 @@
-import React, { PureComponent } from 'react'
-import { Paper, Typography } from '@material-ui/core'
+import React, { PureComponent, useContext } from 'react'
+import { InputBase, Paper, Typography, ButtonBase } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import { Droppable, Draggable } from 'react-beautiful-dnd'
-import Card from './Card'
-import { PRIMARY_COLOR } from '../../core/values/colors'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
+import Ticket from './Ticket'
+import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
+import { useStyles } from './styles'
+import { BoardContext } from './context'
 
 class InnerList extends PureComponent {
   render() {
     return this.props.tasks.map((task, index) => (
-      <Card key={task.id} task={task} index={index} />
+      <Ticket key={task.id} task={task} index={index} />
     ))
   }
 }
@@ -23,6 +25,8 @@ InnerList.propTypes = {
 
 const Column = (props) => {
   const { column, tasks, index } = props
+  const { setTicketModalOpen } = useContext(BoardContext)
+  const classes = useStyles()
 
   return (
     <Draggable draggableId={column.id} index={index}>
@@ -36,6 +40,7 @@ const Column = (props) => {
             minWidth: '210px',
             marginLeft: '2vh',
             marginRight: '2vh',
+            position: 'relative',
             ...providedDraggable.draggableProps.style,
           }}
         >
@@ -61,6 +66,24 @@ const Column = (props) => {
               >
                 <InnerList tasks={tasks} />
                 {provided.placeholder}
+                <Paper
+                  style={{
+                    background: ACCENT2_COLOR,
+                    textAlign: 'center',
+                    position: 'sticky',
+                    bottom: 0,
+                  }}
+                >
+                  <ButtonBase>
+                    <InputBase
+                      className={classes.input}
+                      placeholder="   + Add new card"
+                      inputProps={{ className: classes.inputTextColor }}
+                      disabled
+                      onClick={() => setTicketModalOpen(true)}
+                    />
+                  </ButtonBase>
+                </Paper>
               </Paper>
             )}
           </Droppable>

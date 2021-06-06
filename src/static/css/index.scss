@@ -76,3 +76,12 @@ a {
 .selectedTeam {
   background-color: $SUCCESS_COLOR !important;
 }
+
+.ticketNameLabel input {
+  text-align: center;
+}
+
+.MuiGridList-root {
+  margin: 0 !important;
+  margin-top: 1.2% !important;
+}
