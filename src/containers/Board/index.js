@@ -1,4 +1,4 @@
-import React, { PureComponent, useState } from 'react'
+import React, { PureComponent, useEffect, useState } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
 import { GridList, InputBase, Paper } from '@material-ui/core'
@@ -8,10 +8,12 @@ import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import Column from './Column'
 import {
+  boardNameSelector,
   changeColumnOrderSuccess,
-  changeTicketsInColumnsSuccess,
+  changeTicketsOrderSuccess,
   columnOrderSelector,
   columnsSelector,
+  getBoardDataStarted,
   ticketsSelector,
 } from './boardSlice'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
@@ -49,6 +51,7 @@ const initTicketModalInputs = {
 const Board = () => {
   const dispatch = useDispatch()
 
+  const boardName = useSelector(boardNameSelector)
   const tickets = useSelector(ticketsSelector)
   const columns = useSelector(columnsSelector)
   const columnOrder = useSelector(columnOrderSelector)
@@ -71,10 +74,6 @@ const Board = () => {
     ticketModalOpen,
     setTicketModalOpen,
   }
-
-  const { boardName } = useParams()
-
-  const classes = useStyles()
 
   const onDragEnd = ({ destination, source, draggableId, type }) => {
     if (
@@ -110,7 +109,7 @@ const Board = () => {
           [newHome.id]: newHome,
         }
 
-        dispatch(changeTicketsInColumnsSuccess(newColumnsData))
+        dispatch(changeTicketsOrderSuccess(newColumnsData))
         return
       }
 
@@ -134,7 +133,7 @@ const Board = () => {
         [newHome.id]: newHome,
         [newForeign.id]: newForeign,
       }
-      dispatch(changeTicketsInColumnsSuccess(newColumnsData))
+      dispatch(changeTicketsOrderSuccess(newColumnsData))
     }
   }
 
@@ -146,6 +145,14 @@ const Board = () => {
       console.log(value)
     }
   }
+
+  const { boardId } = useParams()
+
+  useEffect(() => {
+    dispatch(getBoardDataStarted(boardId))
+  }, [])
+
+  const classes = useStyles()
 
   return (
     <BoardContext.Provider value={contextValues}>

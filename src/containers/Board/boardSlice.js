@@ -70,22 +70,18 @@ const initialState = {
       tickets: [],
     },
   },
+  name: 'test board name',
   columnOrder: ['column-1', 'column-2', 'column-3'],
   isFetching: false,
+  isFailed: false,
 }
 
 export const ticketsSelector = (state) => state.board.tickets
+export const boardNameSelector = (state) => state.board.name
 export const ticketByIdSelector = (ticketId) => (state) =>
   state.board.tickets[ticketId]
 export const columnsSelector = (state) => state.board.columns
 export const columnOrderSelector = (state) => state.board.columnOrder
-// Object.entries(state.board.columns)
-//   .map(([id, { position }]) => ({
-//     id,
-//     position,
-//   }))
-//   .sort((prev, next) => prev.position - next.position)
-//   .map(({ id }) => id)
 export const isFetchingSelector = (state) => state.board.isFetching
 export const ticketsInColumnCountSelector = (columnId) => (state) =>
   state.board.columns[columnId].tickets.length
@@ -94,11 +90,38 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    changeTicketsInColumnsStarted: () => {},
-    changeTicketsInColumnsPending: (state) => {
+    getBoardDataStarted: () => {},
+    getBoardDataSuccess: (state, { payload: { name, columns } }) => {
+      state.isFetching = false
+      state.name = name
+      state.columns = columns.reduce(
+        (acc, column) => ({ ...acc, [column.id]: column }),
+        {},
+      )
+      state.tickets = columns.tasks.reduce(
+        (acc, ticket) => ({ ...acc, [ticket.id]: ticket }),
+        {},
+      )
+      state.columnOrder = columns
+        .map(({ id, position }) => ({
+          id,
+          position,
+        }))
+        .sort((prev, next) => prev.position - next.position)
+        .map(({ id }) => id)
+    },
+    getBoardDataFailed: (state) => {
+      state.isFetching = false
+      state.isFailed = true
+    },
+    getBoardDataPending: (state) => {
       state.isFetching = true
     },
-    changeTicketsInColumnsSuccess: (state, { payload }) => {
+    changeTicketsOrderStarted: () => {},
+    changeTicketsOrderPending: (state) => {
+      state.isFetching = true
+    },
+    changeTicketsOrderSuccess: (state, { payload }) => {
       state.columns = payload
       state.isFetching = false
     },
@@ -114,9 +137,13 @@ export const boardSlice = createSlice({
 })
 
 export const {
-  changeTicketsInColumnsStarted,
-  changeTicketsInColumnsPending,
-  changeTicketsInColumnsSuccess,
+  getBoardDataPending,
+  getBoardDataStarted,
+  getBoardDataSuccess,
+  getBoardDataFailed,
+  changeTicketsOrderStarted,
+  changeTicketsOrderPending,
+  changeTicketsOrderSuccess,
   changeColumnOrderPending,
   changeColumnOrderStarted,
   changeColumnOrderSuccess,
