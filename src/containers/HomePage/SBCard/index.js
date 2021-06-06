@@ -23,7 +23,7 @@ import {
 import { CARD_TYPES } from './cardTypes'
 import { RenderBoardsColumn, RenderTeamsColumn } from './renderColumns'
 
-const PAGE_SIZE = 4
+const PAGE_SIZE = 3
 
 const SBCard = (props) => {
   const { itemsHeader, btnName, rowDataSelector, cardType } = props
