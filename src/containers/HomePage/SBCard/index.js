@@ -114,7 +114,10 @@ const SBCard = (props) => {
         <Button
           className={`paperBtn rounded ${classes.paperBtn}`}
           onClick={() => changePage(page + 1)}
-          disabled={page === Math.ceil(rawData.length / PAGE_SIZE)}
+          disabled={
+            page ===
+            Math.ceil(rawData.length / PAGE_SIZE || rawData.length === 0)
+          }
         >
           <Paper elevation={0} className={`rounded ${classes.cardPaper}`}>
             <Typography className={classes.addBtn} color="textSecondary">

@@ -21,10 +21,12 @@ export const loginRequest = (loginPayload) =>
     .catch((reason) => reason)
 
 export const registerRequest = (data) =>
-  API.post('/register', data).then((response) => {
-    handleResponse(response.data)
-    return response
-  })
+  API.post('/register', data)
+    .then((response) => {
+      handleResponse(response.data)
+      return response
+    })
+    .catch((reason) => reason)
 
 export const logoutRequest = () => {
   removeState(ACCESS_TOKEN_KEY)
