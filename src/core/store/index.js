@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga'
 import authSlice from '../../containers/Auth/authSlice'
 import rootSaga from '../sagas'
 import homeSlice from '../../containers/HomePage/homeSlice'
+import boardSlice from '../../containers/Board/boardSlice'
 
 const sagaMiddleware = createSagaMiddleware()
 const middleware = [
@@ -17,6 +18,7 @@ const store = configureStore({
   reducer: {
     auth: authSlice,
     home: homeSlice,
+    board: boardSlice,
   },
   devTools: devMode,
   middleware,

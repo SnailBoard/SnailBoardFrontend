@@ -11,7 +11,7 @@ import {
 import PropTypes from 'prop-types'
 import SnailImage from '../../static/img/snailboard.png'
 
-const Card = (props) => {
+const Ticket = (props) => {
   const { task, index } = props
 
   return (
@@ -50,7 +50,7 @@ const Card = (props) => {
   )
 }
 
-Card.propTypes = {
+Ticket.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
@@ -58,4 +58,4 @@ Card.propTypes = {
   index: PropTypes.number.isRequired,
 }
 
-export default Card
+export default Ticket
