@@ -16,7 +16,7 @@ export const getUsersRequest = () =>
     .catch((reason) => reason)
 
 export const inviteUserToTeamRequest = (payload) => {
-  API.get('/team/generateLink', {
+  API.post('/team/generateLink', {
     params: payload,
   })
     .then((response) => response)
