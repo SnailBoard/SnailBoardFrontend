@@ -50,10 +50,12 @@ const Board = () => {
   const tasks = useSelector(tasksSelector)
   const columns = useSelector(columnsSelector)
   const columnOrder = useSelector(columnOrderSelector)
+
   const [ticketModalOpen, setTicketModalOpen] = useState(false)
   const [ticketModalInputs, setTicketModalInputs] = useState(
     initTicketModalInputs,
   )
+
   console.log(ticketModalInputs)
   const handleChange = (event) => {
     setTicketModalInputs((prevState) => ({

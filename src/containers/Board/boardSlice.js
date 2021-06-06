@@ -35,6 +35,8 @@ export const taskByIdSelector = (taskId) => (state) => state.board.tasks[taskId]
 export const columnsSelector = (state) => state.board.columns
 export const columnOrderSelector = (state) => state.board.columnOrder
 export const isFetchingSelector = (state) => state.board.isFetching
+export const ticketsInColumnCountSelector = (columnId) => (state) =>
+  state.board.columns[columnId].taskIds.length
 
 export const boardSlice = createSlice({
   name: 'board',

@@ -2,10 +2,12 @@ import React, { PureComponent, useContext } from 'react'
 import { InputBase, Paper, Typography, ButtonBase } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
 import Ticket from './Ticket'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
 import { useStyles } from './styles'
 import { BoardContext } from './context'
+import { ticketsInColumnCountSelector } from './boardSlice'
 
 class InnerList extends PureComponent {
   render() {
@@ -26,6 +28,9 @@ InnerList.propTypes = {
 const Column = (props) => {
   const { column, tasks, index } = props
   const { setTicketModalOpen } = useContext(BoardContext)
+
+  const ticketsCount = useSelector(ticketsInColumnCountSelector(column.id))
+
   const classes = useStyles()
 
   return (
@@ -51,6 +56,14 @@ const Column = (props) => {
             variant="h5"
           >
             {column.title}
+          </Typography>
+          <Typography
+            {...providedDraggable.dragHandleProps}
+            align="center"
+            style={{ color: 'whitesmoke' }}
+            variant="body1"
+          >
+            {ticketsCount} tickets
           </Typography>
           <Droppable droppableId={column.id} type="task">
             {(provided) => (
