@@ -85,7 +85,7 @@ export const RenderBoardsColumn = (
       <Button
         className={`paperBtn rounded ${classes.paperBtn}`}
         onClick={() => {
-          history.push('/board')
+          history.push(`board/${data.id}`)
         }}
       >
         <Paper elevation={0} className={`rounded ${classes.cardPaper}`}>

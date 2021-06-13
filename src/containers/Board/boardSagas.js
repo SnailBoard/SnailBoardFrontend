@@ -1,21 +1,15 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import {
-  changeTicketPositionRequest,
-  getBoardDataRequest,
-  changeColumnOrderRequest,
-} from './service'
+import { addColumnRequest, getBoardDataRequest } from './service'
 
 import {
-  getBoardDataStarted,
-  getBoardDataPending,
-  getBoardDataSuccess,
+  addColumnFailed,
+  addColumnPending,
+  addColumnStarted,
+  addColumnSuccess,
   getBoardDataFailed,
-  changeColumnOrderPending,
-  changeColumnOrderStarted,
-  changeColumnOrderSuccess,
-  changeTicketsInColumnsSuccess,
-  changeTicketsInColumnsPending,
-  changeTicketsInColumnsStarted,
+  getBoardDataPending,
+  getBoardDataStarted,
+  getBoardDataSuccess,
 } from './boardSlice'
 
 function* getBoardData({ payload }) {
@@ -33,6 +27,22 @@ function* watchGetBoardData() {
   yield takeEvery(getBoardDataStarted, getBoardData)
 }
 
+function* addNewColumn({ payload }) {
+  yield put(addColumnPending())
+  const response = yield call(() => addColumnRequest(payload))
+  console.log(response)
+
+  if (response.status < 400) {
+    yield put(addColumnSuccess(response.data))
+  } else {
+    yield put(addColumnFailed())
+  }
+}
+
+function* watchAddNewColumn() {
+  yield takeEvery(addColumnStarted, addNewColumn)
+}
+
 export default function* boardSagas() {
-  yield all([watchGetBoardData()])
+  yield all([watchGetBoardData(), watchAddNewColumn()])
 }

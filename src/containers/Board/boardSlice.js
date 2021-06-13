@@ -94,15 +94,23 @@ export const boardSlice = createSlice({
     getBoardDataSuccess: (state, { payload: { name, columns } }) => {
       state.isFetching = false
       state.name = name
+
       state.columns = columns.reduce(
         (acc, column) => ({ ...acc, [column.id]: column }),
         {},
       )
-      state.tickets = columns.tasks.reduce(
+
+      const columnsTasks = columns.reduce(
+        (acc, column) => [...acc, column.tasks],
+        [],
+      )
+
+      state.tickets = columnsTasks.reduce(
         (acc, ticket) => ({ ...acc, [ticket.id]: ticket }),
         {},
       )
-      state.columnOrder = columns
+
+      state.columnOrder = columnsTasks
         .map(({ id, position }) => ({
           id,
           position,
@@ -133,6 +141,17 @@ export const boardSlice = createSlice({
       state.columnOrder = payload
       state.isFetching = false
     },
+    addColumnStarted: () => {},
+    addColumnPending: (state) => {
+      state.isFetching = true
+    },
+    addColumnSuccess: (state) => {
+      state.isFetching = false
+    },
+    addColumnFailed: (state) => {
+      state.isFetching = false
+      state.isFailed = true
+    },
   },
 })
 
@@ -147,6 +166,10 @@ export const {
   changeColumnOrderPending,
   changeColumnOrderStarted,
   changeColumnOrderSuccess,
+  addColumnSuccess,
+  addColumnStarted,
+  addColumnPending,
+  addColumnFailed,
 } = boardSlice.actions
 
 export default boardSlice.reducer
