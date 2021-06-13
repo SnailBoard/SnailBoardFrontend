@@ -1,8 +1,8 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import {
-  changeTicketPosition,
-  getBoardData,
-  changeColumnOrder,
+  changeTicketPositionRequest,
+  getBoardDataRequest,
+  changeColumnOrderRequest,
 } from './service'
 
 import {
@@ -18,9 +18,9 @@ import {
   changeTicketsInColumnsStarted,
 } from './boardSlice'
 
-function* getBoard({ payload }) {
+function* getBoardData({ payload }) {
   yield put(getBoardDataPending())
-  const response = yield call(() => getBoardData(payload))
+  const response = yield call(() => getBoardDataRequest(payload))
 
   if (response.status < 400) {
     yield put(getBoardDataSuccess(response.data))
@@ -30,7 +30,7 @@ function* getBoard({ payload }) {
 }
 
 function* watchGetBoardData() {
-  yield takeEvery(getBoardDataStarted, getBoard)
+  yield takeEvery(getBoardDataStarted, getBoardData)
 }
 
 export default function* boardSagas() {

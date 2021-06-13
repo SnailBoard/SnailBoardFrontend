@@ -1,9 +1,9 @@
 import API from '../../core/api'
 
-export const getBoardData = (boardId) => API.get(`/board/${boardId}`)
+export const getBoardDataRequest = (boardId) => API.get(`/board/${boardId}`)
 
-export const changeColumnOrder = (newColumnOrder) =>
+export const changeColumnOrderRequest = (newColumnOrder) =>
   API.patch('board/columns', newColumnOrder)
 
-export const changeTicketPosition = (newTicketPosition) =>
+export const changeTicketPositionRequest = (newTicketPosition) =>
   API.patch('board/ticket', newTicketPosition)
