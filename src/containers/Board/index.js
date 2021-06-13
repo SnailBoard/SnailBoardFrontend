@@ -1,4 +1,4 @@
-import React, { PureComponent, useState } from 'react'
+import React, { PureComponent, useEffect, useState } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
 import { GridList, InputBase, Paper } from '@material-ui/core'
@@ -8,11 +8,13 @@ import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import Column from './Column'
 import {
+  boardNameSelector,
   changeColumnOrderSuccess,
-  changeTasksInColumnsSuccess,
+  changeTicketsOrderSuccess,
   columnOrderSelector,
   columnsSelector,
-  tasksSelector,
+  getBoardDataStarted,
+  ticketsSelector,
 } from './boardSlice'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
 import { BoardContext } from './context'
@@ -20,18 +22,20 @@ import TicketModal from '../Modals/TicketModal'
 
 class InnerList extends PureComponent {
   render() {
-    const { column, taskMap, index } = this.props
-    const tasks = column.taskIds.map((taskId) => taskMap[taskId])
-    return <Column column={column} tasks={tasks} index={index} />
+    const { column, ticketsMap, index } = this.props
+    const tickets = column.tickets.map((ticketId) => ticketsMap[ticketId])
+    return <Column column={column} tickets={tickets} index={index} />
   }
 }
 
 InnerList.propTypes = {
-  taskMap: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  }),
+  ticketsMap: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   column: PropTypes.shape({
-    taskIds: PropTypes.string.isRequired,
+    tickets: PropTypes.array.isRequired,
   }),
   index: PropTypes.number.isRequired,
 }
@@ -47,14 +51,16 @@ const initTicketModalInputs = {
 const Board = () => {
   const dispatch = useDispatch()
 
-  const tasks = useSelector(tasksSelector)
+  const boardName = useSelector(boardNameSelector)
+  const tickets = useSelector(ticketsSelector)
   const columns = useSelector(columnsSelector)
   const columnOrder = useSelector(columnOrderSelector)
+
   const [ticketModalOpen, setTicketModalOpen] = useState(false)
   const [ticketModalInputs, setTicketModalInputs] = useState(
     initTicketModalInputs,
   )
-  console.log(ticketModalInputs)
+
   const handleChange = (event) => {
     setTicketModalInputs((prevState) => ({
       ...prevState,
@@ -68,10 +74,6 @@ const Board = () => {
     ticketModalOpen,
     setTicketModalOpen,
   }
-
-  const { boardName } = useParams()
-
-  const classes = useStyles()
 
   const onDragEnd = ({ destination, source, draggableId, type }) => {
     if (
@@ -93,13 +95,13 @@ const Board = () => {
       const foreign = columns[destination.droppableId]
 
       if (home === foreign) {
-        const newTaskIds = Array.from(home.taskIds)
+        const newTaskIds = Array.from(home.tickets)
         newTaskIds.splice(source.index, 1)
         newTaskIds.splice(destination.index, 0, draggableId)
 
         const newHome = {
           ...home,
-          taskIds: newTaskIds,
+          tickets: newTaskIds,
         }
 
         const newColumnsData = {
@@ -107,23 +109,23 @@ const Board = () => {
           [newHome.id]: newHome,
         }
 
-        dispatch(changeTasksInColumnsSuccess(newColumnsData))
+        dispatch(changeTicketsOrderSuccess(newColumnsData))
         return
       }
 
       // moving from one list to another
-      const homeTaskIds = Array.from(home.taskIds)
+      const homeTaskIds = Array.from(home.tickets)
       homeTaskIds.splice(source.index, 1)
       const newHome = {
         ...home,
-        taskIds: homeTaskIds,
+        tickets: homeTaskIds,
       }
 
-      const foreignTaskIds = Array.from(foreign.taskIds)
+      const foreignTaskIds = Array.from(foreign.tickets)
       foreignTaskIds.splice(destination.index, 0, draggableId)
       const newForeign = {
         ...foreign,
-        taskIds: foreignTaskIds,
+        tickets: foreignTaskIds,
       }
 
       const newColumnsData = {
@@ -131,7 +133,7 @@ const Board = () => {
         [newHome.id]: newHome,
         [newForeign.id]: newForeign,
       }
-      dispatch(changeTasksInColumnsSuccess(newColumnsData))
+      dispatch(changeTicketsOrderSuccess(newColumnsData))
     }
   }
 
@@ -143,6 +145,14 @@ const Board = () => {
       console.log(value)
     }
   }
+
+  const { boardId } = useParams()
+
+  useEffect(() => {
+    dispatch(getBoardDataStarted(boardId))
+  }, [])
+
+  const classes = useStyles()
 
   return (
     <BoardContext.Provider value={contextValues}>
@@ -169,7 +179,7 @@ const Board = () => {
                       key={column.id}
                       column={column}
                       index={index}
-                      taskMap={tasks}
+                      ticketsMap={tickets}
                     />
                   )
                 })}

@@ -2,21 +2,23 @@ import React, { PureComponent, useContext } from 'react'
 import { InputBase, Paper, Typography, ButtonBase } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
 import Ticket from './Ticket'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
 import { useStyles } from './styles'
 import { BoardContext } from './context'
+import { ticketsInColumnCountSelector } from './boardSlice'
 
 class InnerList extends PureComponent {
   render() {
-    return this.props.tasks.map((task, index) => (
-      <Ticket key={task.id} task={task} index={index} />
+    return this.props.tickets.map((ticket, index) => (
+      <Ticket key={ticket.id} ticket={ticket} index={index} />
     ))
   }
 }
 
 InnerList.propTypes = {
-  tasks: PropTypes.arrayOf(
+  tickets: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
@@ -24,8 +26,11 @@ InnerList.propTypes = {
 }
 
 const Column = (props) => {
-  const { column, tasks, index } = props
+  const { column, tickets, index } = props
   const { setTicketModalOpen } = useContext(BoardContext)
+
+  const ticketsCount = useSelector(ticketsInColumnCountSelector(column.id))
+
   const classes = useStyles()
 
   return (
@@ -50,7 +55,15 @@ const Column = (props) => {
             style={{ color: 'white' }}
             variant="h5"
           >
-            {column.title}
+            {column.name}
+          </Typography>
+          <Typography
+            {...providedDraggable.dragHandleProps}
+            align="center"
+            style={{ color: 'whitesmoke' }}
+            variant="body1"
+          >
+            {ticketsCount} tickets
           </Typography>
           <Droppable droppableId={column.id} type="task">
             {(provided) => (
@@ -60,11 +73,11 @@ const Column = (props) => {
                 style={{
                   margin: '7px',
                   backgroundColor: PRIMARY_COLOR,
-                  height: '80vh',
+                  height: '78vh',
                   overflow: 'auto',
                 }}
               >
-                <InnerList tasks={tasks} />
+                <InnerList tickets={tickets} />
                 {provided.placeholder}
                 <Paper
                   style={{
@@ -94,15 +107,15 @@ const Column = (props) => {
 }
 
 Column.propTypes = {
-  tasks: PropTypes.arrayOf(
+  tickets: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
     }),
   ),
   column: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
   }),
   index: PropTypes.number.isRequired,
 }

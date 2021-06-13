@@ -32,4 +32,21 @@ export const useStyles = makeStyles((theme) => ({
   inputTextColor: {
     color: 'black',
   },
+  cardContent: {
+    flex: 1,
+    padding: 5,
+  },
+  cardAvatar: {
+    display: 'inline-block',
+    border: '2px solid white',
+    margin: 5,
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+  },
+  cardStoryPoints: {
+    margin: 5,
+    backgroundColor: 'lightblue',
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
 }))
