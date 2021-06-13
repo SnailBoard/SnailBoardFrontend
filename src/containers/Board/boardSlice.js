@@ -145,8 +145,17 @@ export const boardSlice = createSlice({
     addColumnPending: (state) => {
       state.isFetching = true
     },
-    addColumnSuccess: (state) => {
+    addColumnSuccess: (state, { name, description, id, position }) => {
       state.isFetching = false
+
+      state.columns[id] = {
+        id,
+        name,
+        description,
+        position,
+        tickets: [],
+      }
+      state.columnOrder.push(id)
     },
     addColumnFailed: (state) => {
       state.isFetching = false
