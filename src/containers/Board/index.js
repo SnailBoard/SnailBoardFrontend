@@ -8,6 +8,7 @@ import Header from '../../components/Header/Header'
 import { useStyles } from './styles'
 import Column from './Column'
 import {
+  addColumnStarted,
   boardNameSelector,
   changeColumnOrderSuccess,
   changeTicketsOrderSuccess,
@@ -142,7 +143,14 @@ const Board = () => {
       const {
         target: { value },
       } = event
-      console.log(value)
+      dispatch(
+        addColumnStarted({
+          boardId,
+          name: value,
+          description: '',
+          columnPosition: columnOrder.length + 1,
+        }),
+      )
     }
   }
 
