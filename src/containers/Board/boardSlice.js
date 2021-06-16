@@ -1,99 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  tickets: {
-    'b4a382a4-0823-4ef2-bd2e-694ca4abcc3c': {
-      name: 'test',
-      description: 'test',
-      reporter: {
-        firstName: 'Pavel',
-        email: 'pawloiwanov@gmail.com',
-        username: 'pavelItel',
-        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
-      },
-      assignee: {
-        firstName: 'Pavel',
-        email: 'pawloiwanov@gmail.com',
-        username: 'pavelItel',
-        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
-      },
-      id: 'b4a382a4-0823-4ef2-bd2e-694ca4abcc3c',
-      position: 1,
-      created_at: '2021-06-03T21:24:12',
-      updated_at: '2021-06-03T21:24:12',
-      storyPoints: 12,
-      number: 1,
-    },
-    'b4a382b4-0823-4ef2-bd2e-694ca4abcc3c': {
-      name: 'test',
-      description: 'test',
-      reporter: {
-        firstName: 'Pavel',
-        email: 'pawloiwanov@gmail.com',
-        username: 'pavelItel',
-        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
-      },
-      assignee: {
-        firstName: 'Pavel',
-        email: 'pawloiwanov@gmail.com',
-        username: 'pavelItel',
-        id: '1f0822c4-fa90-4a34-85d3-8e4f5befd13d',
-      },
-      id: 'b4a382b4-0823-4ef2-bd2e-694ca4abcc3c',
-      position: 1,
-      created_at: '2021-06-03T21:24:12',
-      updated_at: '2021-06-03T21:24:12',
-      storyPoints: 12,
-      number: 2,
-    },
-  },
-  columns: {
-    'column-1': {
-      id: 'column-1',
-      name: 'To do',
-      description: 'test',
-      position: 1,
-      tickets: ['b4a382a4-0823-4ef2-bd2e-694ca4abcc3c'],
-    },
-    'column-2': {
-      id: 'column-2',
-      name: 'In progress',
-      description: 'test',
-      position: 2,
-      tickets: ['b4a382b4-0823-4ef2-bd2e-694ca4abcc3c'],
-    },
-    'column-3': {
-      id: 'column-3',
-      name: 'Done',
-      description: 'test',
-      position: 3,
-      tickets: [],
-    },
-  },
+  tasks: {},
+  columns: {},
   name: 'test board name',
-  columnOrder: ['column-1', 'column-2', 'column-3'],
+  columnOrder: [],
   isFetching: false,
   isFailed: false,
+  members: [],
 }
 
-export const ticketsSelector = (state) => state.board.tickets
+export const ticketsSelector = (state) => state.board.tasks
 export const boardNameSelector = (state) => state.board.name
 export const ticketByIdSelector = (ticketId) => (state) =>
-  state.board.tickets[ticketId]
+  state.board.tasks[ticketId]
 export const columnsSelector = (state) => state.board.columns
 export const columnOrderSelector = (state) => state.board.columnOrder
+export const membersSelector = (state) => state.board.members
 export const isFetchingSelector = (state) => state.board.isFetching
 export const ticketsInColumnCountSelector = (columnId) => (state) =>
-  state.board.columns[columnId].tickets.length
+  state.board.columns[columnId].tasks.length
 
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    getBoardDataStarted: () => {},
-    getBoardDataSuccess: (state, { payload: { name, columns } }) => {
+    getBoardDataStarted: (state) => {
+      state.columnOrder = []
+    },
+    getBoardDataSuccess: (state, { payload: { name, columns, members } }) => {
       state.isFetching = false
       state.name = name
+      state.members = members
 
       state.columns = columns.reduce(
         (acc, column) => ({ ...acc, [column.id]: column }),
@@ -101,22 +39,20 @@ export const boardSlice = createSlice({
       )
 
       const columnsTasks = columns.reduce(
-        (acc, column) => [...acc, column.tasks],
+        (acc, column) => [...acc, ...column.tasks],
         [],
       )
 
-      state.tickets = columnsTasks.reduce(
+      state.tasks = columnsTasks.reduce(
         (acc, ticket) => ({ ...acc, [ticket.id]: ticket }),
         {},
       )
-
-      state.columnOrder = columnsTasks
-        .map(({ id, position }) => ({
-          id,
-          position,
-        }))
-        .sort((prev, next) => prev.position - next.position)
-        .map(({ id }) => id)
+      state.columnOrder = columns.map(({ id, position }) => ({
+        id,
+        position,
+      }))
+      state.columnOrder.sort((prev, next) => prev.position - next.position)
+      state.columnOrder = state.columnOrder.map(({ id }) => id)
     },
     getBoardDataFailed: (state) => {
       state.isFetching = false
@@ -145,7 +81,10 @@ export const boardSlice = createSlice({
     addColumnPending: (state) => {
       state.isFetching = true
     },
-    addColumnSuccess: (state, { name, description, id, position }) => {
+    addColumnSuccess: (
+      state,
+      { payload: { name, description, id, position } },
+    ) => {
       state.isFetching = false
 
       state.columns[id] = {
@@ -153,11 +92,51 @@ export const boardSlice = createSlice({
         name,
         description,
         position,
-        tickets: [],
+        tasks: [],
       }
       state.columnOrder.push(id)
     },
     addColumnFailed: (state) => {
+      state.isFetching = false
+      state.isFailed = true
+    },
+    addTicketStarted: () => {},
+    addTicketPending: (state) => {
+      state.isFetching = true
+    },
+    addTicketSuccess: (
+      state,
+      payload,
+      // {
+      //   payload: {
+      //     name,
+      //     description,
+      //     reporter,
+      //     assignee,
+      //     id,
+      //     position,
+      //     created_at,
+      //     updated_at,
+      //     story_points,
+      //     ticket_number,
+      //     columnId,
+      //   },
+      // },
+    ) => {
+      console.log('Response ticket', payload)
+      state.isFetching = false
+
+      // state.column[columnId].tasks.push(id)
+      // state.tickets[id] = {
+      //   id,
+      //   name,
+      //   description,
+      //   position,
+      //   tasks: [],
+      // }
+      // state.columnOrder.push(id)
+    },
+    addTicketFailed: (state) => {
       state.isFetching = false
       state.isFailed = true
     },

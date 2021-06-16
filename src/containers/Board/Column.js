@@ -11,14 +11,14 @@ import { ticketsInColumnCountSelector } from './boardSlice'
 
 class InnerList extends PureComponent {
   render() {
-    return this.props.tickets.map((ticket, index) => (
+    return this.props.tasks.map((ticket, index) => (
       <Ticket key={ticket.id} ticket={ticket} index={index} />
     ))
   }
 }
 
 InnerList.propTypes = {
-  tickets: PropTypes.arrayOf(
+  tasks: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
@@ -26,7 +26,7 @@ InnerList.propTypes = {
 }
 
 const Column = (props) => {
-  const { column, tickets, index } = props
+  const { column, tasks, index } = props
   const { setTicketModalOpen } = useContext(BoardContext)
 
   const ticketsCount = useSelector(ticketsInColumnCountSelector(column.id))
@@ -63,7 +63,7 @@ const Column = (props) => {
             style={{ color: 'whitesmoke' }}
             variant="body1"
           >
-            {ticketsCount} tickets
+            {ticketsCount} tasks
           </Typography>
           <Droppable droppableId={column.id} type="task">
             {(provided) => (
@@ -77,7 +77,7 @@ const Column = (props) => {
                   overflow: 'auto',
                 }}
               >
-                <InnerList tickets={tickets} />
+                <InnerList tasks={tasks} />
                 {provided.placeholder}
                 <Paper
                   style={{
@@ -93,7 +93,7 @@ const Column = (props) => {
                       placeholder="   + Add new card"
                       inputProps={{ className: classes.inputTextColor }}
                       disabled
-                      onClick={() => setTicketModalOpen(true)}
+                      onClick={() => setTicketModalOpen(column.id)}
                     />
                   </ButtonBase>
                 </Paper>
@@ -107,7 +107,7 @@ const Column = (props) => {
 }
 
 Column.propTypes = {
-  tickets: PropTypes.arrayOf(
+  tasks: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,

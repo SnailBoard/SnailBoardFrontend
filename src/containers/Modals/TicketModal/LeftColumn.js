@@ -43,7 +43,9 @@ export const useStyles = makeStyles(() => ({
 
 const LeftColumn = () => {
   const classes = useStyles()
-  const { ticketModalInputs, handleChange } = useContext(BoardContext)
+  const { ticketModalInputs, handleChange, handleSaveTicket } = useContext(
+    BoardContext,
+  )
 
   return (
     <>
@@ -88,6 +90,7 @@ const LeftColumn = () => {
           <Button
             className={`paperBtn rounded ${classes.addTicketBtn}`}
             style={{ background: SUCCESS_COLOR }}
+            onClick={handleSaveTicket}
           >
             <Paper
               className="paperBtn rounded"
