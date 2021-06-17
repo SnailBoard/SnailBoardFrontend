@@ -119,38 +119,38 @@ export const boardSlice = createSlice({
     addTicketPending: (state) => {
       state.addTicket.isFetching = true
     },
-    addTicketSuccess: (
-      state,
-      payload,
-      // {
-      //   payload: {
-      //     name,
-      //     description,
-      //     reporter,
-      //     assignee,
-      //     id,
-      //     position,
-      //     created_at,
-      //     updated_at,
-      //     story_points,
-      //     ticket_number,
-      //     columnId,
-      //   },
-      // },
-    ) => {
-      console.log('Response ticket', payload)
+    addTicketSuccess: (state, payload) => {
+      const {
+        name,
+        description,
+        reporter,
+        assignee,
+        id,
+        position,
+        // eslint-disable-next-line camelcase
+        created_at,
+        // eslint-disable-next-line camelcase
+        updated_at,
+        // eslint-disable-next-line camelcase
+        story_points,
+        // eslint-disable-next-line camelcase
+        ticket_number,
+      } = payload.payload.ticketInfo
       state.addTicket.isFetching = false
       state.addTicket.isFulfilled = true
-
-      // state.column[columnId].tasks.push(id)
-      // state.tickets[id] = {
-      //   id,
-      //   name,
-      //   description,
-      //   position,
-      //   tasks: [],
-      // }
-      // state.columnOrder.push(id)
+      state.columns[payload.payload.columnId].tasks.push(id)
+      state.tasks[id] = {
+        id,
+        name,
+        description,
+        reporter,
+        assignee,
+        position,
+        created_at,
+        updated_at,
+        story_points,
+        ticket_number,
+      }
     },
     addTicketFailed: (state) => {
       state.addTicket.isFetching = false
