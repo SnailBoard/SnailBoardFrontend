@@ -9,23 +9,28 @@ import { useStyles } from './styles'
 import Column from './Column'
 import {
   addColumnStarted,
+  addTicketStarted,
   boardNameSelector,
   changeColumnOrderSuccess,
   changeTicketsOrderSuccess,
   columnOrderSelector,
   columnsSelector,
   getBoardDataStarted,
+  membersSelector,
   ticketsSelector,
 } from './boardSlice'
 import { ACCENT2_COLOR, PRIMARY_COLOR } from '../../core/values/colors'
 import { BoardContext } from './context'
 import TicketModal from '../Modals/TicketModal'
+import { setAuthorizationToken } from '../../core/api'
+import { loadState } from '../../core/localStorage'
+import { ACCESS_TOKEN_KEY } from '../../core/values/keys'
 
 class InnerList extends PureComponent {
   render() {
     const { column, ticketsMap, index } = this.props
-    const tickets = column.tickets.map((ticketId) => ticketsMap[ticketId])
-    return <Column column={column} tickets={tickets} index={index} />
+    const tasks = column.tasks.map((taskId) => ticketsMap[taskId])
+    return <Column column={column} tasks={tasks} index={index} />
   }
 }
 
@@ -36,15 +41,15 @@ InnerList.propTypes = {
     }),
   ).isRequired,
   column: PropTypes.shape({
-    tickets: PropTypes.array.isRequired,
+    tasks: PropTypes.array.isRequired,
   }),
   index: PropTypes.number.isRequired,
 }
 
 const initTicketModalInputs = {
-  reporter: 'Danya',
-  assignee: 'Nazar',
-  storyPoints: 5,
+  reporter: '',
+  assignee: '',
+  storyPoints: 1,
   name: '',
   description: '',
 }
@@ -53,11 +58,12 @@ const Board = () => {
   const dispatch = useDispatch()
 
   const boardName = useSelector(boardNameSelector)
-  const tickets = useSelector(ticketsSelector)
+  const tasks = useSelector(ticketsSelector)
   const columns = useSelector(columnsSelector)
   const columnOrder = useSelector(columnOrderSelector)
+  const members = useSelector(membersSelector)
 
-  const [ticketModalOpen, setTicketModalOpen] = useState(false)
+  const [ticketModalOpen, setTicketModalOpen] = useState('')
   const [ticketModalInputs, setTicketModalInputs] = useState(
     initTicketModalInputs,
   )
@@ -69,11 +75,27 @@ const Board = () => {
     }))
   }
 
+  const handleSaveTicket = () => {
+    const payload = {
+      name: ticketModalInputs.name,
+      description: ticketModalInputs.description,
+      reporter_id: ticketModalInputs.reporter,
+      assignee_id: ticketModalInputs.assignee,
+      story_points: ticketModalInputs.storyPoints,
+      column_id: ticketModalOpen,
+      column_position: Object.keys(columns).length + 1,
+    }
+    console.log(payload)
+    dispatch(addTicketStarted(payload))
+  }
+
   const contextValues = {
     handleChange,
     ticketModalInputs,
     ticketModalOpen,
     setTicketModalOpen,
+    handleSaveTicket,
+    members,
   }
 
   const onDragEnd = ({ destination, source, draggableId, type }) => {
@@ -115,14 +137,14 @@ const Board = () => {
       }
 
       // moving from one list to another
-      const homeTaskIds = Array.from(home.tickets)
+      const homeTaskIds = Array.from(home.tasks)
       homeTaskIds.splice(source.index, 1)
       const newHome = {
         ...home,
         tickets: homeTaskIds,
       }
 
-      const foreignTaskIds = Array.from(foreign.tickets)
+      const foreignTaskIds = Array.from(foreign.tasks)
       foreignTaskIds.splice(destination.index, 0, draggableId)
       const newForeign = {
         ...foreign,
@@ -157,6 +179,7 @@ const Board = () => {
   const { boardId } = useParams()
 
   useEffect(() => {
+    setAuthorizationToken(loadState(ACCESS_TOKEN_KEY))
     dispatch(getBoardDataStarted(boardId))
   }, [])
 
@@ -187,7 +210,7 @@ const Board = () => {
                       key={column.id}
                       column={column}
                       index={index}
-                      ticketsMap={tickets}
+                      ticketsMap={tasks}
                     />
                   )
                 })}

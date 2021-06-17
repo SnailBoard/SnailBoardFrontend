@@ -75,7 +75,8 @@ const BootstrapInput = withStyles((theme) => ({
 
 const RightColumn = () => {
   const classes = useStyles()
-  const { ticketModalInputs, handleChange } = useContext(BoardContext)
+  const { ticketModalInputs, handleChange, members } = useContext(BoardContext)
+  console.log('members', members)
 
   const renderReporterForm = () => (
     <>
@@ -92,9 +93,9 @@ const RightColumn = () => {
             onChange={handleChange}
             input={<BootstrapInput />}
           >
-            <MenuItem value="Pavel">Pavel</MenuItem>
-            <MenuItem value="Nazar">Nazar</MenuItem>
-            <MenuItem value="Danya">Danya</MenuItem>
+            {members.map((member) => (
+              <MenuItem value={member.id}>{member.firstName}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Paper>
@@ -116,9 +117,9 @@ const RightColumn = () => {
             onChange={handleChange}
             input={<BootstrapInput />}
           >
-            <MenuItem value="Pavel">Pavel</MenuItem>
-            <MenuItem value="Nazar">Nazar</MenuItem>
-            <MenuItem value="Danya">Danya</MenuItem>
+            {members.map((member) => (
+              <MenuItem value={member.id}>{member.firstName}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Paper>
