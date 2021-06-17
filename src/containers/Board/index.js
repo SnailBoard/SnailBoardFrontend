@@ -95,9 +95,8 @@ const Board = () => {
       assignee_id: ticketModalInputs.assignee,
       story_points: ticketModalInputs.storyPoints,
       column_id: ticketModalOpen,
-      column_position: Object.keys(columns).length + 1,
+      column_position: columns[ticketModalOpen].tasks.length + 1,
     }
-    console.log(payload)
     dispatch(addTicketStarted(payload))
   }
 
