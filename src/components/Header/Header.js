@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   AppBar,
+  Avatar,
   Button,
   IconButton,
   Toolbar,
@@ -65,6 +66,10 @@ const Header = (props) => {
             <Typography className={classes.title} variant="h5" noWrap>
               {user.firstName}
             </Typography>
+            <Avatar
+              alt={user.name}
+              src={`http://127.0.0.1:8081/${user.image}.jpg`}
+            />
             <NavLink exact to="/logout">
               <Button className={classes.btnLink}>
                 <Typography variant="h5" noWrap>

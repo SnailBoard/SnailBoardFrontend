@@ -2,6 +2,7 @@ import { all, call, put, takeEvery } from 'redux-saga/effects'
 import history from '../../setupHistory'
 import {
   acceptInvitationRequest,
+  addImage,
   getRefreshData,
   loginRequest,
   logoutRequest,
@@ -27,6 +28,9 @@ import {
   refreshFailed,
   refreshPending,
   registerFailed,
+  uploadingImage,
+  uploadingImageSuccess,
+  uploadingImageStarted,
 } from './authSlice'
 import { TOKEN_EXPIRED_MESSAGE } from '../../core/values/keys'
 import { setAuthorizationToken } from '../../core/api'
@@ -119,6 +123,16 @@ function* watchRefresh() {
   yield takeEvery(refreshStarted, refresh)
 }
 
+function* uploadImage({ payload }) {
+  yield put(uploadingImage())
+  const response = yield call(() => addImage(payload))
+  yield put(uploadingImageSuccess(response.data))
+}
+
+function* watchUpload() {
+  yield takeEvery(uploadingImageStarted, uploadImage)
+}
+
 export default function* authSagas() {
   yield all([
     watchLogin(),
@@ -126,5 +140,6 @@ export default function* authSagas() {
     watchLogout(),
     watchUser(),
     watchRefresh(),
+    watchUpload(),
   ])
 }

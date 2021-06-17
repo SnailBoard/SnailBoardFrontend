@@ -23,11 +23,15 @@ const initialState = {
     users: [],
     isUsersFetching: false,
     isUserFetchingFailed: false,
+    uploadedImageId: '',
+    isUploadingImage: false,
   },
   boards: {
     isFetching: false,
     isFailed: false,
     isFulfilled: false,
+    uploadedImageId: '',
+    isUploadingImage: false,
     data: {
       boards: [],
       memberCount: 0,
@@ -64,6 +68,14 @@ export const isBoardsFailedSelector = (state) => state.home.boards.isFailed
 export const boardsDataSelector = (state) => state.home.boards.data
 
 export const selectedTeamSelector = (state) => state.home.selectedTeam
+export const isUploadingTeamImageSelector = (state) =>
+  state.home.teams.isUploadingImage
+export const isUploadingBoardImageSelector = (state) =>
+  state.home.boards.isUploadingImage
+export const uploadedTeamImageIdSelector = (state) =>
+  state.home.teams.uploadedImageId
+export const uploadedBoardImageIdSelector = (state) =>
+  state.home.boards.uploadedImageId
 
 export const homeSlice = createSlice({
   name: 'home',
@@ -146,6 +158,26 @@ export const homeSlice = createSlice({
     setSelectedTeam: (state, payload) => {
       state.selectedTeam = payload.payload
     },
+    uploadingTeamImageStarted: () => {},
+    uploadingTeamImage: (state) => {
+      state.teams.isUploadingImage = true
+    },
+    uploadingTeamImageSuccess: (state, payload) => {
+      state.teams.isUploadingImage = false
+      state.teams.uploadedImageId = payload.payload
+    },
+    uploadingBoardImageStarted: () => {},
+    uploadingBoardImage: (state) => {
+      state.boards.isUploadingImage = true
+    },
+    uploadingBoardImageSuccess: (state, payload) => {
+      state.boards.isUploadingImage = false
+      state.boards.uploadedImageId = payload.payload
+    },
+    cleanImages: (state) => {
+      state.boards.uploadedImageId = ''
+      state.teams.uploadedImageId = ''
+    },
   },
 })
 
@@ -176,6 +208,13 @@ export const {
   getBoardsPending,
   getBoardsSuccess,
   getBoardsFailed,
+  uploadingBoardImage,
+  uploadingBoardImageStarted,
+  uploadingBoardImageSuccess,
+  uploadingTeamImage,
+  uploadingTeamImageStarted,
+  uploadingTeamImageSuccess,
+  cleanImages,
 } = homeSlice.actions
 
 export default homeSlice.reducer

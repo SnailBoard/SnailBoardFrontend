@@ -9,28 +9,35 @@ import {
 } from './service'
 
 import {
-  addTeamStarted,
-  addTeamPending,
-  addTeamSuccess,
+  addBoardFailed,
+  addBoardPending,
+  addBoardStarted,
+  addBoardSuccess,
   addTeamFailed,
-  getTeamsStarted,
-  getTeamsPending,
-  getTeamsSuccess,
+  addTeamPending,
+  addTeamStarted,
+  addTeamSuccess,
+  getBoardsFailed,
+  getBoardsPending,
+  getBoardsStarted,
+  getBoardsSuccess,
   getTeamsFailed,
+  getTeamsPending,
+  getTeamsStarted,
+  getTeamsSuccess,
+  getUsersFailed,
   getUsersPending,
   getUsersStarted,
   getUsersSuccess,
-  getUsersFailed,
   inviteUserToTeam,
-  addBoardStarted,
-  addBoardPending,
-  addBoardSuccess,
-  addBoardFailed,
-  getBoardsStarted,
-  getBoardsPending,
-  getBoardsSuccess,
-  getBoardsFailed,
+  uploadingBoardImage,
+  uploadingBoardImageStarted,
+  uploadingBoardImageSuccess,
+  uploadingTeamImage,
+  uploadingTeamImageStarted,
+  uploadingTeamImageSuccess,
 } from './homeSlice'
+import { addImage } from '../Auth/service'
 
 function* addTeam({ payload }) {
   yield put(addTeamPending())
@@ -77,7 +84,6 @@ function* getUsers() {
 }
 
 function* inviteUser({ payload }) {
-  console.log(payload)
   yield call(() => inviteUserToTeamRequest(payload))
 }
 
@@ -95,6 +101,27 @@ function* addBoard({ payload }) {
     yield put(addBoardFailed())
   }
 }
+
+function* uploadTeamImage({ payload }) {
+  yield put(uploadingTeamImage())
+  const response = yield call(() => addImage(payload))
+  yield put(uploadingTeamImageSuccess(response.data))
+}
+
+function* watchUploadTeam() {
+  yield takeEvery(uploadingTeamImageStarted, uploadTeamImage)
+}
+
+function* uploadBoardImage({ payload }) {
+  yield put(uploadingBoardImage())
+  const response = yield call(() => addImage(payload))
+  yield put(uploadingBoardImageSuccess(response.data))
+}
+
+function* watchUploadBoard() {
+  yield takeEvery(uploadingBoardImageStarted, uploadBoardImage)
+}
+
 function* watchAddTeam() {
   yield takeEvery(addTeamStarted, addTeam)
 }
@@ -123,5 +150,7 @@ export default function* homeSagas() {
     watchInviteToTeam(),
     watchAddBoard(),
     watchGetBoards(),
+    watchUploadTeam(),
+    watchUploadBoard(),
   ])
 }

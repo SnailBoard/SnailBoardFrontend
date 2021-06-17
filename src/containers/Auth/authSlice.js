@@ -7,6 +7,8 @@ const initialState = {
   isFetching: false,
   isFulfilled: false,
   isFailed: false,
+  isUploadingImage: false,
+  uploadedImageId: '',
   user: {},
 }
 
@@ -15,6 +17,8 @@ export const isFetchingSelector = (state) => state.auth.isFetching
 export const isFulfilledSelector = (state) => state.auth.isFulfilled
 export const isFailedSelector = (state) => state.auth.isFailed
 export const userSelector = (state) => state.auth.user
+export const isUploadingImageSelector = (state) => state.auth.isUploadingImage
+export const uploadedImageIdSelector = (state) => state.auth.uploadedImageId
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -83,6 +87,14 @@ export const authSlice = createSlice({
     logoutSuccess: (state) => {
       state.isAuthorized = false
     },
+    uploadingImageStarted: () => {},
+    uploadingImage: (state) => {
+      state.isUploadingImage = true
+    },
+    uploadingImageSuccess: (state, payload) => {
+      state.isUploadingImage = false
+      state.uploadedImageId = payload.payload
+    },
   },
 })
 
@@ -106,6 +118,9 @@ export const {
   refreshPending,
   refreshSuccess,
   refreshFailed,
+  uploadingImage,
+  uploadingImageSuccess,
+  uploadingImageStarted,
 } = authSlice.actions
 
 export default authSlice.reducer

@@ -20,8 +20,11 @@ import MoodIcon from '@material-ui/icons/Mood'
 import {
   isFailedSelector,
   isFetchingSelector,
+  isUploadingImageSelector,
   registerStarted,
   userClosedErrorAlert,
+  uploadingImageStarted,
+  uploadedImageIdSelector,
 } from '../authSlice'
 import { useStyles } from '../styles'
 
@@ -29,6 +32,8 @@ const RegisterPage = () => {
   const dispatch = useDispatch()
   const isFetching = useSelector(isFetchingSelector)
   const isFailed = useSelector(isFailedSelector)
+  const isAdding = useSelector(isUploadingImageSelector)
+  const uploadedImageId = useSelector(uploadedImageIdSelector)
 
   const classes = useStyles()
 
@@ -40,6 +45,7 @@ const RegisterPage = () => {
   const [isFirstNameValid, setFirstNameValid] = useState(true)
   const [isEmailValid, setEmailValid] = useState(true)
   const [isPasswordValid, setIsPasswordValid] = useState(true)
+  const [selectedFile, setSelectedFile] = useState()
 
   const setValidatedFirstName = (v) => setFirstNameValid(v.length >= 2)
   const setValidatedUsername = (v) => setUsernameValid(v.length >= 2)
@@ -74,9 +80,18 @@ const RegisterPage = () => {
         password,
         username,
         firstName,
+        image: uploadedImageId,
       }
+      console.log(registerPayload)
       dispatch(registerStarted(registerPayload))
     }
+  }
+
+  const handleFileChange = (element) => {
+    const filesList = element.target.files
+    if (!filesList || !filesList[0]) return
+    setSelectedFile(filesList[0])
+    dispatch(uploadingImageStarted(filesList[0]))
   }
 
   const onEmailChange = (e) => {
@@ -120,6 +135,29 @@ const RegisterPage = () => {
               </Avatar>
               <h2>Register</h2>
             </Grid>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                component="label"
+                disabled={!!isAdding}
+              >
+                Add avatar
+                <input
+                  type="file"
+                  hidden
+                  accept=".png,.jpg"
+                  onChange={handleFileChange}
+                />
+              </Button>
+              {selectedFile && (
+                <Avatar
+                  alt="Avatar"
+                  src={URL.createObjectURL(selectedFile)}
+                  style={{ marginLeft: '10px' }}
+                />
+              )}
+            </div>
             <TextField
               label="Email"
               variant="outlined"

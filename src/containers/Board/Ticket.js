@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import {
   Avatar,
@@ -14,6 +14,10 @@ import { ACCENT_COLOR } from '../../core/values/colors'
 const Ticket = (props) => {
   const { ticket, index } = props
   const classes = useStyles()
+
+  useEffect(() => {
+    console.log(ticket)
+  })
 
   return (
     <Draggable draggableId={ticket.id} index={index}>
@@ -32,18 +36,18 @@ const Ticket = (props) => {
             <Grid item xs direction="column">
               <CardContent className={classes.cardContent}>
                 <Typography variant="body2" color="textPrimary" component="p">
-                  #{ticket.number} {ticket.description}
+                  #{ticket.ticket_number} {ticket.description}
                 </Typography>
               </CardContent>
               <Avatar className={classes.cardStoryPoints}>
                 <Typography variant="caption" color="initial" component="p">
-                  {ticket.storyPoints}
+                  {ticket.story_points}
                 </Typography>
               </Avatar>
             </Grid>
             <Avatar
               className={classes.cardAvatar}
-              src="http://i.pravatar.cc/300?img=1"
+              src={`http://127.0.0.1:8081/${ticket.assignee.image}.jpg`}
             />
           </Grid>
         </BaseCard>
@@ -56,8 +60,9 @@ Ticket.propTypes = {
   ticket: PropTypes.shape({
     id: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    number: PropTypes.number.isRequired,
-    storyPoints: PropTypes.number.isRequired,
+    ticket_number: PropTypes.number.isRequired,
+    story_points: PropTypes.number.isRequired,
+    assignee: PropTypes.object,
   }),
   index: PropTypes.number.isRequired,
 }

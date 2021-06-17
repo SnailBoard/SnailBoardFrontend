@@ -19,12 +19,13 @@ import PropTypes from 'prop-types'
 import { ACCENT_COLOR, TEXT_DIMMED_COLOR } from '../../core/values/colors'
 import {
   addTeamStarted,
-  userClosedErrorAlert,
-  setRefresh,
-  isAddTeamFulfilledSelector,
-  isAddTeamFetchingSelector,
   isAddTeamFailedSelector,
+  isAddTeamFetchingSelector,
+  isAddTeamFulfilledSelector,
   setIsAddTeamFulfilledFalse,
+  setRefresh,
+  uploadedTeamImageIdSelector,
+  userClosedErrorAlert,
 } from '../HomePage/homeSlice'
 
 export const useStyles = makeStyles((theme) => ({
@@ -81,6 +82,7 @@ const AddTeamModal = (props) => {
   const isFulfilled = useSelector(isAddTeamFulfilledSelector)
   const isFetching = useSelector(isAddTeamFetchingSelector)
   const isFailed = useSelector(isAddTeamFailedSelector)
+  const uploadedTeamImageId = useSelector(uploadedTeamImageIdSelector)
 
   const dispatch = useDispatch()
   const [name, setName] = useState('')
@@ -103,7 +105,12 @@ const AddTeamModal = (props) => {
 
   const handleAddTeam = () => {
     if (isNameValid) {
-      const addTeamPayload = { name, description }
+      const addTeamPayload = {
+        name,
+        description,
+        image: uploadedTeamImageId,
+      }
+      console.log(addTeamPayload)
       dispatch(addTeamStarted(addTeamPayload))
     }
   }

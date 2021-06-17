@@ -99,6 +99,7 @@ const AddUserToTeamModal = (props) => {
 
   const handleAddUser = () => {
     if (selectedTeam) {
+      console.log(selectedTeam.id)
       if (username) {
         dispatch(
           inviteUserToTeam({

@@ -52,3 +52,11 @@ export const acceptInvitationRequest = (payload) => {
     .then((response) => response)
     .catch((reason) => reason)
 }
+
+export const addImage = (image) => {
+  const data = new FormData()
+  data.append('image', image, image.name)
+  return API.post(`images/add`, data)
+    .then((response) => response)
+    .catch((reason) => reason)
+}
