@@ -40,3 +40,5 @@ export const addTicketRequest = ({
     column_id,
     column_position,
   })
+    .then((response) => response)
+    .catch((reason) => reason)
