@@ -1,7 +1,13 @@
 import React, { PureComponent, useEffect, useState } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PropTypes from 'prop-types'
-import { GridList, InputBase, Paper } from '@material-ui/core'
+import {
+  Backdrop,
+  CircularProgress,
+  GridList,
+  InputBase,
+  Paper,
+} from '@material-ui/core'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header/Header'
@@ -16,6 +22,7 @@ import {
   columnOrderSelector,
   columnsSelector,
   getBoardDataStarted,
+  isAddTicketFetchingSelector,
   membersSelector,
   ticketsSelector,
 } from './boardSlice'
@@ -62,6 +69,11 @@ const Board = () => {
   const columns = useSelector(columnsSelector)
   const columnOrder = useSelector(columnOrderSelector)
   const members = useSelector(membersSelector)
+
+  const isAddTicketFetching = useSelector(isAddTicketFetchingSelector)
+
+  // add other isFetching flags via || operation
+  const isFetching = isAddTicketFetching
 
   const [ticketModalOpen, setTicketModalOpen] = useState('')
   const [ticketModalInputs, setTicketModalInputs] = useState(
@@ -118,13 +130,13 @@ const Board = () => {
       const foreign = columns[destination.droppableId]
 
       if (home === foreign) {
-        const newTaskIds = Array.from(home.tickets)
+        const newTaskIds = Array.from(home.tasks)
         newTaskIds.splice(source.index, 1)
         newTaskIds.splice(destination.index, 0, draggableId)
 
         const newHome = {
           ...home,
-          tickets: newTaskIds,
+          tasks: newTaskIds,
         }
 
         const newColumnsData = {
@@ -141,14 +153,14 @@ const Board = () => {
       homeTaskIds.splice(source.index, 1)
       const newHome = {
         ...home,
-        tickets: homeTaskIds,
+        tasks: homeTaskIds,
       }
 
       const foreignTaskIds = Array.from(foreign.tasks)
       foreignTaskIds.splice(destination.index, 0, draggableId)
       const newForeign = {
         ...foreign,
-        tickets: foreignTaskIds,
+        tasks: foreignTaskIds,
       }
 
       const newColumnsData = {
@@ -245,6 +257,9 @@ const Board = () => {
           </Droppable>
         </DragDropContext>
         <TicketModal />
+        <Backdrop className={classes.backdrop} open={isFetching}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </div>
     </BoardContext.Provider>
   )

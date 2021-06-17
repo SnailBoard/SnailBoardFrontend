@@ -150,6 +150,7 @@ const SBCard = (props) => {
             classes,
           )
         }
+        console.log('selectorData', selectorData)
         const { memberCount } = selectorData
         return RenderBoardsColumn(data, memberCount, index, classes, history)
       })}

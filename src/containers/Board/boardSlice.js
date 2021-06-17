@@ -8,6 +8,11 @@ const initialState = {
   isFetching: false,
   isFailed: false,
   members: [],
+  addTicket: {
+    isFulfilled: false,
+    isFetching: false,
+    isFailed: false,
+  },
 }
 
 export const ticketsSelector = (state) => state.board.tasks
@@ -20,6 +25,13 @@ export const membersSelector = (state) => state.board.members
 export const isFetchingSelector = (state) => state.board.isFetching
 export const ticketsInColumnCountSelector = (columnId) => (state) =>
   state.board.columns[columnId].tasks.length
+
+export const isAddTicketFetchingSelector = (state) =>
+  state.board.addTicket.isFetching
+export const isAddTicketFulfilledSelector = (state) =>
+  state.board.addTicket.isFulfilled
+export const isAddTicketFailedSelector = (state) =>
+  state.board.addTicket.isFailed
 
 export const boardSlice = createSlice({
   name: 'board',
@@ -34,7 +46,10 @@ export const boardSlice = createSlice({
       state.members = members
 
       state.columns = columns.reduce(
-        (acc, column) => ({ ...acc, [column.id]: column }),
+        (acc, column) => ({
+          ...acc,
+          [column.id]: { ...column, tasks: column.tasks.map(({ id }) => id) },
+        }),
         {},
       )
 
@@ -102,7 +117,7 @@ export const boardSlice = createSlice({
     },
     addTicketStarted: () => {},
     addTicketPending: (state) => {
-      state.isFetching = true
+      state.addTicket.isFetching = true
     },
     addTicketSuccess: (
       state,
@@ -124,7 +139,8 @@ export const boardSlice = createSlice({
       // },
     ) => {
       console.log('Response ticket', payload)
-      state.isFetching = false
+      state.addTicket.isFetching = false
+      state.addTicket.isFulfilled = true
 
       // state.column[columnId].tasks.push(id)
       // state.tickets[id] = {
@@ -137,8 +153,12 @@ export const boardSlice = createSlice({
       // state.columnOrder.push(id)
     },
     addTicketFailed: (state) => {
-      state.isFetching = false
-      state.isFailed = true
+      state.addTicket.isFetching = false
+      state.addTicket.isFulfilled = true
+      state.addTicket.isFailed = true
+    },
+    setIsAddTicketFulfilledFalse: (state) => {
+      state.addTicket.isFulfilled = false
     },
   },
 })
@@ -158,6 +178,11 @@ export const {
   addColumnStarted,
   addColumnPending,
   addColumnFailed,
+  addTicketFailed,
+  addTicketPending,
+  addTicketStarted,
+  addTicketSuccess,
+  setIsAddTicketFulfilledFalse,
 } = boardSlice.actions
 
 export default boardSlice.reducer

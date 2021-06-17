@@ -76,7 +76,6 @@ const BootstrapInput = withStyles((theme) => ({
 const RightColumn = () => {
   const classes = useStyles()
   const { ticketModalInputs, handleChange, members } = useContext(BoardContext)
-  console.log('members', members)
 
   const renderReporterForm = () => (
     <>
@@ -165,16 +164,9 @@ const RightColumn = () => {
           justify="space-between"
           alignItems="center"
         >
-          <Grid item>
-            <Typography className={classes.timeLabel} variant="body2">
-              12.03.2021
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.timeLabel} variant="body2">
-              11:57
-            </Typography>
-          </Grid>
+          <Typography className={classes.timeLabel} variant="body2">
+            {new Date().toLocaleString()}
+          </Typography>
         </Grid>
       </Paper>
     </>
@@ -192,16 +184,9 @@ const RightColumn = () => {
           justify="space-between"
           alignItems="center"
         >
-          <Grid item>
-            <Typography className={classes.timeLabel} variant="body2">
-              11.03.2021
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.timeLabel} variant="body2">
-              19:57
-            </Typography>
-          </Grid>
+          <Typography className={classes.timeLabel} variant="body2">
+            {new Date().toLocaleString()}
+          </Typography>
         </Grid>
       </Paper>
     </>
