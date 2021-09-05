@@ -6,6 +6,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-18.04
+    env:
+      CI: false
     strategy:
       matrix:
         node_version: [14]
@@ -20,4 +22,6 @@ jobs:
       - name: run CI-test-build
         run: |
           npm install
-          CI=false npm run build
+          npm run lint
+          npm run test
+          npm run build
